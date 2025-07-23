@@ -530,11 +530,15 @@ body[data-theme="ungu"] {
                         <div class="d-flex align-items-center flex-wrap gap-3">
                             <h5 class="card-title text-light mb-0">[ Monitoring Price Coin ]</h5>
                             <div id="TokenPrices">
-                                <small class="fw-bold text-danger">BTC: <span id="btcPrice">--</span> | </small>
+                                <!-- <small class="fw-bold text-danger">BTC: <span id="btcPrice">--</span> | </small>
                                 <small class="fw-bold text-warning">BNB: <span id="bnbPrice">--</span> | </small>
                                 <small class="fw-bold text-primary">ETH: <span id="ethPrice">--</span> | </small>
                                 <small class="fw-bold text-info">MATIC: <span id="maticPrice">--</span> | </small>
-                                <small class="fw-bold text-light">USDT/IDR: <span id="usdtIdrPrice">--</span></small>
+                                <small class="fw-bold text-light">USDT/IDR: <span id="usdtIdrPrice">--</span></small> -->
+                                <span id="gasTokenPrices">
+                                    <!-- Akan diisi otomatis seperti: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
+                                </span>
+
                             </div>
                         </div>
                         <!-- Palet Tema Kotak -->
@@ -574,9 +578,10 @@ body[data-theme="ungu"] {
                         </small>
                         <small id="statERROR"></small>
                         <!-- ⛽ Gas Fees Info -->
-                        <span id="gasTokenPrices">
-                            <!-- Akan diisi otomatis seperti: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
-                        </span>
+                         
+                        <!-- <span id="gasTokenPrices">
+                           
+                        </span> -->
                             
                     </div>
                     <!-- Kontrol -->
@@ -589,9 +594,9 @@ body[data-theme="ungu"] {
                         <a href="#" target="_blank" id="reload" title="RELOAD PAGE">
                             <img src="https://cdn-icons-png.freepik.com/512/210/210136.png" width="23px">
                         </a>
-                        <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" title="BUKA AKSES">
+                        <!-- <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" title="BUKA AKSES">
                             <img src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="25px">
-                        </a>
+                        </a> -->
                         <button id="autorunBtn" class="btn btn-sm text-dark bg-white">
                              <i class="bi bi-arrow-repeat"></i>
                         </button>
