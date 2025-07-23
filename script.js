@@ -655,8 +655,8 @@ class TokenPriceMonitor {
                     const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
 
                     gasTextParts.push(
-                       `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
-                       //  `<span class='badge ${chainBadgeColor} fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
+                    //    `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
+                        `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)}]</span>`
                     );
                 }).fail(() => {
                     gasTextParts.push(`${chain.label}[err]`);
@@ -679,20 +679,6 @@ class TokenPriceMonitor {
         const fullURL = withProxy(targetURL); // menggunakan fungsi proxy
 
         $.getJSON(fullURL)
-            .done(response => {
-                const rate = parseFloat(response.ticker.last);
-                window.ExchangeRates = window.ExchangeRates || {};
-                window.ExchangeRates.IndodaxUSDT = rate;
-
-                $('#usdtIdrPrice').text(`Rp ${rate.toLocaleString('id-ID')}`);
-            })
-            .fail(err => {
-                console.warn('[✘] Failed to fetch USDT → IDR rate:', err);
-            });
-    }
-
-    fetchUSDTtoIDRRateLAMA() {
-        $.getJSON('https://indodax.com/api/ticker/usdtidr')
             .done(response => {
                 const rate = parseFloat(response.ticker.last);
                 window.ExchangeRates = window.ExchangeRates || {};
@@ -1523,6 +1509,11 @@ class TokenPriceMonitor {
 
 
     async CheckPrices() {
+       const headerHeight = $('header').outerHeight() || 80;
+        $('html, body').animate({
+            scrollTop: $('#CheckPrice').offset().top - headerHeight
+        }, 600);
+
         this.fetchGasTokenPrices();
         $('.chainFilterCheckbox').prop('disabled', true);
         $("#statERROR").html('');
@@ -2088,7 +2079,7 @@ class TokenPriceMonitor {
                 case 'Matcha': {
                     const matchaData = await fetchWithCountdown(
                         safeCellId, dexName,
-                        () => DEXAPIs.get0xPrice(inputContract, outputContract, rawAmountIn, chainId),
+                        () => DEXAPIs.get0xPrice(inputContract, outputContract, rawAmountIn, chainId, direction),
                         timeoutLimit
                     );
 
@@ -2649,7 +2640,7 @@ class TokenPriceMonitor {
                         <!-- HEADER -->
                         <div class="card-header px-1 py-1 d-flex justify-content-between align-items-center border-bottom-0 align-middle NameSinyalDEX" style="min-height: unset;">
                             <div class="fw-semibold text-uppercase ps-2" style="font-size: 0.85rem;">
-                                ${dexId} &nbsp;<span class="badge fs-8 bg-warning-subtle" id="new_${dexId}_Signal" ></span>
+                                ${dexId} &nbsp;<span class="badge fs-8 bg-warning-subtle" id="new_${dexId}_Signal" ></span>  <span id="errorBadge_${dex}" class="badge bg-danger ms-1 d-none">0</span>
                             </div>
                             <i class="bi bi-caret-down-fill toggle-icon" id="icon-${dexId}"
                                 data-bs-toggle="collapse"
@@ -2672,66 +2663,6 @@ class TokenPriceMonitor {
         });
 
         container.append(row);
-
-        // Event collapse Bootstrap
-        container.on('shown.bs.collapse', function (e) {
-            const targetId = $(e.target).attr('id');
-            const dexId = targetId.replace('collapse-', '');
-            $(`#icon-${dexId}`).removeClass('bi-caret-right-fill').addClass('bi-caret-down-fill');
-        });
-
-        container.on('hidden.bs.collapse', function (e) {
-            const targetId = $(e.target).attr('id');
-            const dexId = targetId.replace('collapse-', '');
-            $(`#icon-${dexId}`).removeClass('bi-caret-down-fill').addClass('bi-caret-right-fill');
-        });
-    }
-
-    initPNLSignalStructure1BARIS() {
-        const container = $('#dexSignals');
-        container.empty();
-
-        this.pnlSignals = {};
-
-        // Gunakan flex column agar setiap DEX berada dalam baris sendiri
-        const column = $('<div class="d-flex flex-column gap-2"></div>');
-
-        for (const dex of DexList) {
-            this.pnlSignals[dex] = [];
-
-            const dexId = dex.toUpperCase();
-            const collapseId = `collapse-${dexId}`;
-            const listId = `pnl-list-${dexId}`;
-            const textColor = this.getTextColorClassFromBadge(this.getBadgeColor(dex, 'dex'));
-
-            // error <span id="errorBadge_${dex}" class="badge bg-danger ms-1 d-none">0</span> 
-            const card = $(`
-                <div class="card border shadow-sm rounded-top no-rounded-bottom">
-                    <!-- HEADER -->
-                    <div class="card-header px-1 py-1 d-flex justify-content-between align-items-center border-bottom-0 align-middle sinyalDEX" style="min-height: unset;">
-                        <div class="fw-semibold text-uppercase ${textColor}" style="font-size: 0.85rem;">
-                            ${dexId} &nbsp;<span class="badge fs-8 bg-warning-subtle" id="new_${dexId}_Signal" ></span>
-                        </div>
-                        <i class="bi bi-caret-down-fill toggle-icon" id="icon-${dexId}"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#${collapseId}"
-                            aria-expanded="true"
-                            aria-controls="${collapseId}"
-                            style="cursor: pointer; font-size: 0.85rem;"></i>
-                    </div>
-                    <!-- BODY -->
-                    <div class="card-body p-2 bg-light-subtle  align-middle">
-                        <div id="${collapseId}" class="collapse show">
-                            <div id="${listId}" class="d-flex flex-wrap gap-1 small text-start"></div>
-                        </div>
-                    </div>
-                </div>
-            `);
-
-            column.append(card);
-        }
-
-        container.append(column);
 
         // Event collapse Bootstrap
         container.on('shown.bs.collapse', function (e) {
@@ -2955,35 +2886,6 @@ class TokenPriceMonitor {
     // Utility functions
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    showAlertLAMA(message, type = 'info') {
-        const alertId = 'alert-' + Date.now();
-
-        const alertHtml = `
-            <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show position-fixed d-flex align-items-center justify-content-between"
-                style="top: 1%; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 70%; max-width: 90vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 3rem;">
-
-                <div class="me-2">${message}</div>
-                <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        `;
-
-        $('body').append(alertHtml);
-
-        setTimeout(() => {
-            $(`#${alertId}`).alert('close');
-        }, 5000);
-
-         // 🔔 Tambahan untuk Android WebView
-        if (window.Android && typeof window.Android.showToast === 'function') {
-            window.Android.showToast(message);
-        }
-
-        // 💥 Tambahan: Getar jika ada fungsi vibrate Android
-        if (window.Android && typeof window.Android.vibrate === 'function') {
-            window.Android.vibrate(200); // getar selama 200ms
-        }
     }
 
     showAlert(message, type = 'info') {
