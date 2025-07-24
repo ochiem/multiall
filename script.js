@@ -139,6 +139,9 @@ class TokenPriceMonitor {
             this.loadTokenTable();
         });
 
+        $('#mainTabs .disabled a').on('click', function (e) {
+            e.preventDefault();
+        });
 
        $(document).off('click', '.btn-save-inline').on('click', '.btn-save-inline', (e) => {
             const btn = $(e.currentTarget);
@@ -269,18 +272,19 @@ class TokenPriceMonitor {
             this.highestPNLSignal = {}; // ✅ Reset setiap scan baru
 
             // Aktifkan tab Price Monitoring
-            // // $('#mainTabs a[href="#priceMonitoring"]').tab('show');
-
-            // // const tabToken = $('#mainTabs .nav-item:has(a[href="#tokenManagement"])');
-            // // const tabSetting = $('#mainTabs .nav-item:has(a[href="#apiSettings"])');
-            // // const tabModal = $('#mainTabs .nav-item:has(a[href="#portfolioTab"])');
-            // // const tabInfo = $('#mainTabs .nav-item:has(a[href="#infoChecking"])');
+            $('#mainTabs a[href="#priceMonitoring"]').tab('show');
+            
+            const tabMonitoring = $('#mainTabs .nav-item:has(a[href="#priceMonitoring"])');
+            const tabToken = $('#mainTabs .nav-item:has(a[href="#tokenManagement"])');
+            const tabSetting = $('#mainTabs .nav-item:has(a[href="#apiSettings"])');
+            const tabModal = $('#mainTabs .nav-item:has(a[href="#portfolioTab"])');
 
             // // Sembunyikan tab lain saat proses
-            // tabToken.hide();
-            // tabSetting.hide();
-            // tabModal.hide();
-            // tabInfo.hide();
+            tabMonitoring.hide();
+            tabToken.hide();
+            tabSetting.hide();
+            tabModal.hide();
+
 
             // Tampilkan kembali panel sinyal
             $('#dexSignals').show();
@@ -321,10 +325,11 @@ class TokenPriceMonitor {
                 this.startAutorunCountdown(() => $('#CheckPrice').trigger('click'));
             } else {
                 // Mode Manual: kembalikan tab & aktifkan tombol-tombol
-                // tabToken.show();
-                // tabSetting.show();
-                // tabModal.show();
-                // tabInfo.show();
+                tabMonitoring.show();
+                tabToken.show();
+                tabSetting.show();
+                tabModal.show();
+
 
                 $('#StopScan').addClass('d-none');
                 $('#monitoringSearch').prop('disabled', false);
@@ -705,87 +710,6 @@ class TokenPriceMonitor {
             .fail(err => {
                 console.warn('[✘] Failed to fetch USDT → IDR rate:', err);
             });
-    }
- 
-    generateEmptyTableLAMA() {
-        const tbody = $('#priceTableBody');
-        tbody.empty();
-
-        if (typeof this.sortAscending === 'undefined') {
-            this.sortAscending = true;
-        }
-
-        const activeTokens = this.tokens
-            .filter(t => t.isActive)
-            .filter(t => this.selectedChains.includes(t.chain))
-            .filter(t => {
-                const keyword = (this.searchKeyword || '').toLowerCase();
-                return (
-                    t.symbol.toLowerCase().includes(keyword) ||
-                    t.pairSymbol.toLowerCase().includes(keyword)
-                );
-            })
-            .sort((a, b) => {
-                const symbolA = a.symbol.toLowerCase();
-                const symbolB = b.symbol.toLowerCase();
-                return this.sortAscending
-                    ? symbolA.localeCompare(symbolB)
-                    : symbolB.localeCompare(symbolA);
-            });
-
-        if (activeTokens.length === 0) {
-            tbody.html(`<tr><td colspan="16" class="text-center text-danger py-7">DATA TIDAK DITEMUAKN / TIDAK ADA DAFTAR TOKEN</td></tr>`);
-            return;
-        }
-
-        let rowIndex = 0; // 🔢 Inisialisasi counter baris global
-        // 🔢 Batasi hanya 4 DEX pertama
-
-        for (const token of activeTokens) {
-            for (const cex of token.selectedCexs) {
-                const limitedDexList = (token.selectedDexs || []).slice(0, 4);
-
-                const rowId = `token-row-${token.id}-${cex.replace(/\W+/g, '').toLowerCase()}`;
-
-                const dexCEXtoDEX = limitedDexList.map(dex => {
-                    const isDexSelected = token.selectedDexs?.includes(dex);
-                    const icon = isDexSelected ? '🔒' : '⛔';
-                    const bgClass = isDexSelected ? '' : 'abu';
-                    const cellId = `cell_${token.symbol}_${token.pairSymbol}_${token.chain}_${cex}_${dex}`.toLowerCase().replace(/\W+/g, '');
-
-                    return `<td id="${cellId}" class="dex-price-cell text-center ${bgClass}">${icon}</td>`;
-                }).join('');
-
-                const dexDEXtoCEX = limitedDexList.map(dex => {
-                    const isDexSelected = token.selectedDexs?.includes(dex);
-                    const icon = isDexSelected ? '🔒' : '⛔';
-                    const bgClass = isDexSelected ? '' : 'abu';
-                    const cellId = `cell_${token.pairSymbol}_${token.symbol}_${token.chain}_${dex}_${cex}`.toLowerCase().replace(/\W+/g, '');
-
-                    return `<td id="${cellId}" class="dex-price-cell text-center ${bgClass}">${icon}</td>`;
-                }).join('');
-
-                const detailHTML = this.createTokenDetailContent(token, cex);
-                const orderbookLeftId = `orderbook_cex_to_dex_${cex}_${token.chain}_${token.symbol}_${token.pairSymbol}`;
-                const orderbookRightId = `orderbook_dex_to_cex_${cex}_${token.chain}_${token.pairSymbol}_${token.symbol}`;
-
-                // 🔄 Tentukan kelas strip berdasarkan indeks baris
-                const stripClass = rowIndex % 2 === 0 ? 'strip-even' : 'strip-odd';
-
-                const rowHTML = `
-                    <tr id="${rowId}" class="token-data-row text-center ${stripClass} fs-8"  >
-                        <td id="${orderbookLeftId.toLowerCase()}" >${cex}🔒</td>
-                        ${dexCEXtoDEX}
-                        <td class="token-detail-cell">${detailHTML}</td>
-                        ${dexDEXtoCEX}
-                        <td id="${orderbookRightId.toLowerCase()}" >${cex}🔒</td>
-                    </tr>
-                `;
-
-                tbody.append(rowHTML);
-                rowIndex++; // ⬆️ Tambah index baris
-            }
-        }
     }
 
     generateEmptyTable() {
@@ -1708,7 +1632,6 @@ class TokenPriceMonitor {
                 const shortCex = (CexShortMap[tokenUnit.cexName] || tokenUnit.cexName || '').toUpperCase();
                 const shortChain = (chainShortMap[(tokenUnit.chain || '').toUpperCase()] || tokenUnit.chain || '').toUpperCase();
 
-
                  // Scroll ke token pertama di batch, setelah semua selesai
                 const firstToken = batch[0];
                 if (firstToken) {
@@ -1882,7 +1805,8 @@ class TokenPriceMonitor {
         const tokenDecimals = token.decimals;
         const pairDecimals = token.pairDecimals;
         const gasFeeUSD = PriceUtils.getGasFeeUSD(token.chain, 210000, 5);
-
+        const shortChain = chainShortMap[String(token.chain || '').toUpperCase()];
+        
         const baseSymbol = token.symbol.toUpperCase();
         const quoteSymbol = token.pairSymbol.toUpperCase();
         const modal = direction === 'cex_to_dex' ? token.modalCexToDex : token.modalDexToCex;
@@ -2021,13 +1945,18 @@ class TokenPriceMonitor {
                 //     this.showAlert(alertMsg, 'success');
                 // }
                 if (pnl > parseFloat(this.settings.PNLFilter)) {
-                    const alertMsg = `
-                        🌐 CHAIN: ${token.chain.toUpperCase()} | 
-                        💹 CEX: ${cexName.toUpperCase()} → DEX: ${dexName.toUpperCase()} | 
-                        <span style="color:black; font-weight:bold;">🪙 MODAL: $${modal} </span> | 
-                        <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}</span> | 
-                        <span style="color:green; font-weight:bold;">💰 PROFIT: $${pnl.toFixed(2)} (${pnlPersen}%)</span>
-                    `.replace(/\s{2,}/g, ' ').trim(); // Hilangkan spasi berlebih
+                    // const alertMsg = `
+                    //     🌐 CHAIN: ${token.chain.toUpperCase()} | 
+                    //     💹 CEX: ${cexName.toUpperCase()} → DEX: ${dexName.toUpperCase()} | 
+                    //     <span style="color:black; font-weight:bold;">🪙 MODAL: $${modal} </span> | 
+                    //     <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}</span> | 
+                    //     <span style="color:green; font-weight:bold;">💰 PROFIT: $${pnl.toFixed(2)} (${pnlPersen}%)</span>
+                    // `.replace(/\s{2,}/g, ' ').trim(); // Hilangkan spasi berlebih
+
+                     const alertMsg = `
+                        <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}[${shortChain}]</span> | 
+                        <span style="color:green; font-weight:bold;">💰 $${pnl.toFixed(2)}</span>
+                    `.replace(/\s{2,}/g, ' ').trim(); 
 
                     this.showAlert(alertMsg, 'success');
                 }
@@ -2067,12 +1996,17 @@ class TokenPriceMonitor {
                 //     this.showAlert(alertMsg, 'success');
                 // }
                  if (pnl >  parseFloat(this.settings.PNLFilter)) {
-                    const alertMsg = `
-                        🌐 CHAIN: ${token.chain.toUpperCase()} | 
-                        💹 DEX: ${dexName.toUpperCase()} → CEX: ${cexName.toUpperCase()} | 
-                        <span style="color:black; font-weight:bold;">🪙 MODAL: $${modal} </span> | 
-                        <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}</span> | 
-                        <span style="color:green; font-weight:bold;">💰 PROFIT: $${pnl.toFixed(2)} (${pnlPersen}%)</span>
+                    // const alertMsg = `
+                    //     🌐 CHAIN: ${token.chain.toUpperCase()} | 
+                    //     💹 DEX: ${dexName.toUpperCase()} → CEX: ${cexName.toUpperCase()} | 
+                    //     <span style="color:black; font-weight:bold;">🪙 MODAL: $${modal} </span> | 
+                    //     <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}</span> | 
+                    //     <span style="color:green; font-weight:bold;">💰 PROFIT: $${pnl.toFixed(2)} (${pnlPersen}%)</span>
+                    // `.replace(/\s{2,}/g, ' ').trim(); // Hilangkan spasi berlebih
+
+                     const alertMsg = `
+                        <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}[${shortChain}]</span> | 
+                        <span style="color:green; font-weight:bold;">💰 $${pnl.toFixed(2)}</span>
                     `.replace(/\s{2,}/g, ' ').trim(); // Hilangkan spasi berlebih
 
                     this.showAlert(alertMsg, 'success');
