@@ -97,170 +97,183 @@
         <h3 class="uk-heading-line text-warning" style="text-align: center; margin-bottom: 0px;"><span>PORTOFOLIO ASSET</span> <img src="https://coopsugar.org/storage/2022/03/new.gif" width="50px" /></h3>
 
     <!-- Grid Container -->
-    <div class="uk-grid uk-child-width-1-3 uk-grid-small " uk-grid>
-      
-         <div>
+    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-3@l uk-grid-small" uk-grid>
+        <div>
             <div class="uk-card uk-card-default uk-card-body">
-                  <!-- Bagian CEX -->
-                <h5 class="uk-heading-line uk-text-primary "><span>Setting All Exchanges</span> </h5>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox"  checked id="BINANCE" />&nbsp;
-                            <label class="form-check-label" for="BINANCE">BINANCE</label>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyBINANCE" placeholder="API KEY BINANCE" value="" required />
-                    <input type="text" class="form-control" id="secretkeyBINANCE" placeholder="SECRET KEY BINANCE" value="" required />
-                </div>
+                <!-- Container Accordion -->
+                <ul uk-accordion="multiple: true">
+                    <!-- Collapse: Setting All Exchanges -->
+                    <li class="uk-open">
+                        <a class="uk-accordion-title" href="#">
+                            <h5 class="uk-heading-line uk-text-primary "><span>⚙️ Setting All Exchanges</span> </h5>
+                        </a>
+                        <div class="uk-accordion-content">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox"  checked id="BINANCE" />&nbsp;
+                                            <label class="form-check-label" for="BINANCE">BINANCE</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyBINANCE" placeholder="API KEY BINANCE" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyBINANCE" placeholder="SECRET KEY BINANCE" value="" required />
+                                </div>
 
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox" id="GATE" />&nbsp;
-                            <label class="form-check-label" for="GATE">GATE</label>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyGATE" placeholder="API KEY GATE" value="" required />
-                    <input type="text" class="form-control" id="secretkeyGATE" placeholder="SECRET KEY GATE" value="" required />
-                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox" id="GATE" />&nbsp;
+                                            <label class="form-check-label" for="GATE">GATE</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyGATE" placeholder="API KEY GATE" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyGATE" placeholder="SECRET KEY GATE" value="" required />
+                                </div>
+                                <!--
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox"  id="BITGET" />&nbsp;
+                                            <label class="form-check-label" for="BITGET">BITGET</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyBITGET" placeholder="API KEY BITGET" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyBITGET" placeholder="SECRET KEY BITGET" value="" required />
+                                    <input type="text" class="form-control" id="passphraseBITGET" placeholder="PASSPHRASE KEY BITGET" value="" required />
+                                </div>
 
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox"  id="BITGET" />&nbsp;
-                            <label class="form-check-label" for="BITGET">BITGET</label>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyBITGET" placeholder="API KEY BITGET" value="" required />
-                    <input type="text" class="form-control" id="secretkeyBITGET" placeholder="SECRET KEY BITGET" value="" required />
-                    <input type="text" class="form-control" id="passphraseBITGET" placeholder="PASSPHRASE KEY BITGET" value="" required />
-                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox"  id="KUCOIN" />&nbsp;
+                                            <label class="form-check-label" for="KUCOIN">KUCOIN</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyKUCOIN" placeholder="API KEY KUCOIN" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyKUCOIN" placeholder="SECRET KEY KUCOIN" value="" required />
+                                    <input type="text" class="form-control" id="passphraseKUCOIN" placeholder="PASSPHRASE KEY KUCOIN" value="" required />
+                                </div>
 
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox"  id="KUCOIN" />&nbsp;
-                            <label class="form-check-label" for="KUCOIN">KUCOIN</label>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyKUCOIN" placeholder="API KEY KUCOIN" value="" required />
-                    <input type="text" class="form-control" id="secretkeyKUCOIN" placeholder="SECRET KEY KUCOIN" value="" required />
-                    <input type="text" class="form-control" id="passphraseKUCOIN" placeholder="PASSPHRASE KEY KUCOIN" value="" required />
-                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox" id="BYBIT" />&nbsp;
+                                            <label class="form-check-label" for="BYBIT">BYBIT</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyBYBIT" placeholder="API KEY BYBIT" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyBYBIT" placeholder="SECRET KEY BYBIT" value="" required />
+                                </div> -->
 
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox" id="BYBIT" />&nbsp;
-                            <label class="form-check-label" for="BYBIT">BYBIT</label>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyBYBIT" placeholder="API KEY BYBIT" value="" required />
-                    <input type="text" class="form-control" id="secretkeyBYBIT" placeholder="SECRET KEY BYBIT" value="" required />
-                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox" id="INDODAX" />&nbsp;
+                                            <label class="form-check-label" for="INDODAX">INDODAX</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyINDODAX" placeholder="API KEY INDODAX" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyINDODAX" placeholder="SECRET KEY INDODAX" value="" required />
+                                </div>
 
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox" id="INDODAX" />&nbsp;
-                            <label class="form-check-label" for="INDODAX">INDODAX</label>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyINDODAX" placeholder="API KEY INDODAX" value="" required />
-                    <input type="text" class="form-control" id="secretkeyINDODAX" placeholder="SECRET KEY INDODAX" value="" required />
-                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" class="uk-checkbox" id="MEXC" />&nbsp;
+                                            <label class="form-check-label" for="MEXC">MEXC</label>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="apikeyMEXC" placeholder="API KEY MEXC" value="" required />
+                                    <input type="text" class="form-control" id="secretkeyMEXC" placeholder="SECRET KEY MEXC" value="" required />
+                                </div>
 
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" class="uk-checkbox" id="MEXC" />&nbsp;
-                            <label class="form-check-label" for="MEXC">MEXC</label>
+                                <div class="uk-flex uk-flex-right">
+                                    <button class="uk-button uk-button-small uk-button-primary" id="SaveConfigCEXS">CHECK EXCHANGER</button>
+                                </div>
                         </div>
-                    </div>
-                    <input type="text" class="form-control" id="apikeyMEXC" placeholder="API KEY MEXC" value="" required />
-                    <input type="text" class="form-control" id="secretkeyMEXC" placeholder="SECRET KEY MEXC" value="" required />
-                </div>
+                    </li>
 
-                <div class="uk-flex uk-flex-right">
-                     <button class="uk-button uk-button-small uk-button-primary" id="SaveConfigCEXS">CHECK EXCHANGER</button>
-                </div>
-                  <!-- Bagian CEX -->
-                <div class="uk-width-auto@m">
-                <hr/>
-                <h5 class="uk-heading-line uk-text-left"><span>Setting Chains & Wallet</span></h5>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="ETHEREUM" />&nbsp;
-                                <label class="form-check-label" for="ethWallet">ETHEREUM</label>
-                            </div>
-                        </div>
-                        <input class="form-control" type="text" id="ethWallet" placeholder="Enter Ethereum Wallet Address">
-                    </div>
+                    <!-- Collapse: Setting Chains & Wallet -->
+                    <li class="uk-open">
+                        <a class="uk-accordion-title" href="#">
+                            <h5 class="uk-heading-line uk-text-left">
+                            <span>🔗 Setting Chains & Wallet</span></h5>
+                        </a>
+                        <div class="uk-accordion-content">
+                            <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="ETHEREUM" />&nbsp;
+                                                <label class="form-check-label" for="ethWallet">ETHEREUM</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="ethWallet" placeholder="Enter Ethereum Wallet Address">
+                                    </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="BSC" />&nbsp;
-                                <label class="form-check-label" for="bscWallet">BSC</label>
-                            </div>
-                        </div>
-                        <input class="form-control" type="text" id="bscWallet" placeholder="Enter BSC Wallet Address">
-                    </div>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="BSC" />&nbsp;
+                                                <label class="form-check-label" for="bscWallet">BSC</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="bscWallet" placeholder="Enter BSC Wallet Address">
+                                    </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="POLYGON" />&nbsp;
-                                <label class="form-check-label" for="polygonWallet">POLYGON</label>
-                            </div>
-                        </div>
-                        <input class="form-control" type="text" id="polygonWallet" placeholder="Enter Polygon Wallet Address">
-                    </div>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="POLYGON" />&nbsp;
+                                                <label class="form-check-label" for="polygonWallet">POLYGON</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="polygonWallet" placeholder="Enter Polygon Wallet Address">
+                                    </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="BASE" />&nbsp;
-                                <label class="form-check-label" for="baseWallet">BASE</label>
-                            </div>
-                        </div>
-                        <input class="form-control" type="text" id="baseWallet" placeholder="Enter Base Wallet Address">
-                    </div>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="BASE" />&nbsp;
+                                                <label class="form-check-label" for="baseWallet">BASE</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="baseWallet" placeholder="Enter Base Wallet Address">
+                                    </div>
 
-                    <div class="input-group mb-2" >
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="ARBITRUM" />&nbsp;
-                                <label class="form-check-label" for="arbitrumWallet">ARBITRUM</label>
-                            </div>
+                                    <div class="input-group mb-2" >
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="ARBITRUM" />&nbsp;
+                                                <label class="form-check-label" for="arbitrumWallet">ARBITRUM</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="arbitrumWallet" placeholder="Enter Arbitrum Wallet Address">
+                                    </div>
+                                    <!-- <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="AVAX" />&nbsp;
+                                                <label class="form-check-label" for="avaxWallet">AVAX</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="avaxWallet" placeholder="Enter AVAX Wallet Address">
+                                    </div>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox"  id="SOLANA" />&nbsp;
+                                                <label class="form-check-label" for="solanaWallet">SOLANA</label>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="text" id="solanaWallet" placeholder="Enter Solana Wallet Address">
+                                    </div> -->
+                                    
+                                    <div class="uk-flex uk-flex-right">
+                                        <button class="uk-button uk-button-small uk-button-secondary" id="SaveWalletChains">CHECK WALLETS</button>
+                                    </div>
                         </div>
-                        <input class="form-control" type="text" id="arbitrumWallet" placeholder="Enter Arbitrum Wallet Address">
-                    </div>
-                    <!-- <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="AVAX" />&nbsp;
-                                <label class="form-check-label" for="avaxWallet">AVAX</label>
-                            </div>
-                        </div>
-                        <input class="form-control" type="text" id="avaxWallet" placeholder="Enter AVAX Wallet Address">
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox"  id="SOLANA" />&nbsp;
-                                <label class="form-check-label" for="solanaWallet">SOLANA</label>
-                            </div>
-                        </div>
-                        <input class="form-control" type="text" id="solanaWallet" placeholder="Enter Solana Wallet Address">
-                    </div> -->
-                    
-                    <div class="uk-flex uk-flex-right">
-                        <button class="uk-button uk-button-small uk-button-secondary" id="SaveWalletChains">CHECK WALLETS</button>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
         <!-- Kolom 2 -->
@@ -269,15 +282,15 @@
               <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                 <!-- Gambar kiri -->
                 <div>
-                    <a href="https://multiscan-ruby.vercel.app/MULTI/modal.html" target="_blank">
+                    <!-- <a href="https://multiscan-ruby.vercel.app/MULTI/modal.html" target="_blank">
                         <img title="TAB SENDIRI" src="https://cdn-icons-png.flaticon.com/512/5548/5548820.png" width="28px" />
-                    </a>&nbsp;&nbsp;
+                    </a>&nbsp;&nbsp; -->
                     <a href="#" target="_blank" id="reload">
                       <img title="RELOAD PAGE" src="https://cdn-icons-png.freepik.com/512/210/210136.png" width="25px" />
                     </a>&nbsp;&nbsp;
-                     <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
+                     <!-- <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
                         <img title="BUKA KUNCI" src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="28px" />
-                    </a>&nbsp;&nbsp;
+                    </a>&nbsp;&nbsp; -->
                     <a href="#" target="_blank" id="openModalKalkulator">
                         <img title="KALKULATOR" src="https://cdn-icons-png.flaticon.com/512/342/342344.png" width="25px" />
                     </a>&nbsp;&nbsp;
@@ -311,7 +324,7 @@
                         <td class="uk-text-secondary">GATE</td>
                         <td id="GATESaldo" class="uk-text-right"> xxx {USDT}</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td class="uk-text-secondary">BITGET</td>
                         <td id="BITGETSaldo" class="uk-text-right"> xxx {USDT}</td>
                     </tr>
@@ -322,7 +335,7 @@
                     <tr>
                         <td class="uk-text-secondary">BYBIT</td>
                         <td id="BYBITSaldo" class="uk-text-right"> xxx {USDT}</td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td class="uk-text-secondary">INDODAX</td>
                         <td id="INDODAXSaldo" class="uk-text-right"> xxx {INDODAX}</td>
@@ -532,7 +545,7 @@
             // Fetch initial rates
             function fetchRatesx() {
                 const binanceURL = encodeURIComponent('https://data-api.binance.vision/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","BNBUSDT","POLUSDT","AVAXUSDT","SOLUSDT"]');
-                const indodaxURL = encodeURIComponent('https://indodax.com/api/ticker/usdtidr');
+                const indodaxURL = encodeURIComponent('https://simple-proxy-psi.vercel.app/?url=https://indodax.com/api/ticker/usdtidr');
 
                 $.when(
                     $.ajax({
@@ -570,7 +583,7 @@
             function fetchRates() {
                 $.when(
                     $.getJSON("https://api-gcp.binance.com/api/v3/ticker/price?symbols=[%22BTCUSDT%22,%22ETHUSDT%22,%22BNBUSDT%22,%22POLUSDT%22,%22AVAXUSDT%22,%22SOLUSDT%22]"),
-                    $.getJSON("https://indodax.com/api/ticker/USDTIDR")
+                    $.getJSON("https://simple-proxy-psi.vercel.app/?url=https://indodax.com/api/ticker/USDTIDR")
                 ).done(function (binanceResponse, indodaxResponse) {
                     binanceResponse[0].forEach((res) => {
                         switch (res.symbol) {
@@ -597,7 +610,7 @@
                     return;
                 }
 
-                $.getJSON("https://api-gcp.binance.com/api/v3/ticker/price?symbol=" + symbol1 + "USDT")
+                $.getJSON("https://proxykanan.awokawok.workers.dev/?https://api-gcp.binance.com/api/v3/ticker/price?symbol=" + symbol1 + "USDT")
                     .done(function (response) {
                         ratePrice.random1 = parseFloat(response.price);
                         $("#random1price").prop("disabled", false).val(ratePrice.random1.toFixed(8));
@@ -1065,7 +1078,7 @@
         async function cekAssetGate() {
             const key = $("#apikeyGATE").val();
             const secret = $("#secretkeyGATE").val();
-            const host = "https://cors-anywhere.herokuapp.com/https://api.gateio.ws";
+            const host = "https://proxykiri.awokawok.workers.dev/?https://api.gateio.ws";
             const prefix = "/api/v4";
             const method = "GET";
             const url = "/spot/accounts";
@@ -1288,7 +1301,7 @@
                 $("#INDODAXSaldo").text("Loading...");
 
                 const response = await $.ajax({
-                    url: "https://indodax.com/tapi",
+                    url: "https://simple-proxy-psi.vercel.app/?url=https://indodax.com/tapi",
                     type: "POST",
                     headers: {
                         "Key": apiKey,
@@ -1348,7 +1361,7 @@
             const apiSecret = $("#secretkeyMEXC").val();
             const recvWindow = 5000;
             const timestamp = Date.now().toString();
-            const apiUrl = "https://cors-anywhere.herokuapp.com/https://api.mexc.com/api/v3/account";
+            const apiUrl = "https://proxykiri.awokawok.workers.dev/?https://api.mexc.com/api/v3/account";
             const queryString = `recvWindow=${recvWindow}&timestamp=${timestamp}`;
             const signature = CryptoJS.HmacSHA256(queryString, apiSecret).toString(CryptoJS.enc.Hex);
             const fullUrl = `${apiUrl}?${queryString}&signature=${signature}`;
@@ -1402,7 +1415,7 @@
             const apiSecret = $("#secretkeyBINANCE").val();
             if (!apiKey || !apiSecret) return;
 
-            const apiUrl = "https://api-gcp.binance.com/api/v3/account";
+            const apiUrl = "https://proxykanan.awokawok.workers.dev/?https://api-gcp.binance.com/api/v3/account";
             const timestamp = Date.now();
             const queryString = `timestamp=${timestamp}`;
             const signature = CryptoJS.HmacSHA256(queryString, apiSecret).toString(CryptoJS.enc.Hex);
@@ -1976,7 +1989,7 @@
         async function USDTIDR(usdt) {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: "https://indodax.com/api/ticker/usdtidr", // Endpoint Indodax untuk USDT ke IDR
+                    url: "https://simple-proxy-psi.vercel.app/?url=https://indodax.com/api/ticker/usdtidr", // Endpoint Indodax untuk USDT ke IDR
                     success: function (response) {
                         // Mendapatkan harga terkini dari Indodax API
                         var USDTRate = parseFloat(response.ticker.last);
