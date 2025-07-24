@@ -3175,7 +3175,7 @@ class TokenPriceMonitor {
 // Initialize the application when DOM is ready
 $(document).ready(function() {
     window.app = new TokenPriceMonitor();
-
+    
     $('#scrollTopBtn').show();
     
    // Fungsi untuk menerapkan tema dan tandai kotak aktif
