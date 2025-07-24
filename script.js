@@ -1,5 +1,5 @@
 // Token Price Monitor Application - Updated for Frontend API Calls
-const DexList = ['KyberSwap','OKXDEX', '1inch','ODOS', 'Matcha', 'ParaSwap'];
+const DexList = ['KyberSwap','OKXDEX', '1inch','ODOS', 'Matcha', 'ParaSwap','Magpie','BEBOP'];
 const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
 const ChainList = ['BSC', 'Ethereum', 'Polygon', 'Arbitrum', 'Base'];
 
@@ -203,7 +203,50 @@ class TokenPriceMonitor {
              this.logAction(`UBAH DATA KOIN`);
         });
 
-       $(document).off('change', '.update-dex-checkbox').on('change', '.update-dex-checkbox', (e) => {
+        $(document).off('change', '.update-dex-checkbox').on('change', '.update-dex-checkbox', (e) => {
+            const checkbox = $(e.target);
+            const tokenId = checkbox.data('token-id');
+            const dexName = checkbox.data('dex');
+            const isChecked = checkbox.is(':checked');
+
+            const tokenIndex = this.tokens.findIndex(t => t.id.toString() === tokenId.toString());
+            if (tokenIndex === -1) return;
+
+            const token = this.tokens[tokenIndex];
+
+            if (isChecked) {
+                if (token.selectedDexs.length >= 4) {
+                    // Batasi hanya 4 DEX
+                    checkbox.prop('checked', false); // batalkan centang
+                    this.showAlert('⚠️ Maksimal 4 DEX per token yang diperbolehkan.', 'warning');
+                    return;
+                }
+
+                if (!token.selectedDexs.includes(dexName)) {
+                    token.selectedDexs.push(dexName);
+                }
+            } else {
+                token.selectedDexs = token.selectedDexs.filter(d => d !== dexName);
+            }
+
+            this.saveTokensToStorage(true);
+
+            const emoji = isChecked ? '✅' : '❌';
+            const alertType = isChecked ? 'primary' : 'danger';
+            this.showAlert(`${emoji} ${dexName} ${isChecked ? 'ditambahkan ke' : 'dihapus dari'} token ${token.symbol}`, alertType);
+
+            this.logAction(`UBAH DATA KOIN`);
+        });
+
+        $(document).off('change', '.form-check-input.dex-option').on('change', '.form-check-input.dex-option', function () {
+            const checked = $('.form-check-input.dex-option:checked');
+            if (checked.length > 4) {
+                $(this).prop('checked', false);
+                alert('⚠️ Maksimal hanya 4 DEX yang boleh dipilih.');
+            }
+        });
+
+       $(document).off('change', '.update-dex-checkboxLAMA').on('change', '.update-dex-checkboxLAMA', (e) => {
             const checkbox = $(e.target);
             const tokenId = checkbox.data('token-id');
             const dexName = checkbox.data('dex');
@@ -253,24 +296,24 @@ class TokenPriceMonitor {
             this.highestPNLSignal = {}; // ✅ Reset setiap scan baru
 
             // Aktifkan tab Price Monitoring
-            $('#mainTabs a[href="#priceMonitoring"]').tab('show');
+            // // $('#mainTabs a[href="#priceMonitoring"]').tab('show');
 
-            const tabToken = $('#mainTabs .nav-item:has(a[href="#tokenManagement"])');
-            const tabSetting = $('#mainTabs .nav-item:has(a[href="#apiSettings"])');
-            const tabModal = $('#mainTabs .nav-item:has(a[href="#portfolioTab"])');
-            const tabInfo = $('#mainTabs .nav-item:has(a[href="#infoChecking"])');
+            // // const tabToken = $('#mainTabs .nav-item:has(a[href="#tokenManagement"])');
+            // // const tabSetting = $('#mainTabs .nav-item:has(a[href="#apiSettings"])');
+            // // const tabModal = $('#mainTabs .nav-item:has(a[href="#portfolioTab"])');
+            // // const tabInfo = $('#mainTabs .nav-item:has(a[href="#infoChecking"])');
 
-            // Sembunyikan tab lain saat proses
-            tabToken.hide();
-            tabSetting.hide();
-            tabModal.hide();
-            tabInfo.hide();
+            // // Sembunyikan tab lain saat proses
+            // tabToken.hide();
+            // tabSetting.hide();
+            // tabModal.hide();
+            // tabInfo.hide();
 
             // Tampilkan kembali panel sinyal
             $('#dexSignals').show();
 
             // Nonaktifkan tombol-tombol selama proses
-            $('#CheckPrice').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Scan...');
+            $('#CheckPrice').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Scan..');
             $('#autorunBtn').prop('disabled', true);
             $('#monitoringSearch').prop('disabled', true).val('');
             $('#sortByToken').prop('disabled', true);
@@ -305,10 +348,10 @@ class TokenPriceMonitor {
                 this.startAutorunCountdown(() => $('#CheckPrice').trigger('click'));
             } else {
                 // Mode Manual: kembalikan tab & aktifkan tombol-tombol
-                tabToken.show();
-                tabSetting.show();
-                tabModal.show();
-                tabInfo.show();
+                // tabToken.show();
+                // tabSetting.show();
+                // tabModal.show();
+                // tabInfo.show();
 
                 $('#StopScan').addClass('d-none');
                 $('#monitoringSearch').prop('disabled', false);
@@ -723,12 +766,14 @@ class TokenPriceMonitor {
         }
 
         let rowIndex = 0; // 🔢 Inisialisasi counter baris global
+        // 🔢 Batasi hanya 4 DEX pertama
+        const limitedDexList = DexList.slice(0, 4);
 
         for (const token of activeTokens) {
             for (const cex of token.selectedCexs) {
                 const rowId = `token-row-${token.id}-${cex.replace(/\W+/g, '').toLowerCase()}`;
 
-                const dexCEXtoDEX = DexList.map(dex => {
+                const dexCEXtoDEX = limitedDexList.map(dex => {
                     const isDexSelected = token.selectedDexs?.includes(dex);
                     const icon = isDexSelected ? '🔒' : '⛔';
                     const bgClass = isDexSelected ? '' : 'abu';
@@ -737,7 +782,7 @@ class TokenPriceMonitor {
                     return `<td id="${cellId}" class="dex-price-cell text-center ${bgClass}">${icon}</td>`;
                 }).join('');
 
-                const dexDEXtoCEX = DexList.map(dex => {
+                const dexDEXtoCEX = limitedDexList.map(dex => {
                     const isDexSelected = token.selectedDexs?.includes(dex);
                     const icon = isDexSelected ? '🔒' : '⛔';
                     const bgClass = isDexSelected ? '' : 'abu';
@@ -1227,24 +1272,28 @@ class TokenPriceMonitor {
     getBadgeColor(name, type) {
         if (type === 'cex') {
             const colors = {
-                Binance: 'bg-warning text-dark',
-                MEXC: 'bg-primary  text-light',
-                Gateio: 'bg-danger text-light',
-                INDODAX: 'bg-info text-dark',
+                Binance: 'bg-binance',
+                MEXC: 'bg-mexc',
+                Gateio: 'bg-gateio',
+                INDODAX: 'bg-indodax',
             };
-            return colors[name] || 'bg-primary';
+            return colors[name] || 'bg-secondary text-light';
         }
+
         if (type === 'dex') {
             const colors = {
-                "1inch": 'bg-warning',
-                KyberSwap: 'bg-success',
-                Matcha: 'bg-primary',
-                ODOS: 'bg-danger',
-                ParaSwap: 'bg-info',
-                OKXDEX: 'bg-dark',
+                "1inch": 'bg-1inch',
+                KyberSwap: 'bg-kyberswap',
+                Matcha: 'bg-matcha',
+                ODOS: 'bg-odos',
+                ParaSwap: 'bg-paraswap',
+                OKXDEX: 'bg-okxdex',
+                BEBOP: 'bg-bebop',
+                Magpie: 'bg-magpie',
             };
-            return colors[name] || 'bg-secondary';
+            return colors[name] || 'bg-secondary text-light';
         }
+
         if (type === 'chain') {
             const colors = {
                 bsc: 'bg-warning text-dark',
@@ -1253,13 +1302,16 @@ class TokenPriceMonitor {
                 arbitrum: 'bg-info text-dark',
                 base: 'bg-dark text-light',
             };
-            return colors[name.toLowerCase()] || 'bg-dark';
+            return colors[name.toLowerCase()] || 'bg-dark text-light';
         }
-        return 'bg-secondary';
+
+        return 'bg-secondary text-light';
     }
+
 
     getTextColorClassFromBadge(badgeClass = '') {
         const map = {
+            // Bootstrap default
             'bg-success': 'text-success',
             'bg-primary': 'text-primary',
             'bg-danger': 'text-danger',
@@ -1268,11 +1320,25 @@ class TokenPriceMonitor {
             'bg-secondary': 'text-secondary',
             'bg-dark': 'text-dark',
             'bg-warning': 'text-warning',
+
+            // Custom brand (CEX & DEX)
+            'bg-binance': 'text-binance',
+            'bg-mexc': 'text-mexc',
+            'bg-gateio': 'text-gateio',
+            'bg-indodax': 'text-indodax',
+
+            'bg-1inch': 'text-1inch',
+            'bg-kyberswap': 'text-kyberswap',
+            'bg-matcha': 'text-matcha',
+            'bg-odos': 'text-odos',
+            'bg-paraswap': 'text-paraswap',
+            'bg-okxdex': 'text-okxdex',
+            'bg-bebop': 'text-bebop',
+            'bg-magpie': 'text-magpie',
         };
 
-        // Ambil class pertama yg dimulai dengan "bg-"
         const bgClass = badgeClass.split(' ').find(cls => cls.startsWith('bg-'));
-        return map[bgClass] || 'text-secondary'; // fallback jika tidak cocok
+        return map[bgClass] || 'text-light';
     }
 
     loadSettingsForm() {
@@ -1343,6 +1409,38 @@ class TokenPriceMonitor {
 
     saveToken() {
         const formData = this.getTokenFormData();
+
+        // Validasi maksimal 4 DEX
+        if (formData.selectedDexs && formData.selectedDexs.length > 4) {
+            this.showAlert('⚠️ Maksimal hanya boleh memilih 4 DEX untuk setiap token.', 'warning');
+            return;
+        }
+
+        // Validasi form lain
+        if (!this.validateTokenForm(formData)) {
+            return;
+        }
+
+        try {
+            if (this.currentEditingToken) {
+                this.updateToken(this.currentEditingToken.id, formData);
+                this.showAlert('✅ Berhasil SIMPAN Perubahan DATA, Silakan Refresh!', 'success');
+                this.logAction(`UBAH DATA KOIN`);
+            } else {
+                this.addToken(formData);
+                this.showAlert('✅ Berhasil Menambah DATA Baru, Silakan Refresh', 'success');
+                this.logAction(`TAMBAH DATA KOIN`);
+            }
+
+            $('#tokenModal').modal('hide');
+            this.resetTokenForm();
+        } catch (error) {
+            this.showAlert('❌ Error saving token: ' + error.message, 'danger');
+        }
+    }
+
+    saveTokenLAMA() {
+        const formData = this.getTokenFormData();
         
         if (!this.validateTokenForm(formData)) {
             return;
@@ -1398,27 +1496,27 @@ class TokenPriceMonitor {
     validateTokenForm(formData) {
         // 🔸 Validasi token
         if (!formData.symbol || !formData.pairSymbol) {
-            this.showAlert('Please enter token and pair symbols', 'warning');
+            this.showAlert('Masukan Symbol Token & Pair', 'warning');
             return false;
         }
 
         if (!formData.contractAddress || !formData.pairContractAddress) {
-            this.showAlert('Please enter contract addresses', 'warning');
+            this.showAlert('Masukan Smart Kontrak', 'warning');
             return false;
         }
 
         if (!formData.chain) {
-            this.showAlert('Please select a chain', 'warning');
+            this.showAlert('Pilih Chain', 'warning');
             return false;
         }
 
         if (!formData.selectedCexs || formData.selectedCexs.length === 0) {
-            this.showAlert('Please select at least one CEX', 'warning');
+            this.showAlert('Pilih CEX', 'warning');
             return false;
         }
 
         if (!formData.selectedDexs || formData.selectedDexs.length === 0) {
-            this.showAlert('Please select at least one DEX', 'warning');
+            this.showAlert('Pilih DEX', 'warning');
             return false;
         }
 
@@ -1508,11 +1606,7 @@ class TokenPriceMonitor {
     }
 
 
-    async CheckPrices() {
-       const headerHeight = $('header').outerHeight() || 80;
-        $('html, body').animate({
-            scrollTop: $('#CheckPrice').offset().top - headerHeight
-        }, 600);
+    async CheckPrices() { 
 
         this.fetchGasTokenPrices();
         $('.chainFilterCheckbox').prop('disabled', true);
@@ -1564,7 +1658,7 @@ class TokenPriceMonitor {
 
         const startTime = new Date();
         const startStr = startTime.toLocaleTimeString();
-        $('#scanTimeInfo').html(`<span class="text-dark">&nbsp;🕒 Mulai Scan : ${startStr}</span>&nbsp;`);
+        $('#scanTimeInfo').html(`<span class="text-dark">&nbsp;🔍 ${startStr}</span>&nbsp;`);
 
         for (const batch of unitBatches) {
             await Promise.allSettled(batch.map(async tokenUnit => {
@@ -1581,6 +1675,10 @@ class TokenPriceMonitor {
                     }
                 };
 
+                const shortCex = (CexShortMap[tokenUnit.cexName] || tokenUnit.cexName || '').toUpperCase();
+                const shortChain = (chainShortMap[(tokenUnit.chain || '').toUpperCase()] || tokenUnit.chain || '').toUpperCase();
+
+
                  // Scroll ke token pertama di batch, setelah semua selesai
                 const firstToken = batch[0];
                 if (firstToken) {
@@ -1595,7 +1693,7 @@ class TokenPriceMonitor {
                     await new Promise(r => setTimeout(r, 100));
 
                     for (const dexName of tokenUnit.selectedDexs) {
-                        $('#scanProgressText').html(`🔄 ${(tokenUnit.cexName).toUpperCase()} → <b>[${tokenUnit.symbol} on ${tokenUnit.chain}]</b> → ${dexName.toUpperCase()} `);
+                        $('#scanProgressText').html(`🔄 ${shortCex.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${dexName.toUpperCase()} `);
                         try {
                             await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, direction);
                         } catch (err) {
@@ -1614,7 +1712,7 @@ class TokenPriceMonitor {
                     await new Promise(r => setTimeout(r, 100));
 
                     for (const dexName of tokenUnit.selectedDexs) {
-                        $('#scanProgressText').html(`🔄 ${dexName.toUpperCase()} → <b>[${tokenUnit.symbol} on ${tokenUnit.chain}]</b> → ${(tokenUnit.cexName).toUpperCase()} `);
+                        $('#scanProgressText').html(`🔄 ${dexName.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${shortCex.toUpperCase()} `);
                         try {
                             await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, direction);
                         } catch (err) {
@@ -1636,7 +1734,7 @@ class TokenPriceMonitor {
         const seconds = (durationSec % 60).toString().padStart(2, '0');
         
         $('#scanProgressText').html(``);
-        $('#scanTimeInfo').append(`<span class="text-primary fs-7">&nbsp;&nbsp;✅ Durasi Scan: ${minutes}:${seconds}</span>&nbsp;`);
+        $('#scanTimeInfo').append(`<span class="text-primary fs-7">&nbsp;&nbsp;✅ Finish: ${minutes}:${seconds}</span>&nbsp;`);
         this.showAlertWithAudio();
         $('.chainFilterCheckbox').prop('disabled', false);
 
@@ -2635,12 +2733,12 @@ class TokenPriceMonitor {
             const textColor = this.getTextColorClassFromBadge(this.getBadgeColor(dex, 'dex'));
 
             const card = $(`
-                <div class="col-12 col-md-6 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-3">
                     <div class="card border shadow-sm rounded-top no-rounded-bottom h-100">
                         <!-- HEADER -->
                         <div class="card-header px-1 py-1 d-flex justify-content-between align-items-center border-bottom-0 align-middle NameSinyalDEX" style="min-height: unset;">
                             <div class="fw-semibold text-uppercase ps-2" style="font-size: 0.85rem;">
-                                ${dexId} &nbsp;<span class="badge fs-8 bg-warning-subtle" id="new_${dexId}_Signal" ></span>  <span id="errorBadge_${dex}" class="badge bg-danger ms-1 d-none">0</span>
+                                ${dexId} &nbsp;<span class="badge fs-8 bg-warning-subtle" id="new_${dexId}_Signal" ></span> 
                             </div>
                             <i class="bi bi-caret-down-fill toggle-icon" id="icon-${dexId}"
                                 data-bs-toggle="collapse"
@@ -2776,13 +2874,15 @@ class TokenPriceMonitor {
         const cexUpper = cex.toUpperCase();
 
         const cexBadgeColor = this.getBadgeColor(cex, 'cex');
+        const cexColor = this.getTextColorClassFromBadge(this.getBadgeColor(cex, 'cex'));
+
         const chainBadgeColor = this.getBadgeColor(token.chain, 'chain');
         const chainColor = this.getTextColorClassFromBadge(this.getBadgeColor(token.chain, 'chain'));
 
         const url = this.GeturlExchanger(cexUpper, tokenSymbol, pairSymbol, 'cex_to_dex');
         const url2 = this.GeturlExchanger(cexUpper, pairSymbol, tokenSymbol, 'dex_to_cex');
 
-        const tokenSC = `<a href="${url2.tradeLink}" class="fs-7 bg-light badge ${chainColor} mx-1" target="_blank">${tokenSymbol}</a>`;
+        const tokenSC = `<a href="${url2.tradeLink}" class="fs-6 mx-1 ${cexColor} " target="_blank">${tokenSymbol}</a>`;
         const pairSC = `<a href="${url.tradeLink}" class="fs-7" target="_blank">${pairSymbol}</a>`;
 
         const stokTokenLink = this.generateStokLinkCEX(token.contractAddress, token.chain, cexUpper);
@@ -2855,7 +2955,7 @@ class TokenPriceMonitor {
 
                 <!-- SC & Trade Info -->
                 <div class="d-block mb-1 fw-bold">
-                    <span>${tokenSC}<a href="${stokTokenLink}" target="_blank"><i class="bi bi-wallet"></i></a> </span>
+                    <span>${tokenSC}<a href="${stokTokenLink}" target="_blank"><i class="bi bi-wallet"></i></a></span>
                     VS 
                     <span>${pairSC} <a href="${stokPairLink}" target="_blank"><i class="bi bi-wallet"></i></a></span>
                 </div>
