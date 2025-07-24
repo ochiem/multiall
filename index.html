@@ -552,6 +552,11 @@
         white-space: nowrap;
     }
 
+    .offcanvas.offcanvas-narrow {
+        width: 300px !important; /* Atur sesuai selera, misalnya 220px, 240px, dsb */
+        max-width: 80vw;          /* Agar tetap responsif di layar kecil */
+    }
+
 </style>
 
 </head>
@@ -575,8 +580,9 @@
         </div>
 
         <!-- Offcanvas Menu dari Kanan -->
-        <div class="offcanvas offcanvas-end bg-dark text-light bg-utama-subtle" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel">
-            
+        <!-- <div class="offcanvas offcanvas-end bg-dark text-light bg-utama-subtle" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel"> -->
+            <div class="offcanvas offcanvas-end offcanvas-narrow bg-dark text-light bg-utama-subtle" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel">
+
             <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="menuBurgerLabel">Menu Navigasi</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
@@ -587,7 +593,7 @@
                 <ul class="nav flex-column" id="mainTabs">
                     <li class="nav-item">
                         <div class="d-flex flex-wrap gap-2">
-                            <strong class="fw-bold text-light d-block mb-1">TEMA :</strong>
+                            <!-- <strong class="fw-bold text-light d-block mb-1">TEMA :</strong> -->
                             <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
                             <div class="theme-box" data-theme="ijo" style="background-color: #529772;" title="Hijau"></div>
                             <div class="theme-box" data-theme="coklat" style="background-color: #8d6e63;" title="Coklat"></div>
@@ -653,7 +659,7 @@
     <!-- Main Content -->
     <div class="container-fluid mt-0">
         <!-- Control Panel -->
-        <div class="row mb-3">
+        <div class="row mb-1">
             <div class="col-md-12">
 
                 <!-- Overlay Loading -->
@@ -667,8 +673,21 @@
                     </p>
                 </div>
 
-               <!-- Wrapper Kontainer -->
-                <div class=" overflow-hidden ps-1 pe-1">
+                <!-- Custom Alert -->
+                <div id="customAlert" class="custom-alert">
+                    ✅ <strong>SCAN SELESAI!</strong><br/>
+                    💰 DATA Siap di ANALISA<br/>
+                    🚀 Saatnya cari CUAN 🤩 !!
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Price Monitoring Tab -->
+            <div class="tab-pane fade show active" id="priceMonitoring">
+                 <!-- Wrapper Kontainer -->
+                <div id="mainBarSection"  class=" overflow-hidden ps-1 pe-1">
                     <!-- Bar + Tombol: satu baris di desktop, kolom di mobile -->
                     <div class="row g-2 align-items-center mt-1">
                         <!-- Tombol -->
@@ -716,20 +735,6 @@
                     </div>
                 </div>
 
-
-                <!-- Custom Alert -->
-                <div id="customAlert" class="custom-alert">
-                    ✅ <strong>SCAN SELESAI!</strong><br/>
-                    💰 DATA Siap di ANALISA<br/>
-                    🚀 Saatnya cari CUAN 🤩 !!
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Content -->
-        <div class="tab-content">
-            <!-- Price Monitoring Tab -->
-            <div class="tab-pane fade show active" id="priceMonitoring">
                 <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
                   
                     <div class="d-flex gap-2 flex-wrap align-items-center small text-nowrap">
@@ -814,6 +819,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
+                            <h5 class="text-center"><i class="bi bi-coin"></i> Token Management</h5>
                             <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                                 <!-- Tombol Aksi -->
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -912,16 +918,18 @@
             </div>
             
             <!-- Portfolio Tab -->
-             <div class="tab-pane fade" id="portfolioTab">
+            <div class="tab-pane fade" id="portfolioTab">
                 <iframe src="modal.html" style="width: 100%; height: 900px; border: none;"></iframe>
-            </div> 
+            </div>
            
             <!-- API Settings Tab -->
             <div class="tab-pane fade" id="apiSettings">
                 <div class="row">
                     <div class="col-md-6 offset-md-3">
+                       
                         <div class="card mt-4">                            
                             <div class="card-body">
+                                 <h5 class="text-center"><i class="bi bi-gear"></i> Settings Aplikasi</h5>
                                 <form id="settingsForm">
                                     <div class="mb-3">
                                         <label class="form-label">User Name</label>
