@@ -707,7 +707,7 @@ class TokenPriceMonitor {
             });
     }
  
-    generateEmptyTable() {
+    generateEmptyTableLAMA() {
         const tbody = $('#priceTableBody');
         tbody.empty();
 
@@ -787,6 +787,90 @@ class TokenPriceMonitor {
             }
         }
     }
+
+    generateEmptyTable() {
+        const tbody = $('#priceTableBody');
+        tbody.empty();
+
+        if (typeof this.sortAscending === 'undefined') {
+            this.sortAscending = true;
+        }
+
+        const activeTokens = this.tokens
+            .filter(t => t.isActive)
+            .filter(t => this.selectedChains.includes(t.chain))
+            .filter(t => {
+                const keyword = (this.searchKeyword || '').toLowerCase();
+                return (
+                    t.symbol.toLowerCase().includes(keyword) ||
+                    t.pairSymbol.toLowerCase().includes(keyword)
+                );
+            })
+            .sort((a, b) => {
+                const symbolA = a.symbol.toLowerCase();
+                const symbolB = b.symbol.toLowerCase();
+                return this.sortAscending
+                    ? symbolA.localeCompare(symbolB)
+                    : symbolB.localeCompare(symbolA);
+            });
+
+        if (activeTokens.length === 0) {
+            tbody.html(`<tr><td colspan="16" class="text-center text-danger py-7">DATA TIDAK DITEMUAKN / TIDAK ADA DAFTAR TOKEN</td></tr>`);
+            return;
+        }
+
+        let rowIndex = 0;
+
+        for (const token of activeTokens) {
+            for (const cex of token.selectedCexs) {
+                const selectedDexs = token.selectedDexs || [];
+                const limitedDexList = selectedDexs.slice(0, 4); // maksimal 4
+                const fillerCount = 4 - limitedDexList.length;
+
+                const rowId = `token-row-${token.id}-${cex.replace(/\W+/g, '').toLowerCase()}`;
+
+                // 🔒➡️ CEX ke DEX
+                const dexCEXtoDEX = limitedDexList.map(dex => {
+                    const isSelected = selectedDexs.includes(dex);
+                    const icon = isSelected ? '🔒' : '🚫';
+                    const cellId = `cell_${token.symbol}_${token.pairSymbol}_${token.chain}_${cex}_${dex}`.toLowerCase().replace(/\W+/g, '');
+                    return `<td id="${cellId}" class="dex-price-cell text-center">${icon}</td>`;
+                }).join('');
+
+                const fillerCEXtoDEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">🚫</td>').join('');
+
+                // 🔒⬅️ DEX ke CEX
+                const dexDEXtoCEX = limitedDexList.map(dex => {
+                    const isSelected = selectedDexs.includes(dex);
+                    const icon = isSelected ? '🔒' : '🚫';
+                    const cellId = `cell_${token.pairSymbol}_${token.symbol}_${token.chain}_${dex}_${cex}`.toLowerCase().replace(/\W+/g, '');
+                    return `<td id="${cellId}" class="dex-price-cell text-center">${icon}</td>`;
+                }).join('');
+
+                const fillerDEXtoCEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">🚫</td>').join('');
+
+                const detailHTML = this.createTokenDetailContent(token, cex);
+                const orderbookLeftId = `orderbook_cex_to_dex_${cex}_${token.chain}_${token.symbol}_${token.pairSymbol}`;
+                const orderbookRightId = `orderbook_dex_to_cex_${cex}_${token.chain}_${token.pairSymbol}_${token.symbol}`;
+
+                const stripClass = rowIndex % 2 === 0 ? 'strip-even' : 'strip-odd';
+
+                const rowHTML = `
+                    <tr id="${rowId}" class="token-data-row text-center ${stripClass} fs-8">
+                        <td id="${orderbookLeftId.toLowerCase()}">${cex}🔒</td>
+                        ${dexCEXtoDEX}${fillerCEXtoDEX}
+                        <td class="token-detail-cell">${detailHTML}</td>
+                        ${dexDEXtoCEX}${fillerDEXtoCEX}
+                        <td id="${orderbookRightId.toLowerCase()}">${cex}🔒</td>
+                    </tr>
+                `;
+
+                tbody.append(rowHTML);
+                rowIndex++;
+            }
+        }
+    }
+
 
     generateOrderBook(token, priceData, cexName, direction) {
         const base = token.symbol.toUpperCase();        // e.g. AUCTION
