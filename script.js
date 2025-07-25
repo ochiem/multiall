@@ -676,8 +676,8 @@ class TokenPriceMonitor {
                     const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
 
                     gasTextParts.push(
-                    //    `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
-                        `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)}]</span>`
+                        `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
+                        // `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)}]</span>`
                     );
                 }).fail(() => {
                     gasTextParts.push(`${chain.label}[err]`);
