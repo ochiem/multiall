@@ -557,80 +557,139 @@
         max-width: 80vw;          /* Agar tetap responsif di layar kecil */
     }
 
+    .nav-icon-button {
+        font-size: 1.3rem;
+        padding: 0.5rem 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: 0.375rem;
+        border: none;                 /* Hapus border */
+        outline: none;                /* Hapus outline saat fokus */
+        background: transparent;      /* Transparan default */
+        color: var(--bs-body-color);  /* Warna default teks/icon */
+        box-shadow: none;             /* Hilangkan shadow */
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-icon-button:hover,
+    .nav-icon-button.active {
+        background-color: var(--bs-primary);
+        color: #fff;
+    }
+
+    .nav-icon-button i {
+        font-size: 1.3rem;
+    }
+
+    /* Khusus untuk .navbar-toggler (burger menu) */
+    .navbar-toggler {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+
+
 </style>
 
 </head>
 <body style="font-family: 10px;">
 
     <nav class="navbar bg-utama py-2">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
-            
+        <div class="container-fluid d-flex align-items-center justify-content-between py-1 px-2 bg-dark">
             <!-- Brand -->
-            <a class="navbar-brand fw-bold text-light" href="#">[ Monitoring Price Coin ]</a>
+            <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#">[ Monitoring Price Coins ]</a>
 
-            <!-- Status Info (desktop only, sembunyi di mobile) -->
+            <!-- Status Info -->
             <div class="d-none d-md-flex flex-column align-items-end text-end me-2">
-            <small id="statERROR" class="text-danger"></small>
+                <small id="statERROR" class="text-danger"></small>
             </div>
+            <!-- Tab Icons Controller -->
+            <ul class="nav nav-pills mb-0 d-flex gap-1" id="tabIconController" role="tablist">
 
-            <!-- Tombol Burger -->
-            <button class="navbar-toggler text-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuBurgerOffcanvas" aria-controls="menuBurgerOffcanvas">
-            <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Button: Reload Page -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="reloadButton" type="button" title="Refresh" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </li>
+                
+                <!-- Tab: Price Monitoring -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button active text-white" id="price-tab"
+                        data-bs-toggle="tab" data-bs-target="#priceMonitoring" type="button" role="tab"
+                        aria-controls="priceMonitoring" aria-selected="true" title="Price Monitoring">
+                        <i class="bi bi-graph-up"></i>
+                    </button>
+                </li>
+
+                <!-- Tab: Token Management -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="token-tab"
+                        data-bs-toggle="tab" data-bs-target="#tokenManagement" type="button" role="tab"
+                        aria-controls="tokenManagement" aria-selected="false" title="Manajemen Koin">
+                        <i class="bi bi-coin"></i>
+                    </button>
+                </li>
+
+                <!-- Tab: API Settings -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="setting-tab"
+                        data-bs-toggle="tab" data-bs-target="#apiSettings" type="button" role="tab"
+                        aria-controls="apiSettings" aria-selected="false" title="Setting Aplikasi">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                </li>
+
+
+                <!-- Tab: Portfolio -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="portfolio-tab"
+                        data-bs-toggle="tab" data-bs-target="#portfolioTab" type="button" role="tab"
+                        aria-controls="portfolioTab" aria-selected="false" title="Portfolio Asset">
+                        <i class="bi bi-wallet"></i>
+                    </button>
+                </li>
+
+                <!-- Button: Offcanvas Menu -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#menuBurgerOffcanvas"
+                        aria-controls="menuBurgerOffcanvas" title="Info Aplikasi">
+                        <i class="bi bi-info-circle"></i>
+                    </button>
+                </li>
+            </ul>
         </div>
 
-        <!-- Offcanvas Menu dari Kanan -->
-        <!-- <div class="offcanvas offcanvas-end bg-dark text-light bg-utama-subtle" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel"> -->
-            <div class="offcanvas offcanvas-end offcanvas-narrow bg-dark text-light bg-utama-subtle" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel">
+        <div class="offcanvas offcanvas-end offcanvas-narrow text-light bg-secondary" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel">
 
-            <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="menuBurgerLabel">Menu Navigasi</h5>
+            <!-- <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="menuBurgerLabel"><i class="bi bi-info-square"></i>Info Aplikasi</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-            </div>
+            </div> -->
 
             <div class="offcanvas-body d-flex flex-column gap-1">
-                <!-- Tab Navigasi -->
-                <ul class="nav flex-column" id="mainTabs">
-                    <li class="nav-item">
-                        <div class="d-flex flex-wrap gap-2">
-                            <!-- <strong class="fw-bold text-light d-block mb-1">TEMA :</strong> -->
-                            <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
-                            <div class="theme-box" data-theme="ijo" style="background-color: #529772;" title="Hijau"></div>
-                            <div class="theme-box" data-theme="coklat" style="background-color: #8d6e63;" title="Coklat"></div>
-                            <div class="theme-box" data-theme="abu" style="background-color: #7d8085;" title="Abu"></div>
-                            <div class="theme-box" data-theme="pink" style="background-color: pink;" title="Pink"></div>
-                            <div class="theme-box" data-theme="orange" style="background-color: orange;" title="Orange"></div>
-                            <div class="theme-box" data-theme="ungu" style="background-color: #9c6cd1;" title="Ungu"></div>
-                        </div>
-                    </li>
-                    <hr class="my-1 bg-light"/>
-                    <li class="nav-item">
-                    <a class="nav-link active text-light" data-bs-toggle="tab" href="#priceMonitoring">
-                        <i class="bi bi-graph-up"></i> Monitoring Price
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link text-light" data-bs-toggle="tab" href="#tokenManagement">
-                        <i class="bi bi-coin"></i> Token Management
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link text-light" data-bs-toggle="tab" href="#apiSettings">
-                        <i class="bi bi-gear"></i> Settings Aplikasi
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link text-light" data-bs-toggle="tab" href="#portfolioTab">
-                        <i class="bi bi-wallet"></i> Portofolio Assets
-                    </a>
-                    </li>
-                </ul>
-
+               
+            <div class="d-flex flex-wrap gap-2">
+                <strong class="fw-bold text-light d-block mb-1"> TEMA :</strong><br/>
+                <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
+                <div class="theme-box" data-theme="ijo" style="background-color: #529772;" title="Hijau"></div>
+                <div class="theme-box" data-theme="coklat" style="background-color: #8d6e63;" title="Coklat"></div>
+                <div class="theme-box" data-theme="abu" style="background-color: #7d8085;" title="Abu"></div>
+                <div class="theme-box" data-theme="pink" style="background-color: pink;" title="Pink"></div>
+                <div class="theme-box" data-theme="orange" style="background-color: orange;" title="Orange"></div>
+                <div class="theme-box" data-theme="ungu" style="background-color: #9c6cd1;" title="Ungu"></div>
+            </div>
             <hr class="my-1 bg-light"/>
 
             <!-- Tema -->
             <div>
-                <small class="fw-bold text-danger">INFO STATUS:</small><br/>
+                <small class="fw-bold text-white">ACTION :</small><br/>
                 <span id="infostatus" class="text-white">---</span>
                 <span id="autorunCountdown" class="ms-2 badge bg-danger text-light fs-8"></span>
             </div>
@@ -661,17 +720,6 @@
         <!-- Control Panel -->
         <div class="row mb-1">
             <div class="col-md-12">
-
-                <!-- Overlay Loading -->
-                <div id="loadingOverlay" class="loading-overlay">
-                    <div class="spinner-border text-primary mt-5" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p class="mt-3 fw-bold text-primary">
-                        Mohon Menunggu [Layar Freeze], Sedang Proses update wallet CEX...<br>
-                        Jika Mouse digerakkan Layar Akan Berkedip -_-
-                    </p>
-                </div>
 
                 <!-- Custom Alert -->
                 <div id="customAlert" class="custom-alert">
@@ -816,104 +864,110 @@
 
             <!-- Token Management Tab -->
             <div class="tab-pane fade" id="tokenManagement">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <h5 class="text-center"><i class="bi bi-coin"></i> Token Management</h5>
-                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                <!-- Tombol Aksi -->
-                                <div class="d-flex align-items-center gap-2 flex-wrap">
-                                    <button class="btn btn-sm btn-outline-primary bg-light" data-bs-toggle="modal" data-bs-target="#tokenModal">
-                                        <i class="bi bi-plus-lg"></i> Add Tokens
-                                    </button>
+                <!-- Overlay Loading -->
+                <div id="loadingOverlay" class="loading-overlay">
+                    <span id="infoupdateWALLET" class="text-danger fs-6 ms-4"></span><br/>
 
-                                    <button class="btn btn-sm btn-outline-success bg-light" id="exportTokensBtn">
-                                        <i class="bi bi-download"></i> Export
-                                    </button>
+                    <div class="spinner-border text-primary mt-5" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 fw-bold text-primary text-center px-3">
+                        
+                        Mohon Menunggu [Layar Freeze], Sedang Proses update wallet CEX...<br>
+                        Jika Mouse digerakkan Layar Akan Berkedip -_-
+                    </p>
+                </div>
 
-                                    <button class="btn btn-sm btn-outline-danger bg-light" id="importTokensBtn">
-                                        <i class="bi bi-upload"></i> Import
-                                    </button>
-                                    
-                                    <button class="btn btn-sm btn-outline-info bg-light" id="WalletCEX">
-                                        <i class="bi bi-wallet"></i> Wallet CEX
-                                    </button>
+                <div class="card mt-3">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <h5 class="mb-0 text-white d-flex align-items-center gap-2">
+                            <i class="bi bi-coin"></i> Token Management
+                            
+                        </h5>
 
-                                    <input type="file" id="importTokensInput" accept=".csv" hidden>
+                        <!-- Tombol Aksi -->
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tokenModal">
+                                <i class="bi bi-plus-lg"></i> Add Tokens
+                            </button>
 
-                                    <div class="input-group input-group-sm bg-light" style="width: 200px;">
-                                        <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                        <input type="text" id="tokenSearch" class="form-control" placeholder="Search token...">
-                                    </div>
-                                </div>
+                            <button class="btn btn-sm btn-outline-success" id="exportTokensBtn">
+                                <i class="bi bi-download"></i> Export
+                            </button>
 
-                                <!-- Statistik Token + Filter Chain -->
-                                <div class="d-flex align-items-center flex-wrap gap-3 small text-nowrap">
+                            <button class="btn btn-sm btn-outline-danger" id="importTokensBtn">
+                                <i class="bi bi-upload"></i> Import
+                            </button>
 
-                                    <div class="text-secondary fw-bold">📊 Statistik Tokens</div>
+                            <button class="btn btn-sm btn-outline-info" id="WalletCEX">
+                                <i class="bi bi-wallet"></i> Wallet CEX
+                            </button>
 
-                                    <!-- Checkbox per Chain -->
-                                    <label class="text-warning">
-                                        <input type="checkbox" class="filter-chain-checkbox me-1" value="BSC" checked>
-                                        BSC: <span id="bscCountManagement" class="fw-bold">0</span>
-                                    </label>
+                            <input type="file" id="importTokensInput" accept=".csv" hidden>
 
-                                    <label class="text-primary">
-                                        <input type="checkbox" class="filter-chain-checkbox me-1" value="Ethereum" checked>
-                                        ERC: <span id="ethCountManagement" class="fw-bold">0</span>
-                                    </label>
-
-                                    <label class="text-danger">
-                                        <input type="checkbox" class="filter-chain-checkbox me-1" value="Base" checked>
-                                        BASE: <span id="baseCountManagement" class="fw-bold">0</span>
-                                    </label>
-
-                                    <label class="text-info">
-                                        <input type="checkbox" class="filter-chain-checkbox me-1" value="Polygon" checked>
-                                        POLY: <span id="polyCountManagement" class="fw-bold">0</span>
-                                    </label>
-
-                                    <label class="text-secondary">
-                                        <input type="checkbox" class="filter-chain-checkbox me-1" value="Arbitrum" checked>
-                                        ARB: <span id="arbCountManagement" class="fw-bold">0</span>
-                                    </label>
-
-                                    <div class="text-dark fw-bolder">
-                                        TOTAL: <span id="totalTokensManagement">0</span>
-                                        [ 
-                                        <span class="fw-bold text-success">ACTIVE:</span> <span id="activeTokensManagement" class="fw-bold text-success">0</span>
-                                        <span class="fw-bold text-danger">INACTIVE: </span><span id="inactiveTokensManagement" class="fw-bold text-danger">0</span> 
-                                        ]
-                                    </div>
-                                </div>
-
-
+                            <!-- Search -->
+                            <div class="input-group input-group-sm" style="width: 200px;">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" id="tokenSearch" class="form-control form-control-sm" placeholder="Search token...">
                             </div>
-
-                           
-
-                            <div class="card-body p-0">
-                                <div class="table-responsive sticky-table-container" style="max-height: 800px; overflow-y: auto;">
-                                    <table class="table table-hover custom-striped mb-0 sticky-table" id="tokenTable">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Symbol Token / Pair</th>
-                                                <th>Chain & Status</th>
-                                                <th>Modal {CEX & DEX}</th>
-                                                <th>Exchanger (CEX)</th>
-                                                <th>DEX</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tokenTableBody">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-                    
+
+                    <!-- Statistik dan Filter -->
+                    <div class="px-3 py-2 border-bottom bg-light">
+                        <div class="d-flex align-items-center flex-wrap gap-3 small text-nowrap">
+                            <div class="fw-bold text-secondary">📊 Statistik Tokens</div>
+
+                            <!-- Checkbox Chain Filter -->
+                            <label class="text-warning">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="BSC" checked>
+                                BSC: <span id="bscCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-primary">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Ethereum" checked>
+                                ERC: <span id="ethCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-danger">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Base" checked>
+                                BASE: <span id="baseCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-info">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Polygon" checked>
+                                POLY: <span id="polyCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-secondary">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Arbitrum" checked>
+                                ARB: <span id="arbCountManagement" class="fw-bold">0</span>
+                            </label>
+
+                            <!-- Total -->
+                            <div class="text-dark fw-bold">
+                                TOTAL: <span id="totalTokensManagement">0</span> [
+                                <span class="text-success">ACTIVE:</span> <span id="activeTokensManagement">0</span>
+                                <span class="text-danger">INACTIVE:</span> <span id="inactiveTokensManagement">0</span>
+                                ]
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Token -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive sticky-table-container" style="max-height: 800px; overflow-y: auto;">
+                            <table class="table table-hover custom-striped mb-0 sticky-table" id="tokenTable">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Symbol Token / Pair</th>
+                                        <th>Chain & Status</th>
+                                        <th>Modal {CEX & DEX}</th>
+                                        <th>Exchanger (CEX)</th>
+                                        <th>DEX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tokenTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -924,44 +978,51 @@
            
             <!-- API Settings Tab -->
             <div class="tab-pane fade" id="apiSettings">
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                       
-                        <div class="card mt-4">                            
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card mt-4 shadow-sm rounded-3">
                             <div class="card-body">
-                                 <h5 class="text-center"><i class="bi bi-gear"></i> Settings Aplikasi</h5>
+                                <h5 class="text-center mb-4 text-white">
+                                    <i class="bi bi-gear"></i> Settings Aplikasi
+                                </h5>
+
                                 <form id="settingsForm">
                                     <div class="mb-3">
-                                        <label class="form-label">User Name</label>
+                                        <label for="UserName" class="form-label">User Name</label>
                                         <input type="text" class="form-control" id="UserName" required>
-                                        <small class="form-text text-muted">UserName</small>
+                                        <small class="form-text text-muted">Masukkan nama pengguna Anda.</small>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Jumlah Anggota Grup [3-7]</label>
+                                        <label for="tokensPerBatch" class="form-label">Jumlah Anggota Grup [3-7]</label>
                                         <input type="number" class="form-control" id="tokensPerBatch" min="3" max="7" required>
-                                        <small class="form-text text-muted">Number of Grups</small>
+                                        <small class="form-text text-muted">Jumlah anggota per batch grup.</small>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label class="form-label">Jeda Antar Grup (ms) [300-5000]</label>
+                                        <label for="delayBetweenGrup" class="form-label">Jeda Antar Grup (ms) [300-5000]</label>
                                         <input type="number" class="form-control" id="delayBetweenGrup" min="300" max="5000" required>
-                                        <small class="form-text text-muted">Delay between Grups</small>
+                                        <small class="form-text text-muted">Jeda waktu antar batch (dalam milidetik).</small>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label class="form-label">Waktu Tunggu (ms) [2000-150000]</label>
+                                        <label for="TimeoutCount" class="form-label">Waktu Tunggu (ms) [2000-150000]</label>
                                         <input type="number" class="form-control" id="TimeoutCount" min="2000" max="150000" required>
-                                        <small class="form-text text-muted">Time Out </small>
+                                        <small class="form-text text-muted">Waktu maksimal menunggu proses (ms).</small>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label class="form-label">PNL Filter</label>
-                                        <input type="number" class="form-control" id="PNLFilter" value="0" required  min="0" step="0.01">
-                                        <small class="form-text text-muted">PNL Filter </small>
+                                        <label for="PNLFilter" class="form-label">PNL Filter</label>
+                                        <input type="number" class="form-control" id="PNLFilter" min="0" step="0.01" value="0" required>
+                                        <small class="form-text text-muted">Minimal PNL agar ditampilkan (0 untuk menonaktifkan).</small>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label class="form-label">WALLET ADDRESS</label>
+                                        <label for="WalletAddress" class="form-label">Wallet Address</label>
                                         <input type="text" class="form-control" id="WalletAddress" required>
-                                        <small class="form-text text-muted">Wallet Address</small>
+                                        <small class="form-text text-muted">Alamat wallet Anda untuk filter & identifikasi.</small>
                                     </div>
+
                                     <div class="text-end">
                                         <button type="submit" class="btn btn-primary" id="saveSettingsBtn">
                                             <i class="bi bi-check-lg"></i> Save Settings
@@ -973,9 +1034,9 @@
                     </div>
                 </div>
             </div>
-
-           
+       
         </div>
+
     </div>
 <!-- ✅ MODAL TOKEN FORM -->
     <div class="modal fade" id="tokenModal" tabindex="-1">
