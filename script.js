@@ -1,5 +1,4 @@
-// Token Price Monitor Application - Updated for Frontend API Calls
-const DexList = [ '1inch','KyberSwap','OKXDEX','ODOS', 'Matcha', 'ParaSwap','Magpie','LIFI'];
+const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI', 'ParaSwap','Magpie'];
 const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
 const ChainList = ['BSC', 'Ethereum', 'Polygon', 'Arbitrum', 'Base'];
 
