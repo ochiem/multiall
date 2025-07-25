@@ -274,16 +274,18 @@ class TokenPriceMonitor {
             // Aktifkan tab Price Monitoring
             $('#mainTabs a[href="#priceMonitoring"]').tab('show');
             
-            const tabMonitoring = $('#mainTabs .nav-item:has(a[href="#priceMonitoring"])');
-            const tabToken = $('#mainTabs .nav-item:has(a[href="#tokenManagement"])');
-            const tabSetting = $('#mainTabs .nav-item:has(a[href="#apiSettings"])');
-            const tabModal = $('#mainTabs .nav-item:has(a[href="#portfolioTab"])');
+           // Nonaktifkan klik pada tab lain (bukan disembunyikan)
+            const disableTab = (selector) => {
+                const tabBtn = $(`#tabIconController button[data-bs-target="${selector}"]`);
+                tabBtn.addClass('disabled').css({
+                    'pointer-events': 'none',
+                    'opacity': 0.5
+                });
+            };
 
-            // // Sembunyikan tab lain saat proses
-            tabMonitoring.hide();
-            tabToken.hide();
-            tabSetting.hide();
-            tabModal.hide();
+            disableTab('#tokenManagement');
+            disableTab('#apiSettings');
+            disableTab('#portfolioTab');
 
 
             // Tampilkan kembali panel sinyal
@@ -325,10 +327,9 @@ class TokenPriceMonitor {
                 this.startAutorunCountdown(() => $('#CheckPrice').trigger('click'));
             } else {
                 // Mode Manual: kembalikan tab & aktifkan tombol-tombol
-                tabMonitoring.show();
-                tabToken.show();
-                tabSetting.show();
-                tabModal.show();
+                enableTab('#tokenManagement');
+                enableTab('#apiSettings');
+                enableTab('#portfolioTab');
 
 
                 $('#StopScan').addClass('d-none');
