@@ -8,7 +8,8 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <!-- Custom CSS -->
 <style>
     /* ======================= THEME: BIRU ======================= */
@@ -186,7 +187,7 @@
     .bg-odos      { background-color: #f40606 !important; color: #fff !important; }
     .bg-paraswap  { background-color: #1c51ff !important; color: #fff !important; }
     .bg-okxdex    { background-color: #000000 !important; color: #fff !important; }
-    .bg-bebop     { background-color: #f6ec2d !important; color: #000 !important; }
+    .bg-lifi     { background-color: #6405a8 !important; color: #000 !important; }
     .bg-magpie    { background-color: #00b8d9 !important; color: #000 !important; }
 
     /* Text-only (tanpa background) */
@@ -201,7 +202,7 @@
     .text-odos      { color: #f40606 !important; }
     .text-paraswap  { color: #1c51ff !important; }
     .text-okxdex    { color: #000000 !important; }
-    .text-bebop     { color: #f6ec2d !important; }
+    .text-lifi     { color: #6a13e3 !important; }
     .text-magpie    { color: #00b8d9 !important; }
 
 
@@ -340,6 +341,7 @@
         white-space: nowrap;
         overflow: hidden;
         padding: 4px 6px;
+        min-width: 80px;
     }
 
     .price-comparison-table thead th {
@@ -608,6 +610,19 @@
             <div class="d-none d-md-flex flex-column align-items-end text-end me-2">
                 <small id="statERROR" class="text-danger"></small>
             </div>
+              <!-- Overlay Loading -->
+                <div id="loadingOverlay" class="loading-overlay">
+                    <span id="infoupdateWALLET" class="text-danger fs-6 ms-4"></span><br/>
+
+                    <div class="spinner-border text-primary mt-5" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 fw-bold text-primary text-center px-3">
+                        
+                        Mohon Menunggu [Layar Freeze], Sedang Proses update wallet CEX...<br>
+                        Jika Mouse digerakkan Layar Akan Berkedip -_-
+                    </p>
+                </div>
             <!-- Tab Icons Controller -->
             <ul class="nav nav-pills mb-0 d-flex gap-1" id="tabIconController" role="tablist">
 
@@ -617,13 +632,13 @@
                         <i class="bi bi-arrow-clockwise"></i>
                     </button>
                 </li>
-                
+
                 <!-- Tab: Price Monitoring -->
                 <li class="nav-item" role="presentation">
                     <button class="nav-link nav-icon-button active text-white" id="price-tab"
                         data-bs-toggle="tab" data-bs-target="#priceMonitoring" type="button" role="tab"
                         aria-controls="priceMonitoring" aria-selected="true" title="Price Monitoring">
-                        <i class="bi bi-graph-up"></i>
+                        <i class="bi bi-crosshair"></i>
                     </button>
                 </li>
 
@@ -633,6 +648,13 @@
                         data-bs-toggle="tab" data-bs-target="#tokenManagement" type="button" role="tab"
                         aria-controls="tokenManagement" aria-selected="false" title="Manajemen Koin">
                         <i class="bi bi-coin"></i>
+                    </button>
+                </li>
+
+                 <!-- Button: check status wallet CEX -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="WalletCEX"  data-bs-target="#WalletCEX" type="button" title="Cek Wallet Exchanger">
+                        <i class="bi bi-arrow-left-right"></i>
                     </button>
                 </li>
 
@@ -668,49 +690,45 @@
 
         <div class="offcanvas offcanvas-end offcanvas-narrow text-light bg-secondary" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel">
 
-            <!-- <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="menuBurgerLabel"><i class="bi bi-info-square"></i>Info Aplikasi</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-            </div> -->
-
             <div class="offcanvas-body d-flex flex-column gap-1">
                
-            <div class="d-flex flex-wrap gap-2">
-                <strong class="fw-bold text-light d-block mb-1"> TEMA :</strong><br/>
-                <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
-                <div class="theme-box" data-theme="ijo" style="background-color: #529772;" title="Hijau"></div>
-                <div class="theme-box" data-theme="coklat" style="background-color: #8d6e63;" title="Coklat"></div>
-                <div class="theme-box" data-theme="abu" style="background-color: #7d8085;" title="Abu"></div>
-                <div class="theme-box" data-theme="pink" style="background-color: pink;" title="Pink"></div>
-                <div class="theme-box" data-theme="orange" style="background-color: orange;" title="Orange"></div>
-                <div class="theme-box" data-theme="ungu" style="background-color: #9c6cd1;" title="Ungu"></div>
-            </div>
-            <hr class="my-1 bg-light"/>
+                <div class="d-flex flex-wrap gap-2">
+                    <strong class="fw-bold text-light d-block mb-1"> TEMA :</strong><br/>
+                    <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
+                    <div class="theme-box" data-theme="ijo" style="background-color: #529772;" title="Hijau"></div>
+                    <div class="theme-box" data-theme="coklat" style="background-color: #8d6e63;" title="Coklat"></div>
+                    <div class="theme-box" data-theme="abu" style="background-color: #7d8085;" title="Abu"></div>
+                    <div class="theme-box" data-theme="pink" style="background-color: pink;" title="Pink"></div>
+                    <div class="theme-box" data-theme="orange" style="background-color: orange;" title="Orange"></div>
+                    <div class="theme-box" data-theme="ungu" style="background-color: #9c6cd1;" title="Ungu"></div>
+                </div>
+                <hr class="my-1 bg-light"/>
 
-            <!-- Tema -->
-            <div>
-                <small class="fw-bold text-white">ACTION :</small><br/>
-                <span id="infostatus" class="text-white">---</span>
-                <span id="autorunCountdown" class="ms-2 badge bg-danger text-light fs-8"></span>
-            </div>
+                <!-- Tema -->
+                <div>
+                    <span class="fw-bold text-dark badge bg-white ">ACTION :</span><br/>
+                    <span id="infostatus" class="text-white fw-bold fs-8">---</span>
+                </div>
 
-            <hr class="my-1 bg-light"/>
+                <hr class="my-1 bg-light"/>
 
-            <!-- Token Prices -->
-            <div id="TokenPrices">
-                <small class="fw-bold text-danger">BTC: <span id="btcPrice">--</span> | </small>
-                <small class="fw-bold text-warning">BNB: <span id="bnbPrice">--</span> | </small>
-                <small class="fw-bold text-primary">ETH: <span id="ethPrice">--</span> | </small>
-                <small class="fw-bold text-info">MATIC: <span id="maticPrice">--</span> | </small>
-                <small class="fw-bold text-light">USDT/IDR: <span id="usdtIdrPrice">--</span></small>
-            </div>
+                <!-- Gas Token Prices -->
+                <div id="gasTokenPrices" class="small text-light">
+                    <!-- Akan diisi otomatis: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
+                </div>
 
-            <hr class="my-1 bg-light"/>
+                <hr class="my-1 bg-light"/>
 
-            <!-- Gas Token Prices -->
-            <div id="gasTokenPrices" class="small text-light">
-                <!-- Akan diisi otomatis: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
-            </div>
+                <!-- Token Prices -->
+                <div id="TokenPrices">
+                    <small class="badge bg-white fw-bold text-danger">BTC: <span id="btcPrice">--</span> </small><br/>
+                    <small class="badge bg-white fw-bold text-warning">BNB: <span id="bnbPrice">--</span> </small><br/>
+                    <small class="badge bg-white fw-bold text-primary">ETH: <span id="ethPrice">--</span></small><br/>
+                    <small class="badge bg-white fw-bold text-info">MATIC: <span id="maticPrice">--</span></small><br/>
+                    <small class="badge bg-white fw-bold text-success">USDT/IDR: <span id="usdtIdrPrice">--</span></small>
+                </div>
+
+            
             </div>
         </div>
     </nav>
@@ -741,11 +759,11 @@
                         <!-- Tombol -->
                         <div class="col-12 col-md-auto">
                             <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
-                                <a href="#" target="_blank" id="reload" title="RELOAD PAGE">
+                                <!-- <a href="#" target="_blank" id="reload" title="RELOAD PAGE">
                                     <img src="https://cdn-icons-png.freepik.com/512/210/210136.png" width="23px">
-                                </a>
-                                <button id="autorunBtn" class="btn btn-sm text-dark bg-white">
-                                    <i class="bi bi-arrow-repeat"></i>
+                                </a> -->
+                                <button id="autorunBtn" class="btn btn-sm text-primary bg-white">
+                                    <i class="bi bi-repeat"></i>
                                 </button>
                                 <button class="btn btn-success btn-sm" id="CheckPrice">
                                     <i class="bi bi-play-fill"></i> Check Price
@@ -754,6 +772,7 @@
                                     <i class="bi bi-stop-circle"></i> STOP
                                 </button>
                                 <small id="scanTimeInfo" class="text-primary fw-bold"></small>
+                                <span id="autorunCountdown" class="ms-2 badge bg-danger text-light fs-9"></span>
                             </div>
                         </div>
 
@@ -864,23 +883,10 @@
 
             <!-- Token Management Tab -->
             <div class="tab-pane fade" id="tokenManagement">
-                <!-- Overlay Loading -->
-                <div id="loadingOverlay" class="loading-overlay">
-                    <span id="infoupdateWALLET" class="text-danger fs-6 ms-4"></span><br/>
-
-                    <div class="spinner-border text-primary mt-5" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p class="mt-3 fw-bold text-primary text-center px-3">
-                        
-                        Mohon Menunggu [Layar Freeze], Sedang Proses update wallet CEX...<br>
-                        Jika Mouse digerakkan Layar Akan Berkedip -_-
-                    </p>
-                </div>
 
                 <div class="card mt-3">
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
-                        <h5 class="mb-0 text-white d-flex align-items-center gap-2">
+                        <h5 class="mb-0 text-primary d-flex align-items-center gap-2">
                             <i class="bi bi-coin"></i> Token Management
                             
                         </h5>
@@ -897,10 +903,6 @@
 
                             <button class="btn btn-sm btn-outline-danger" id="importTokensBtn">
                                 <i class="bi bi-upload"></i> Import
-                            </button>
-
-                            <button class="btn btn-sm btn-outline-info" id="WalletCEX">
-                                <i class="bi bi-wallet"></i> Wallet CEX
                             </button>
 
                             <input type="file" id="importTokensInput" accept=".csv" hidden>
@@ -982,7 +984,7 @@
                     <div class="col-md-6">
                         <div class="card mt-4 shadow-sm rounded-3">
                             <div class="card-body">
-                                <h5 class="text-center mb-4 text-white">
+                                <h5 class="text-center mb-4 text-primary">
                                     <i class="bi bi-gear"></i> Settings Aplikasi
                                 </h5>
 
@@ -1195,8 +1197,8 @@
                                                     <label class="form-check-label" for="dexMagpie">Magpie</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="BEBOP" id="dexBEBOP">
-                                                    <label class="form-check-label" for="dexBEBOP">BEBOP</label>
+                                                    <input class="form-check-input" type="checkbox" value="LIFI" id="dexLIFI">
+                                                    <label class="form-check-label" for="dexLIFI">LIFI</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -1233,7 +1235,7 @@
     <button id="scrollTopBtn" title="Kembali ke Atas" class="btn btn-success rounded-circle shadow" style="
         position: fixed;
         bottom: 10px;
-        right: 40%;
+        right: 50%;
         width: 45px;
         height: 45px;
         z-index: 9999;
