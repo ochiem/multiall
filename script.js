@@ -285,6 +285,14 @@ class TokenPriceMonitor {
                 });
             };
 
+            const enableTab = (selector) => {
+                const tabBtn = $(`#tabIconController button[data-bs-target="${selector}"]`);
+                tabBtn.removeClass('disabled').css({
+                    'pointer-events': '',
+                    'opacity': 1
+                });
+            };
+
             disableTab('#tokenManagement');
             disableTab('#apiSettings');
             disableTab('#portfolioTab');
@@ -314,7 +322,6 @@ class TokenPriceMonitor {
 
             // Jalankan proses scan harga token
             await this.CheckPrices();
-            $('#CheckPrice').prop('disabled', false).html('<i class="bi bi-play-fill"></i>Check Price');
 
             // Setelah selesai proses (manual atau autorun)
             if (this.isAutorun) {
@@ -340,6 +347,8 @@ class TokenPriceMonitor {
                 $('#sortByToken').prop('disabled', false);
                 $('#tokenSearch').prop('disabled', false);
                 $('#autorunBtn').prop('disabled', false);
+
+                $('#CheckPrice').prop('disabled', false).html('<i class="bi bi-play-fill"></i>Check Price');
 
                 // Bersihkan countdown jika ada
                 $('#autorunCountdown').text('');
@@ -1958,7 +1967,7 @@ class TokenPriceMonitor {
 
                      const alertMsg = `
                         <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}[${shortChain}]</span> | 
-                        <span style="color:green; font-weight:bold;">💰 $${pnl.toFixed(2)}</span>
+                        <span style="color:green; font-weight:bold;">💰PNL: $${pnl.toFixed(2)}</span>
                     `.replace(/\s{2,}/g, ' ').trim(); 
 
                     this.showAlert(alertMsg, 'success');
@@ -2009,7 +2018,7 @@ class TokenPriceMonitor {
 
                      const alertMsg = `
                         <span style="color:blue; font-weight:bold;">🚀 ${token.symbol}→${token.pairSymbol}[${shortChain}]</span> | 
-                        <span style="color:green; font-weight:bold;">💰 $${pnl.toFixed(2)}</span>
+                        <span style="color:green; font-weight:bold;">💰PNL: $${pnl.toFixed(2)}</span>
                     `.replace(/\s{2,}/g, ' ').trim(); // Hilangkan spasi berlebih
 
                     this.showAlert(alertMsg, 'success');
