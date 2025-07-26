@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Coins</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/8608/8608723.png" />
+    
+    <title>Monitoring Price Crypto</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/16770/16770026.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -593,7 +594,11 @@
         box-shadow: none !important;
         outline: none !important;
     }
-
+    .petunjuk {
+        background-color: var(--danger-color) !important; /* kuning warning */
+        font-size: 1.5rem; /* perbesar icon */
+        border-radius: 5px;
+    }
 
 
 </style>
@@ -604,7 +609,7 @@
     <nav class="navbar bg-utama py-2">
         <div class="container-fluid d-flex align-items-center justify-content-between py-1 px-2 bg-dark">
             <!-- Brand -->
-            <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#">[ Monitoring Price Coins ]</a>
+            <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#">[ Monitoring Price Crypto ]</a>
 
             <!-- Status Info -->
             <div class="d-none d-md-flex flex-column align-items-end text-end me-2">
@@ -635,7 +640,7 @@
 
                 <!-- Tab: Price Monitoring -->
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link nav-icon-button active text-white" id="price-tab"
+                    <button class="nav-link nav-icon-button text-white" id="price-tab"
                         data-bs-toggle="tab" data-bs-target="#priceMonitoring" type="button" role="tab"
                         aria-controls="priceMonitoring" aria-selected="true" title="Price Monitoring">
                         <i class="bi bi-crosshair"></i>
@@ -912,7 +917,7 @@
                             <!-- Search -->
                             <div class="input-group input-group-sm" style="width: 200px;">
                                 <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                <input type="text" id="tokenSearch" class="form-control form-control-sm" placeholder="Search token...">
+                                <input type="text" id="tokenSearch" class="form-control form-control-sm" placeholder="🔍 Cari Koin...">
                             </div>
                         </div>
                     </div>

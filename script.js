@@ -91,9 +91,25 @@ class TokenPriceMonitor {
             $('#autorunBtn').prop('disabled', true);
             $('#StopScan').addClass('d-none');
 
-            alert("⚠️ Silakan atur setting aplikasi terlebih dahulu");
+            alert("⚠️ Silakan Setting Aplikasi Dahulu");
 
-            this.showAlert('⚠️ Setting belum lengkap. Silakan isi nama dan wallet!', 'warning');
+            // Nonaktifkan klik pada tab lain (bukan disembunyikan)
+            const disableTab = (selector) => {
+                const tabBtn = $(`#tabIconController button[data-bs-target="${selector}"]`);
+                tabBtn.addClass('disabled').css({
+                    'pointer-events': 'none',
+                    'opacity': 0.5
+                });
+            };
+
+            disableTab('#priceMonitoring');
+            disableTab('#tokenManagement');
+            disableTab('#portfolioTab');
+            disableTab('#WalletCEX');
+
+            $('#setting-tab').addClass('petunjuk');
+
+            this.showAlert('⚠️ Silakan Isi Nama dan Wallet!', 'warning');
             return;
         }
 
@@ -302,7 +318,7 @@ class TokenPriceMonitor {
             $('#dexSignals').show();
 
             // Nonaktifkan tombol-tombol selama proses
-            $('#CheckPrice').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Scan..');
+            $('#CheckPrice').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> SCAN..');
             $('#autorunBtn').prop('disabled', true);
             $('#monitoringSearch').prop('disabled', true).val('');
             $('#sortByToken').prop('disabled', true);
@@ -1577,8 +1593,11 @@ class TokenPriceMonitor {
         };
 
         this.saveSettingsToStorage();
-        this.showAlert('✅ SIMPAN SETTING BERHASIL!', 'success');
+        
         this.logAction(`SETTING APLIKASI`);
+        alert('✅ SIMPAN SETTING BERHASIL!');
+
+        location.reload();
     }
 
 
@@ -1639,7 +1658,7 @@ class TokenPriceMonitor {
             await Promise.allSettled(batch.map(async tokenUnit => {
                 currentIndex++;
                 const percent = Math.round((currentIndex / totalUnits) * 100);
-                $('#scanProgressPercent').text(`${percent}%`);
+                $('#scanProgressPercent').text(`🔍 ${percent}%`);
                 $('#scanProgressBar').css('width', `${percent}%`);
 
                 const priceData = {
@@ -3307,7 +3326,9 @@ $(document).ready(function() {
     const savedTheme = localStorage.getItem('MULTI_theme');
 
     if (!savedTheme || !isValidTheme(savedTheme)) {
-        alert("🎨 SILAKAN PILIH WARNA TEMA DAHULU [POJOK KANAN ATAS]!");
+        const defaultTheme = 'biru';
+        alert("🎨 SILAKAN PILIH TEMA LAIN [POJOK KANAN ATAS]!");
+        applyTheme(defaultTheme);
         localStorage.removeItem('MULTI_theme'); // bersihkan jika tidak valid
     } else {
         applyTheme(savedTheme);
