@@ -793,7 +793,7 @@ class TokenPriceMonitor {
                 }).join('');
 
 
-                const fillerDEXtoCEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">⛔</td>').join('');
+                const fillerDEXtoCEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">➖</td>').join('');
 
                 const detailHTML = this.createTokenDetailContent(token, cex);
                 const orderbookLeftId = `orderbook_cex_to_dex_${cex}_${token.chain}_${token.symbol}_${token.pairSymbol}`;
@@ -2530,7 +2530,7 @@ class TokenPriceMonitor {
 
             content = `
                 <div class="price-info">&nbsp;</div>
-                <div title="${title}">${emoji}</div>
+                <div title="${title}" class="text-danger">${dexName} ${emoji}</div>
                 <div class="pnl-info">&nbsp;</div>
             `;
 
