@@ -1,3 +1,4 @@
+// Token Price Monitor Application - Updated for Frontend API Calls
 const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI', 'ParaSwap','Magpie'];
 const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
 const ChainList = ['BSC', 'Ethereum', 'Polygon', 'Arbitrum', 'Base'];
@@ -644,7 +645,7 @@ class TokenPriceMonitor {
     }
 
     fetchGasTokenPrices() {
-        const binanceURL = 'https://data-api.binance.vision/api/v3/ticker/price?symbols=["BNBUSDT","ETHUSDT","MATICUSDT","BTCUSDT"]';
+        const binanceURL = 'https://api-gcp.binance.com/api/v3/ticker/price?symbols=["BNBUSDT","ETHUSDT","MATICUSDT","BTCUSDT"]';
 
         $('#gasTokenPrices').html(`<small class="text-muted">Loading Gwei info...</small>`);
 
@@ -662,20 +663,19 @@ class TokenPriceMonitor {
             });
 
             const gasTextParts = [];
+            const gasTokenInfo = {}; // Untuk simpan ke localStorage
             let completed = 0;
 
             supportedChains.forEach(chain => {
                 const kodeChain = chainCodeMap[chain.key];
                 const tokenPrice = tokenPrices[chain.symbol];
 
-                const colorChain = this.getBadgeColor(chain.key, 'chain'); // FIXED
-                const colorClass = this.getTextColorClassFromBadge(this.getBadgeColor(chain.key, 'chain')); // FIXED
-                const chainBadgeColor = this.getBadgeColor(chain.key, 'chain');
                 if (!tokenPrice || !kodeChain) {
                     gasTextParts.push(`${chain.label}[n/a]`);
                     completed++;
                     if (completed === supportedChains.length) {
                         $('#gasTokenPrices').html(gasTextParts.join(" "));
+                        localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
                     }
                     return;
                 }
@@ -683,19 +683,29 @@ class TokenPriceMonitor {
                 const infuraURL = `https://gas.api.infura.io/v3/9d0429abadc34232af7d5c0e6ab98631/networks/${kodeChain}/suggestedGasFees`;
 
                 $.getJSON(infuraURL).done(resp => {
-                    const gwei = parseFloat(resp.low.suggestedMaxFeePerGas);
+                    const lowMaxFeeGwei = parseFloat(resp.low.suggestedMaxFeePerGas); // Ambil dari infura
+                    const gwei = lowMaxFeeGwei * 2; 
                     const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
 
                     gasTextParts.push(
                         `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
-                        // `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)}]</span>`
                     );
+
+                    // Simpan data ke objek
+                    gasTokenInfo[chain.key] = {
+                        symbol: chain.symbol,
+                        gwei: gwei,
+                        tokenPrice: tokenPrice,
+                        gasFeeUSDT: gasUSDT,
+                        gasLimit: chain.gasLimit
+                    };
                 }).fail(() => {
                     gasTextParts.push(`${chain.label}[err]`);
                 }).always(() => {
                     completed++;
                     if (completed === supportedChains.length) {
                         $('#gasTokenPrices').html(gasTextParts.join(" "));
+                        localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
                     }
                 });
             });
@@ -767,20 +777,21 @@ class TokenPriceMonitor {
                 // 🔒➡️ CEX ke DEX
                 const dexCEXtoDEX = limitedDexList.map(dex => {
                     const isSelected = selectedDexs.includes(dex);
-                    const icon = isSelected ? '🔒' : '⛔';
+                    const icon = isSelected ? ` ${dex} 🔒` : `➖`;
                     const cellId = `cell_${token.symbol}_${token.pairSymbol}_${token.chain}_${cex}_${dex}`.toLowerCase().replace(/\W+/g, '');
                     return `<td id="${cellId}" class="dex-price-cell text-center">${icon}</td>`;
                 }).join('');
 
-                const fillerCEXtoDEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">⛔</td>').join('');
+                const fillerCEXtoDEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">➖</td>').join('');
 
                 // 🔒⬅️ DEX ke CEX
                 const dexDEXtoCEX = limitedDexList.map(dex => {
                     const isSelected = selectedDexs.includes(dex);
-                    const icon = isSelected ? '🔒' : '⛔';
+                    const icon = isSelected ? ` ${dex} 🔒` : `➖`;
                     const cellId = `cell_${token.pairSymbol}_${token.symbol}_${token.chain}_${dex}_${cex}`.toLowerCase().replace(/\W+/g, '');
                     return `<td id="${cellId}" class="dex-price-cell text-center">${icon}</td>`;
                 }).join('');
+
 
                 const fillerDEXtoCEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">⛔</td>').join('');
 
@@ -1572,8 +1583,6 @@ class TokenPriceMonitor {
 
 
     async CheckPrices() { 
-
-        this.fetchGasTokenPrices();
         $('.chainFilterCheckbox').prop('disabled', true);
         $("#statERROR").html('');
 
@@ -1626,6 +1635,7 @@ class TokenPriceMonitor {
         $('#scanTimeInfo').html(`<span class="text-dark">&nbsp;🔍 ${startStr}</span>&nbsp;`);
 
         for (const batch of unitBatches) {
+            this.fetchGasTokenPrices();
             await Promise.allSettled(batch.map(async tokenUnit => {
                 currentIndex++;
                 const percent = Math.round((currentIndex / totalUnits) * 100);
@@ -1815,7 +1825,6 @@ class TokenPriceMonitor {
         const network = token.chain.toLowerCase();
         const tokenDecimals = token.decimals;
         const pairDecimals = token.pairDecimals;
-        const gasFeeUSD = PriceUtils.getGasFeeUSD(token.chain, 210000, 5);
         const shortChain = chainShortMap[String(token.chain || '').toUpperCase()];
         
         const baseSymbol = token.symbol.toUpperCase();
@@ -1876,7 +1885,8 @@ class TokenPriceMonitor {
 
         this.setDexCellLoading(token, cexName, dexName, direction);
 
-        const handleResult = (dexNameDisplay, data, rawOutProp = 'amountOut') => {
+        const handleResult = (dexName, data, rawOutProp = 'amountOut') => {
+           // console.warn(dexName,data);
             const outRaw = data[rawOutProp] || '0';
             const normalizedIn = inputAmountToken;
             const normalizedOut = PriceUtils.normalizeAmount(outRaw, outputDecimals);
@@ -1898,7 +1908,8 @@ class TokenPriceMonitor {
                 amountOut: outRaw,
                 price: priceInUSDT,
                 rawRate: price,
-                fee: data.fee || gasFeeUSD,
+                feeDEX: data.feeDEX,
+                feeSwapUSDT: data.feeSwapUSDT,
                 from: direction === 'cex_to_dex' ? baseSymbol : quoteSymbol,
                 to: direction === 'cex_to_dex' ? quoteSymbol : baseSymbol,
                 rateSymbol: `${direction === 'cex_to_dex' ? quoteSymbol : baseSymbol}/${direction === 'cex_to_dex' ? baseSymbol : quoteSymbol}`,
@@ -1919,7 +1930,7 @@ class TokenPriceMonitor {
                 const feeWDToken = token.cexInfo?.[matchedCEXKey]?.[token.symbol.toUpperCase()]?.feewd ?? 0;
 
                 const feeWD = feeWDToken * baseBuy;
-                const feeDEX = data.fee || 0;
+                const feeDEX = data.feeSwapUSDT || data.feeDEX;
                 const totalFee = feeTrade + feeWD  + feeDEX;
 
             if (direction === 'cex_to_dex') {
@@ -2034,13 +2045,7 @@ class TokenPriceMonitor {
             $(`#${cellId}`).html(html);
         };
 
-        const fallbackSlugMap = {
-            'KyberSwap': 'kyberswap',
-            'Matcha': '0x',
-            'OKXDEX': 'okx',
-            'ODOS': 'odos',
-            'ParaSwap': 'paraswap',
-        };
+        
        
         try {
             const cellId = direction === 'cex_to_dex'
@@ -2053,53 +2058,29 @@ class TokenPriceMonitor {
            switch (dexName) {
                 case '1inch':
                     if (direction === 'cex_to_dex') {
-                        if (parseInt(chainId) === 1) {
-                            // 🔁 Gunakan Marble untuk chain ETH
-                            const MarbleData = await fetchWithCountdown(
-                                safeCellId, dexName,
-                                () => DEXAPIs.getMarblePrice(
-                                    inputContract,
-                                    outputContract,
-                                    rawAmountIn,
-                                    inputDecimals,
-                                    outputDecimals,
-                                    chainId,
-                                    token,
-                                    ['1inch'], // hanya gunakan 1inch
-                                    direction
-                                ),
-                                timeoutLimit
-                            );
+                        const MarbleData = await fetchWithCountdown(
+                            safeCellId, dexName,
+                            () => DEXAPIs.getMarblePrice(
+                                inputContract,
+                                outputContract,
+                                rawAmountIn,
+                                inputDecimals,
+                                outputDecimals,
+                                chainId,
+                                token,
+                                ['1inch'], 
+                                direction,
+                                network
+                            ),
+                            timeoutLimit
+                        );
 
-                            if (MarbleData?.status === 'timeout' || MarbleData?.error) {
-                                throw new Error(`1INCH (via Marble) error: ${MarbleData.error || MarbleData.status}`);
-                            }
-
-                            handleResult('1inch', { ...MarbleData });
-
-                        } else {
-                            // 🔁 Gunakan Hinkal (1inch API khusus) untuk selain Ethereum
-                            const inchIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
-                            const inchOut = [{ tokenAddress: outputContract, proportion: 1 }];
-
-                            const inchData = await fetchWithCountdown(
-                                safeCellId, dexName,
-                                () => DEXAPIs.getHinkal1InchPrice(inchIn, inchOut, wallet, rawAmountIn.toString(), chainId),
-                                timeoutLimit
-                            );
-
-                            if (inchData?.status === 'timeout' || inchData?.error) {
-                                throw new Error(`1INCH (via Hinkal) error: ${inchData.error || inchData.status}`);
-                            }
-
-                            handleResult('1inch', {
-                                ...inchData,
-                                amountOut: inchData.outAmounts?.[0] || '0',
-                                exchange: '1inch'
-                            });
+                        if (MarbleData?.status === 'timeout' || MarbleData?.error) {
+                            throw new Error(`1INCH (via Marble) error: ${MarbleData.error || MarbleData.status}`);
                         }
 
-                    } else {
+                        handleResult('1inch', { ...MarbleData });
+                    }else{
                         const dzapData = await fetchWithCountdown(
                             safeCellId, dexName,
                             () => DEXAPIs.getDZAPPrice({
@@ -2123,8 +2104,152 @@ class TokenPriceMonitor {
                         }
 
                         handleResult('1inch', dzapData);
-                    }
 
+                    }
+                    
+                 /*  if (direction === 'cex_to_dex') {
+                        
+                        if (parseInt(chainId) === 1) {
+                            const MarbleData = await fetchWithCountdown(
+                                safeCellId, dexName,
+                                () => DEXAPIs.getMarblePrice(
+                                    inputContract,
+                                    outputContract,
+                                    rawAmountIn,
+                                    inputDecimals,
+                                    outputDecimals,
+                                    chainId,
+                                    token,
+                                    ['1inch'], 
+                                    direction,
+                                    network
+                                ),
+                                timeoutLimit
+                            );
+
+                            if (MarbleData?.status === 'timeout' || MarbleData?.error) {
+                                throw new Error(`1INCH (via Marble) error: ${MarbleData.error || MarbleData.status}`);
+                            }
+
+                            handleResult('1inch', { ...MarbleData });
+
+                        } else {
+                            const inchIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
+                            const inchOut = [{ tokenAddress: outputContract, proportion: 1 }];
+
+                            const inchData = await fetchWithCountdown(
+                                safeCellId, dexName,
+                                () => DEXAPIs.getHinkal1InchPrice(inchIn, inchOut, wallet, rawAmountIn.toString(), chainId,network),
+                                timeoutLimit
+                            );
+
+                            if (inchData?.status === 'timeout' || inchData?.error) {
+                                throw new Error(`1INCH (via Hinkal) error: ${inchData.error || inchData.status}`);
+                            }
+
+                            handleResult('1inch', {
+                                ...inchData,
+                                amountOut: inchData.outAmounts?.[0] || '0',
+                                exchange: '1inch'
+                            });
+                        }
+                            /*
+                        if (parseInt(chainId) === 1) {
+                            // 🔁 Gunakan ZERO untuk chain ETH
+                            const zeroData = await fetchWithCountdown(
+                                safeCellId, dexName,
+                                () => DEXAPIs.getZero1inchPrice(
+                                    inputContract,
+                                    outputContract,
+                                    rawAmountIn,
+                                    inputDecimals,
+                                    outputDecimals,
+                                    chainId,
+                                    direction,
+                                    network
+                                ),
+                                timeoutLimit
+                            );
+
+                            if (zeroData?.status === 'timeout' || zeroData?.error) {
+                                throw new Error(`ZERO (ETH) error: ${zeroData.error || zeroData.status}`);
+                            }
+
+                            handleResult('1inch', { ...zeroData });
+
+                        } else {
+                            // 🔁 Gunakan HINKAL untuk chain non-ETH
+                            const inchIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
+                            const inchOut = [{ tokenAddress: outputContract, proportion: 1 }];
+
+                            const inchData = await fetchWithCountdown(
+                                safeCellId, dexName,
+                                () => DEXAPIs.getHinkal1InchPrice(inchIn, inchOut, wallet, rawAmountIn.toString(), chainId,network),
+                                timeoutLimit
+                            );
+
+                            if (inchData?.status === 'timeout' || inchData?.error) {
+                                throw new Error(`1INCH (via Hinkal) error: ${inchData.error || inchData.status}`);
+                            }
+
+                            handleResult('1inch', {
+                                ...inchData,
+                                amountOut: inchData.outAmounts?.[0] || '0',
+                                exchange: '1inch'
+                            });
+                        }
+
+                    } else {
+                        // const dzapData = await fetchWithCountdown(
+                        //     safeCellId, dexName,
+                        //     () => DEXAPIs.getDZAPPrice({
+                        //         account: wallet,
+                        //         chainId: chainId,
+                        //         sellToken: inputContract,
+                        //         sellDecimals: inputDecimals,
+                        //         buyToken: outputContract,
+                        //         buyDecimals: outputDecimals,
+                        //         sellAmount: rawAmountIn,
+                        //         direction: direction,
+                        //         slippage: 0.3,
+                        //         integratorId: 'dzap',
+                        //         allowedSources: ['oneInchViaLifi'] // ✅ ini yang kamu minta: odos via dzap
+                        //     }),
+                        //     timeoutLimit
+                        // );
+
+                        // if (dzapData?.status === 'timeout' || dzapData?.error) {
+                        //     throw new Error(`DZAP error: ${dzapData.error || dzapData.status}`);
+                        // }
+
+                        // handleResult('1inch', dzapData);
+
+                         const INCHData = await fetchWithCountdown(
+                            safeCellId, dexName,
+                            () => DEXAPIs.get1inchQuotePrice(inputContract, outputContract, rawAmountIn,chainId, network,wallet),
+                            timeoutLimit
+                        );
+
+                        if (INCHData?.status === 'timeout' || INCHData?.error) {
+                            throw new Error(`1inHC NEW error: ${INCHData.error || INCHData.status}`);
+                        }
+
+                        handleResult('1inch', INCHData);
+                    }
+                    */
+                    // const INCHData = await fetchWithCountdown(
+                    //     safeCellId, dexName,
+                    //     () => DEXAPIs.get1inchQuotePrice(inputContract, outputContract, rawAmountIn,chainId, network,wallet),
+                    //     timeoutLimit
+                    // );
+
+                    // if (INCHData?.status === 'timeout' || INCHData?.error) {
+                    //     throw new Error(`1inHC NEW error: ${INCHData.error || INCHData.status}`);
+                    // }
+
+                    // handleResult('1inch', INCHData);
+                    
+                    
                     break;
 
                 case 'KyberSwap': {
@@ -2145,7 +2270,7 @@ class TokenPriceMonitor {
                 case 'Matcha': {
                     const matchaData = await fetchWithCountdown(
                         safeCellId, dexName,
-                        () => DEXAPIs.get0xPrice(inputContract, outputContract, rawAmountIn, chainId, direction),
+                        () => DEXAPIs.get0xPrice(inputContract, outputContract, rawAmountIn, chainId, direction,network),
                         timeoutLimit
                     );
 
@@ -2199,7 +2324,7 @@ class TokenPriceMonitor {
                                 outputDecimals,
                                 chainId,
                                 direction,
-                                wallet
+                                wallet,network
                             ),
                             timeoutLimit
                         );
@@ -2212,18 +2337,18 @@ class TokenPriceMonitor {
                     } else {
                         const dzapData = await fetchWithCountdown(
                             safeCellId, dexName,
-                            () => DEXAPIs.getDZAPPrice({
-                                account: wallet,
-                                chainId: chainId,
-                                sellToken: inputContract,
-                                sellDecimals: inputDecimals,
-                                buyToken: outputContract,
-                                buyDecimals: outputDecimals,
-                                sellAmount: rawAmountIn,
-                                direction: direction,
-                                slippage: 0.3,
-                                integratorId: 'dzap',
-                                allowedSources: ['paraSwap']
+                                () => DEXAPIs.getDZAPPrice({
+                                    account: wallet,
+                                    chainId: chainId,
+                                    sellToken: inputContract,
+                                    sellDecimals: inputDecimals,
+                                    buyToken: outputContract,
+                                    buyDecimals: outputDecimals,
+                                    sellAmount: rawAmountIn,
+                                    direction: direction,
+                                    slippage: 0.3,
+                                    integratorId: 'dzap',
+                                    allowedSources: ['paraSwap'] // ✅ ini yang kamu minta: odos via dzap
                             }),
                             timeoutLimit
                         );
@@ -2244,7 +2369,7 @@ class TokenPriceMonitor {
                     if (direction === 'cex_to_dex') {
                         const odosData = await fetchWithCountdown(
                             safeCellId, dexName,
-                            () => DEXAPIs.getODOSPrice(odosIn, odosOut, wallet, rawAmountIn.toString(), chainId),
+                            () => DEXAPIs.getODOSPrice(odosIn, odosOut, wallet, rawAmountIn.toString(), chainId,network),
                             timeoutLimit
                         );
 
@@ -2258,7 +2383,7 @@ class TokenPriceMonitor {
                         
                         odosData = await fetchWithCountdown(
                             safeCellId,dexName,
-                            () => DEXAPIs.getHinkalODOSPrice(odosIn, odosOut, wallet, rawAmountIn.toString(), chainId),
+                            () => DEXAPIs.getHinkalODOSPrice(odosIn, odosOut, wallet, rawAmountIn.toString(), chainId,network),
                             timeoutLimit
                         );
 
@@ -2273,7 +2398,6 @@ class TokenPriceMonitor {
                 }
                 
                 case 'LIFI':
-                   // if (direction === 'dex_to_cex') {
                         const MarbleData = await fetchWithCountdown(
                                 safeCellId, dexName,
                                 () => DEXAPIs.getMarblePrice(
@@ -2285,7 +2409,8 @@ class TokenPriceMonitor {
                                     chainId,
                                     token,
                                     [],
-                                    direction
+                                    direction,
+                                    network
                                 ),
                                 timeoutLimit
                             );
@@ -2294,31 +2419,7 @@ class TokenPriceMonitor {
                                 throw new Error(`LIFI error: ${MarbleData.error || MarbleData.status}`);
                             }
 
-                            handleResult('lifi', { ...MarbleData });
-                    // } else {
-                    //     const dzapData = await fetchWithCountdown(
-                    //         safeCellId, dexName,
-                    //         () => DEXAPIs.getDZAPPrice({
-                    //             account: wallet,
-                    //             chainId: chainId,
-                    //             sellToken: inputContract,
-                    //             sellDecimals: inputDecimals,
-                    //             buyToken: outputContract,
-                    //             buyDecimals: outputDecimals,
-                    //             sellAmount: rawAmountIn,
-                    //             direction: direction,
-                    //             slippage: 0.3,
-                    //             integratorId: 'dzap',
-                    //         }),
-                    //         timeoutLimit
-                    //     );
-
-                    //     if (dzapData?.status === 'timeout' || dzapData?.error) {
-                    //         throw new Error(`LIFI error: ${dzapData.error || dzapData.status}`);
-                    //     }
-
-                    //     handleResult('lifi', dzapData);
-                    // }
+                            handleResult('lifi', { ...MarbleData });                   
 
                     break;
 
@@ -2328,7 +2429,13 @@ class TokenPriceMonitor {
             }
 
          } catch (err) {
-           
+            const fallbackSlugMap = {
+                'KyberSwap': 'kyberswap',
+                'Matcha': '0x',
+                'OKXDEX': 'okx',
+                'ODOS': 'odos',
+                'ParaSwap': 'paraswap',
+            };
             const slug = fallbackSlugMap[dexName];
             
             // Statistik error per DEX
@@ -2410,31 +2517,37 @@ class TokenPriceMonitor {
         let emoji = '❓'; // default
 
         if (errorRaw.includes('timeout')) emoji = '🕒';
-        else if (errorRaw.includes('network') || errorRaw.includes('fetch')) emoji = '❌';
-        else if (errorRaw.includes('unauthorized') || errorRaw.includes('401')) emoji = '🔒';
-        else if (errorRaw.includes('forbidden') || errorRaw.includes('403')) emoji = '🚫';
-        else if (errorRaw.includes('slow') || errorRaw.includes('delay')) emoji = '🐌';
-        else if (isFallbackError) emoji = '⚠️';
+            else if (errorRaw.includes('network') || errorRaw.includes('fetch')) emoji = '❌';
+            else if (errorRaw.includes('unauthorized') || errorRaw.includes('401')) emoji = '🔒';
+            else if (errorRaw.includes('forbidden') || errorRaw.includes('403')) emoji = '🚫';
+            else if (errorRaw.includes('slow') || errorRaw.includes('delay')) emoji = '🐌';
+            else if (isFallbackError) emoji = '⚠️';
 
-        // 🔢 Hitung jumlah emoji per DEX
-        this.errorVisualStats = this.errorVisualStats || {};
-        this.errorVisualStats[dexName] = this.errorVisualStats[dexName] || {};
-        this.errorVisualStats[dexName][emoji] = (this.errorVisualStats[dexName][emoji] || 0) + 1;
+            // 🔢 Hitung jumlah emoji per DEX
+            this.errorVisualStats = this.errorVisualStats || {};
+            this.errorVisualStats[dexName] = this.errorVisualStats[dexName] || {};
+            this.errorVisualStats[dexName][emoji] = (this.errorVisualStats[dexName][emoji] || 0) + 1;
 
-        content = `
-            <div class="price-info">&nbsp;</div>
-            <div title="${title}">${emoji}</div>
-            <div class="pnl-info">&nbsp;</div>
-        `;
+            content = `
+                <div class="price-info">&nbsp;</div>
+                <div title="${title}">${emoji}</div>
+                <div class="pnl-info">&nbsp;</div>
+            `;
 
-        $cell.removeClass().addClass('dex-price-cell text-center text-light');
-        $cell.addClass(isFallbackError ? 'abu' : 'pink');
-        $cell.html(content);
-        return;
-    }
+            $cell.removeClass().addClass('dex-price-cell text-center text-light');
+            $cell.addClass(isFallbackError ? 'abu' : 'pink');
+            $cell.html(content);
+            return;
+        }
 
         const modal = direction === 'cex_to_dex' ? token.modalCexToDex : token.modalDexToCex;
-        const fee = dexInfo.fee || 0;
+
+        if (typeof dexInfo.feeDEX === 'number' && dexInfo.feeDEX > 0) {
+           var fee = dexInfo.feeDEX;
+        } else {
+           var fee = dexInfo.feeSwapUSDT;
+        }
+        
         const baseBuy = dexInfo.baseBuy || 0;
         const baseSell = dexInfo.baseSell || 0;
         const quoteUSDT = dexInfo.quotePriceUSDT || dexInfo.price || 0;
@@ -2679,7 +2792,7 @@ class TokenPriceMonitor {
             .addClass('dex-price-cell align-middle')
             .html(`
                 <div>
-                    <div class="small text-muted fw-bold">${(dexInfo.exchange).toUpperCase() || dexName.toUpperCase()}</div>
+                    <div class="small text-muted fw-bold">${dexName.toUpperCase()}</div>
                     <a href="${buyLink}" target="_blank" class="text-success">⬆ ${PriceUtils.formatPrice(buyPrice)}</a><br>
                     <a href="${sellLink}" target="_blank" class="text-danger">⬇ ${PriceUtils.formatPrice(sellPrice)}</a>
                 </div>
