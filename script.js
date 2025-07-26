@@ -1708,7 +1708,7 @@ class TokenPriceMonitor {
         const seconds = (durationSec % 60).toString().padStart(2, '0');
         
         $('#scanProgressText').html(``);
-        $('#scanTimeInfo').append(`<span class="text-primary fs-7">&nbsp;&nbsp;✅ Finish: ${minutes}:${seconds}</span>&nbsp;`);
+        $('#scanTimeInfo').append(`<span class="text-primary fs-7">&nbsp;&nbsp;✅ ${minutes}:${seconds}</span>&nbsp;`);
         this.showAlertWithAudio();
         $('.chainFilterCheckbox').prop('disabled', false);
 
@@ -2535,7 +2535,7 @@ class TokenPriceMonitor {
             `;
 
             $cell.removeClass().addClass('dex-price-cell text-center text-light');
-            $cell.addClass(isFallbackError ? 'abu' : 'pink');
+            $cell.addClass(isFallbackError ? 'pink' : 'abu');
             $cell.html(content);
             return;
         }
