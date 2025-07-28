@@ -1,16 +1,6 @@
 // Token Price Monitor Application - Updated for Frontend API Calls
 const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI', 'ParaSwap','Magpie'];
 const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
-const ChainList = ['BSC', 'Ethereum', 'Polygon', 'Arbitrum', 'Base'];
-
-const chainCodeMap = {
-            bsc: 56,
-            ethereum: 1,
-            polygon: 137,
-            arbitrum: 42161,
-            base: 8453,
-            solana: 501
-        };
 
 const CexShortMap = {
     Binance: 'BINC',
@@ -18,31 +8,6 @@ const CexShortMap = {
     Gateio: 'GATE',
     INDODAX: 'INDX'
 };
-
-const chainShortMap = {
-    BSC: 'BSC',
-    ETHEREUM: 'ERC',
-    POLYGON: 'POLY',
-    ARBITRUM: 'ARB',
-    BASE: 'BASE'
-};
-// URL eksplorasi
-const explorerUrls = {
-    '1': 'https://etherscan.io',
-    '56': 'https://bscscan.com',
-    '137': 'https://polygonscan.com',
-     '42161': 'https://arbiscan.io',
-     '8453': 'https://basescan.org/',
-     '501': 'https://solscan.io/',     
-};
-
-const supportedChains = [
-    { key: "ethereum", label: "ERC", symbol: "ETH", gasLimit: 250000 },
-    { key: "bsc", label: "BSC", symbol: "BNB", gasLimit: 80000 },
-    { key: "polygon", label: "POL", symbol: "MATIC", gasLimit: 80000 },
-    { key: "arbitrum", label: "ARB", symbol: "ETH", gasLimit: 100000 },
-    { key: "base", label: "BASE", symbol: "ETH", gasLimit: 100000 }
-];
 
 const ratePrice = {}; // Menyimpan semua kurs mata uang (misal: IDR)
 
@@ -660,76 +625,105 @@ class TokenPriceMonitor {
         });
     }
 
-    fetchGasTokenPrices() {
+   async  fetchGasTokenPrices() {
+    
         const binanceURL = 'https://api-gcp.binance.com/api/v3/ticker/price?symbols=["BNBUSDT","ETHUSDT","MATICUSDT","BTCUSDT"]';
+        $('#gasTokenPrices').html(`<small class="text-white">Loading Gwei info...</small>`);
 
-        $('#gasTokenPrices').html(`<small class="text-muted">Loading Gwei info...</small>`);
+        //console.log("🚀 Memulai fetchGasTokenPrices()");
 
-        $.getJSON(binanceURL).done(priceList => {
-            const tokenPrices = {};
-            priceList.forEach(item => {
-                const symbol = item.symbol.replace("USDT", "");
-                tokenPrices[symbol] = parseFloat(item.price);
+        const response = await $.getJSON(binanceURL).catch(err => {
+            //console.error("❌ Gagal ambil harga token:", err);
+            $('#gasTokenPrices').html('<span class="text-danger">Gagal ambil harga.</span>');
+            return null;
+        });
 
-                // Update individual harga
-                if (symbol === 'BTC') $('#btcPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
-                if (symbol === 'BNB') $('#bnbPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
-                if (symbol === 'ETH') $('#ethPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
-                if (symbol === 'MATIC') $('#maticPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
-            });
+        if (!response) {
+            console.warn("⛔ Respon harga token kosong.");
+            return;
+        }
 
-            const gasTextParts = [];
-            const gasTokenInfo = {}; // Untuk simpan ke localStorage
-            let completed = 0;
+        const tokenPrices = {};
+        response.forEach(item => {
+            const symbol = item.symbol.replace("USDT", "");
+            tokenPrices[symbol] = parseFloat(item.price);
 
-            supportedChains.forEach(chain => {
-                const kodeChain = chainCodeMap[chain.key];
-                const tokenPrice = tokenPrices[chain.symbol];
+            if (symbol === 'BTC') $('#btcPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+            if (symbol === 'BNB') $('#bnbPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+            if (symbol === 'ETH') $('#ethPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+            if (symbol === 'MATIC') $('#maticPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+        });
 
-                if (!tokenPrice || !kodeChain) {
-                    gasTextParts.push(`${chain.label}[n/a]`);
-                    completed++;
-                    if (completed === supportedChains.length) {
-                        $('#gasTokenPrices').html(gasTextParts.join(" "));
-                        localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
-                    }
-                    return;
+       // console.log("💰 Harga token (USDT):", tokenPrices);
+
+        const Web3 = window.Web3;
+        const gasTextParts = [];
+        const gasTokenInfo = {};
+
+        const supportedChains = Object.keys(CHAIN_CONFIG)
+                .filter(key => CHAIN_CONFIG[key].rpc) // hanya yang punya RPC
+                .map(key => ({
+                    key,
+                    label: CHAIN_CONFIG[key].short,
+                    symbol: CHAIN_CONFIG[key].symbol,
+                    gasLimit: CHAIN_CONFIG[key].gasLimit
+                }));
+        for (const chain of supportedChains) {
+            const key = chain.key || chain.symbol;
+            const symbol = chain.symbol;
+
+            const rpcUrl = CHAIN_CONFIG[key.toLowerCase()]?.rpc || CHAIN_CONFIG[symbol.toLowerCase()]?.rpc || '';
+
+            let tokenPrice = tokenPrices[symbol];
+
+            // Fallback manual jika simbol POL belum ada di API
+            if (!tokenPrice && symbol === 'POL') {
+                tokenPrice = tokenPrices['MATIC'];
+            }
+
+            if (!rpcUrl || !tokenPrice) {
+              //  console.warn(`⚠️ RPC URL atau harga token tidak ditemukan untuk ${chain.label} (${symbol})`);
+                gasTextParts.push(`<span class='badge bg-light text-dark fs-8'>${chain.label} [n/a]</span>`);
+                continue;
+            }
+
+            try {
+                console.log(`🔗 Cek jaringan ${chain.label} (${rpcUrl})`);
+                const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+
+                let baseFee;
+                const block = await web3.eth.getBlock("pending");
+
+                if (block && block.baseFeePerGas) {
+                    baseFee = parseInt(block.baseFeePerGas);
+                } else {
+                    baseFee = await web3.eth.getGasPrice();
                 }
 
-                const infuraURL = `https://gas.api.infura.io/v3/9d0429abadc34232af7d5c0e6ab98631/networks/${kodeChain}/suggestedGasFees`;
+                const gwei = (baseFee / 1e9)*2;
+                const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
 
-                $.getJSON(infuraURL).done(resp => {
-                    const lowMaxFeeGwei = parseFloat(resp.low.suggestedMaxFeePerGas); // Ambil dari infura
-                    const gwei = lowMaxFeeGwei * 2; 
-                    const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
+               // console.log(`🟢 ${chain.label} | Gwei: ${gwei.toFixed(2)} | Token: ${symbol} | Price: $${tokenPrice} | Fee ≈ $${gasUSDT.toFixed(4)}`);
 
-                    gasTextParts.push(
-                        `<span class='badge bg-secondary text-white fs-8 fw-bolder'>🔥 ${chain.label} [${gwei.toFixed(3)} | $${gasUSDT.toFixed(4)}]</span>`
-                    );
+                gasTextParts.push(
+                    `<span class='badge bg-secondary text-white fs-8 fw-bold'>🔥 ${chain.label} [${gwei.toFixed(2)} | $${gasUSDT.toFixed(4)}]</span>`
+                );
 
-                    // Simpan data ke objek
-                    gasTokenInfo[chain.key] = {
-                        symbol: chain.symbol,
-                        gwei: gwei,
-                        tokenPrice: tokenPrice,
-                        gasFeeUSDT: gasUSDT,
-                        gasLimit: chain.gasLimit
-                    };
-                }).fail(() => {
-                    gasTextParts.push(`${chain.label}[err]`);
-                }).always(() => {
-                    completed++;
-                    if (completed === supportedChains.length) {
-                        $('#gasTokenPrices').html(gasTextParts.join(" "));
-                        localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
-                    }
-                });
-            });
+                gasTokenInfo[key] = {
+                    symbol,
+                    gwei,
+                    tokenPrice,
+                    gasFeeUSDT: gasUSDT,
+                    gasLimit: chain.gasLimit
+                };
+            } catch (err) {
+                console.error(`❌ Gagal ambil data gas untuk ${chain.label}:`, err);
+                gasTextParts.push(`<span class='badge bg-danger fs-8'>${chain.label} [err]</span>`);
+            }
+        }
 
-        }).fail(err => {
-            console.error("❌ Gagal ambil harga token dari Binance:", err);
-            $('#gasTokenPrices').html('<span class="text-danger">Gagal ambil data harga.</span>');
-        });
+        $('#gasTokenPrices').html(gasTextParts.join(" "));
+        localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
     }
 
     fetchUSDTtoIDRRate() {
@@ -1057,7 +1051,7 @@ class TokenPriceMonitor {
     }
 
     getChainList() {
-        return ChainList;
+        return Object.values(CHAIN_CONFIG).map(c => c.name);
     }
 
     loadTokenTable() {
@@ -1375,18 +1369,6 @@ class TokenPriceMonitor {
         const activeTokens = this.tokens.filter(t => t.isActive);
         const inactiveTokens = this.tokens.filter(t => !t.isActive);
 
-        // Sesuai <option value="..."> pada <select id="tokenChain">
-        const chainList = ['BSC', 'Ethereum', 'Polygon', 'Base', 'Arbitrum'];
-
-        // Pemetaan ke ID HTML yang dipakai
-        const idMap = {
-            BSC: 'bsc',
-            Ethereum: 'eth',
-            Polygon: 'poly',
-            Base: 'base',
-            Arbitrum: 'arb'
-        };
-
         const targets = ['Monitoring', 'Management'];
 
         for (const target of targets) {
@@ -1395,9 +1377,14 @@ class TokenPriceMonitor {
             $(`#activeTokens${target}`).text(activeTokens.length);
             $(`#inactiveTokens${target}`).text(inactiveTokens.length);
 
-            // Jumlah token per chain
-            for (const chainName of chainList) {
-                const htmlId = idMap[chainName]; // Misal "eth" dari "Ethereum"
+            for (const chainKey in CHAIN_CONFIG) {
+                const chain = CHAIN_CONFIG[chainKey];
+                const chainName = chain.name; // Misal: "Polygon", "Ethereum"
+                const htmlId = chain.short?.toLowerCase(); // "poly", "eth", dsb
+
+                // Jika elemen HTML tidak tersedia, skip
+                if (!htmlId || !$(`#${htmlId}Count${target}`).length) continue;
+
                 const count = this.tokens.filter(t => t.chain === chainName).length;
                 $(`#${htmlId}Count${target}`).text(count);
             }
@@ -1406,7 +1393,7 @@ class TokenPriceMonitor {
         // Total baris monitoring = jumlah token aktif × banyaknya selectedCEX
         let totalBaris = 0;
         activeTokens.forEach(token => {
-            // Lewati token yang chain-nya tidak ada di filter
+            // Lewati jika chain tidak aktif difilter
             if (!this.selectedChains.includes(token.chain)) return;
 
             if (Array.isArray(token.selectedCexs)) {
@@ -1630,7 +1617,7 @@ class TokenPriceMonitor {
         });
 
         if (allTokenUnits.length === 0) {
-            this.showAlert('No active tokens to monitor', 'info');
+            this.showAlert('Tidak Ada Daftar Token, Silakan Pilih Chain', 'info');
             $('#priceTableBody').html(`<tr><td colspan="13" class="text-center text-muted py-5">
                 <i class="bi bi-info-circle me-2"></i> Tidak ada DATA KOIN, Silakan ke Management TOKEN
             </td></tr>`);
@@ -1658,8 +1645,9 @@ class TokenPriceMonitor {
             await Promise.allSettled(batch.map(async tokenUnit => {
                 currentIndex++;
                 const percent = Math.round((currentIndex / totalUnits) * 100);
-                $('#scanProgressPercent').text(`🔍 ${percent}%`);
+               // $('#scanProgressPercent').text(`🔍 ${percent}%`);
                 $('#scanProgressBar').css('width', `${percent}%`);
+                
 
                 const priceData = {
                     token: tokenUnit,
@@ -1670,7 +1658,7 @@ class TokenPriceMonitor {
                 };
 
                 const shortCex = (CexShortMap[tokenUnit.cexName] || tokenUnit.cexName || '').toUpperCase();
-                const shortChain = (chainShortMap[(tokenUnit.chain || '').toUpperCase()] || tokenUnit.chain || '').toUpperCase();
+                const shortChain = (CHAIN_CONFIG[tokenUnit.chain?.toLowerCase()]?.short || tokenUnit.chain || '').toUpperCase();
 
                  // Scroll ke token pertama di batch, setelah semua selesai
                 const firstToken = batch[0];
@@ -1686,7 +1674,7 @@ class TokenPriceMonitor {
                     await new Promise(r => setTimeout(r, 100));
 
                     for (const dexName of tokenUnit.selectedDexs) {
-                        $('#scanProgressText').html(`🔄 ${shortCex.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${dexName.toUpperCase()} `);
+                        $('#scanProgressText').html(`🔄 ${shortCex.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${dexName.toUpperCase()} [${percent}%]`);
                         try {
                             await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, direction);
                         } catch (err) {
@@ -1705,7 +1693,7 @@ class TokenPriceMonitor {
                     await new Promise(r => setTimeout(r, 100));
 
                     for (const dexName of tokenUnit.selectedDexs) {
-                        $('#scanProgressText').html(`🔄 ${dexName.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${shortCex.toUpperCase()} `);
+                        $('#scanProgressText').html(`🔄 ${dexName.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${shortCex.toUpperCase()} [${percent}%] `);
                         try {
                             await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, direction);
                         } catch (err) {
@@ -1727,7 +1715,7 @@ class TokenPriceMonitor {
         const seconds = (durationSec % 60).toString().padStart(2, '0');
         
         $('#scanProgressText').html(``);
-        $('#scanTimeInfo').append(`<span class="text-primary fs-7">&nbsp;&nbsp;✅ ${minutes}:${seconds}</span>&nbsp;`);
+        $('#scanProgressPercent').html(`<span class="text-white fs-7">&nbsp;&nbsp;✅ Durasi Scan: ${minutes}:${seconds}</span>&nbsp;`);
         this.showAlertWithAudio();
         $('.chainFilterCheckbox').prop('disabled', false);
 
@@ -1844,7 +1832,7 @@ class TokenPriceMonitor {
         const network = token.chain.toLowerCase();
         const tokenDecimals = token.decimals;
         const pairDecimals = token.pairDecimals;
-        const shortChain = chainShortMap[String(token.chain || '').toUpperCase()];
+        const shortChain = CHAIN_CONFIG[token.chain?.toLowerCase()]?.short || token.chain || '';
         
         const baseSymbol = token.symbol.toUpperCase();
         const quoteSymbol = token.pairSymbol.toUpperCase();
@@ -2076,6 +2064,7 @@ class TokenPriceMonitor {
 
            switch (dexName) {
                 case '1inch':
+                    
                     if (direction === 'cex_to_dex') {
                         const MarbleData = await fetchWithCountdown(
                             safeCellId, dexName,
@@ -2343,7 +2332,8 @@ class TokenPriceMonitor {
                                 outputDecimals,
                                 chainId,
                                 direction,
-                                wallet,network
+                                wallet,
+                                network
                             ),
                             timeoutLimit
                         );
@@ -2487,7 +2477,7 @@ class TokenPriceMonitor {
             }
            
           // if(err.message=="Request timeout"){
-                DEXAPIs.getSWOOPPrice( slug, direction,  inputContract,  outputContract, rawAmountIn,  inputDecimals, outputDecimals,  chainId, this.settings?.WalletAddress || '0x0000000000000000000000000000000000000000',  quotePriceUSDT )
+                DEXAPIs.getSWOOPPrice( slug, direction,  inputContract,  outputContract, rawAmountIn,  inputDecimals, outputDecimals,  chainId, this.settings?.WalletAddress || '0x0000000000000000000000000000000000000000',  quotePriceUSDT,network )
                 .then(fallbackData => {
                     handleResult(dexName, fallbackData, 'amountOut');
                 }).catch(fallbackErr => {
@@ -2688,7 +2678,7 @@ class TokenPriceMonitor {
             const fromSide = CexShortMap[fromSideRaw] || fromSideRaw;
             const toSide = CexShortMap[toSideRaw] || toSideRaw;
 
-            const shortChain = chainShortMap[token.chain?.toUpperCase()] || 'CHAIN';
+            const shortChain = CHAIN_CONFIG[token.chain?.toLowerCase()]?.short || 'CHAIN';
 
             const cexColor = this.getTextColorClassFromBadge(this.getBadgeColor(cexName, 'cex'));
             const chainColor = this.getTextColorClassFromBadge(this.getBadgeColor(token.chain, 'chain'));
@@ -2885,7 +2875,9 @@ class TokenPriceMonitor {
 
     generateDexLink(dex, tokenChain, tokenSymbol, tokenAddress, pairSymbol, pairAddress) {
         const chainName = tokenChain.toLowerCase(); // e.g. 'bsc', 'ethereum'        
-        const chainCode = chainCodeMap[chainName] || 1;
+        //const chainCode = chainCodeMap[chainName] || 1;
+         const chainCode = CHAIN_CONFIG[chainName]?.code
+
 
         const links = {
             kyberswap: `https://kyberswap.com/swap/${chainName}/${tokenAddress}-to-${pairAddress}`,
@@ -2907,8 +2899,8 @@ class TokenPriceMonitor {
         const chainData = CEXWallets[chainKey];
         if (!chainData) return '#STOK';
 
-        const wallet = chainData.WALLET_CEX?.[cexKey]?.address;
-        const explorer = explorerUrls[chainData.Kode_Chain] || explorerUrls['1'];
+        const wallet = chainData.WALLET_CEX?.[cexKey]?.address; 
+        const explorer = (Object.values(CHAIN_CONFIG).find(c => c.code === Number(chainData.Kode_Chain)) || {}).explorer ;
 
         if (!wallet) return '#STOK';
 
@@ -2974,7 +2966,7 @@ class TokenPriceMonitor {
     // Create token detail content
     createTokenDetailContent(token, cex) {
         const chainId = PriceUtils.getChainId(token.chain);
-        const explorerUrl = explorerUrls[chainId] || explorerUrls['1'];
+        const explorerUrl = (Object.values(CHAIN_CONFIG).find(c => c.code === Number(chainId)) || {}).explorer ;
 
         const tokenSymbol = token.symbol.toUpperCase();
         const pairSymbol = token.pairSymbol.toUpperCase();
@@ -2995,7 +2987,8 @@ class TokenPriceMonitor {
 
         const stokTokenLink = this.generateStokLinkCEX(token.contractAddress, token.chain, cexUpper);
         const stokPairLink = this.generateStokLinkCEX(token.pairContractAddress, token.chain, cexUpper);
-        const shortChain = chainShortMap[token.chain?.toUpperCase()] || 'CHAIN';
+        const shortChain = CHAIN_CONFIG[token.chain?.toLowerCase()]?.short || 'CHAIN';
+
 
         const tokenStok = `<a href="${explorerUrl}/token/${token.contractAddress}" target="_blank">[SC]</a>`;
         const pairStok = `<a href="${explorerUrl}/token/${token.pairContractAddress}" target="_blank">[SC]</a>`;
@@ -3213,15 +3206,10 @@ class TokenPriceMonitor {
         const scOut      = direction === 'cex_to_dex' ? token.pairContractAddress : token.contractAddress;
 
         const chainName  = token.chain.toLowerCase();
-        const chainIdMap = {
-            'ethereum': '1',
-            'bsc': '56',
-            'polygon': '137',
-            'arbitrum': '42161',
-            'base': '8453',
-        };
-        const chainId = chainIdMap[chainName];
-        const explorerBase = explorerUrls[chainId] || 'https://etherscan.io';
+       
+        const chainId = Object.values(CHAIN_CONFIG).find(c => c.name === chainName)?.code || '1';
+
+        const explorerBase = (Object.values(CHAIN_CONFIG).find(c => c.code === Number(chainId)) || {}).explorer || CHAIN_CONFIG.ethereum.explorer;
 
         const linkBuy  = `<a href="${explorerBase}/token/${scIn}" target="_blank">${fromSymbol}</a>`;
         const linkSell = `<a href="${explorerBase}/token/${scOut}" target="_blank">${toSymbol}</a>`;
