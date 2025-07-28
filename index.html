@@ -768,11 +768,11 @@
                                 <div class="progress h-100">
                                     <div class="progress-bar progress-bar-striped progres" id="scanProgressBar" role="progressbar" style="width: 100%;">
                                         <!-- Ini tetap untuk label persen -->
-                                        <small class="text-white fw-bold" id="scanProgressPercent">(0%)</small>
+                                        <small class="text-white fw-bold " id="scanProgressPercent"></small>
                                     </div>
                                 </div>
                                 <!-- scanProgressText di tengah-tengah -->
-                                <div class="position-absolute top-50 start-50 translate-middle text-danger fw-bold fs-9 text-center" style="white-space: nowrap;">
+                                <div class="position-absolute top-50 start-50 translate-middle text-black fw-bold fs-9 text-center" style="white-space: nowrap;">
                                     <small id="scanProgressText"></small>
                                 </div>
 
@@ -822,7 +822,7 @@
 
                         <label class="text-primary mb-0">
                             <input type="checkbox" class="me-1 chainFilterCheckbox" value="Ethereum">
-                            ERC: <span id="ethCountMonitoring" class="fw-bold">0</span>
+                            ERC: <span id="ercCountMonitoring" class="fw-bold">0</span>
                         </label>
 
                         <label class="text-info mb-0">
@@ -1228,6 +1228,9 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Web3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
