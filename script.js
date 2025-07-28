@@ -356,6 +356,21 @@ class TokenPriceMonitor {
                  $('#CheckPrice').prop('disabled', true);
                  $('#autorunBtn').prop('disabled', true);
                 checkAllCEXWalletsPerChain();
+                 // Nonaktifkan klik pada tab lain (bukan disembunyikan)
+           
+                 const disableTab = (selector) => {
+                const tabBtn = $(`#tabIconController button[data-bs-target="${selector}"]`);
+                tabBtn.addClass('disabled').css({
+                    'pointer-events': 'none',
+                    'opacity': 0.5
+                });
+            };
+            
+            disableTab('#priceMonitoring');
+            disableTab('#tokenManagement');
+            disableTab('#apiSettings');
+            disableTab('#portfolioTab');
+            disableTab('#WalletCEX');
             }
         });
 
