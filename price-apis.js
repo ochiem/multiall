@@ -1822,10 +1822,10 @@ async function fetchBinance() {
     const queryString = `timestamp=${timestamp}`;
     const signature = calculateSignature("BINANCE", ApiSecret, queryString, "HmacSHA256");
     // bisa dibrowser
-    // const url = `https://proxykiri.awokawok.workers.dev/?https://api4.binance.com/sapi/v1/capital/config/getall?${queryString}&signature=${signature}`;
+     const url = `https://proxykiri.awokawok.workers.dev/?https://api4.binance.com/sapi/v1/capital/config/getall?${queryString}&signature=${signature}`;
     
-   const originalUrl = `https://api.binance.com/sapi/v1/capital/config/getall?${queryString}&signature=${signature}`;
-   const url = withProxy(originalUrl); // 💡 gunakan proxy Vercel Anda
+   //const originalUrl = `https://api.binance.com/sapi/v1/capital/config/getall?${queryString}&signature=${signature}`;
+   //const url = withProxy(originalUrl); // 💡 gunakan proxy Vercel Anda
 
     const response = await $.ajax({
         url,
