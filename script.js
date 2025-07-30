@@ -1,5 +1,5 @@
 // Token Price Monitor Application - Updated for Frontend API Calls
-const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI', 'ParaSwap','Magpie'];
+const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI'];
 const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
 
 const CexShortMap = {
@@ -640,22 +640,17 @@ class TokenPriceMonitor {
         });
     }
 
-   async  fetchGasTokenPrices() {
-    
+    async fetchGasTokenPrices() {
         const binanceURL = 'https://api-gcp.binance.com/api/v3/ticker/price?symbols=["BNBUSDT","ETHUSDT","MATICUSDT","BTCUSDT"]';
         $('#gasTokenPrices').html(`<small class="text-white">Loading Gwei info...</small>`);
 
-        //console.log("🚀 Memulai fetchGasTokenPrices()");
-
         const response = await $.getJSON(binanceURL).catch(err => {
-            //console.error("❌ Gagal ambil harga token:", err);
             $('#gasTokenPrices').html('<span class="text-danger">Gagal ambil harga.</span>');
-            return null;
+            throw new Error('Gagal ambil harga token dari Binance');
         });
 
         if (!response) {
-            console.warn("⛔ Respon harga token kosong.");
-            return;
+            throw new Error("Respon harga token kosong dari Binance");
         }
 
         const tokenPrices = {};
@@ -669,56 +664,43 @@ class TokenPriceMonitor {
             if (symbol === 'MATIC') $('#maticPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
         });
 
-       // console.log("💰 Harga token (USDT):", tokenPrices);
-
         const Web3 = window.Web3;
         const gasTextParts = [];
         const gasTokenInfo = {};
 
         const supportedChains = Object.keys(CHAIN_CONFIG)
-                .filter(key => CHAIN_CONFIG[key].rpc) // hanya yang punya RPC
-                .map(key => ({
-                    key,
-                    label: CHAIN_CONFIG[key].short,
-                    symbol: CHAIN_CONFIG[key].symbol,
-                    gasLimit: CHAIN_CONFIG[key].gasLimit
-                }));
+            .filter(key => CHAIN_CONFIG[key].rpc)
+            .map(key => ({
+                key,
+                label: CHAIN_CONFIG[key].short,
+                symbol: CHAIN_CONFIG[key].symbol,
+                gasLimit: CHAIN_CONFIG[key].gasLimit
+            }));
+
+        let successCount = 0;
+
         for (const chain of supportedChains) {
             const key = chain.key || chain.symbol;
             const symbol = chain.symbol;
-
             const rpcUrl = CHAIN_CONFIG[key.toLowerCase()]?.rpc || CHAIN_CONFIG[symbol.toLowerCase()]?.rpc || '';
-
             let tokenPrice = tokenPrices[symbol];
 
-            // Fallback manual jika simbol POL belum ada di API
             if (!tokenPrice && symbol === 'POL') {
                 tokenPrice = tokenPrices['MATIC'];
             }
 
             if (!rpcUrl || !tokenPrice) {
-              //  console.warn(`⚠️ RPC URL atau harga token tidak ditemukan untuk ${chain.label} (${symbol})`);
                 gasTextParts.push(`<span class='badge bg-light text-dark fs-8'>${chain.label} [n/a]</span>`);
                 continue;
             }
 
             try {
-                console.log(`🔗 Cek jaringan ${chain.label} (${rpcUrl})`);
                 const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-
-                let baseFee;
                 const block = await web3.eth.getBlock("pending");
+                const baseFee = block?.baseFeePerGas ? parseInt(block.baseFeePerGas) : await web3.eth.getGasPrice();
 
-                if (block && block.baseFeePerGas) {
-                    baseFee = parseInt(block.baseFeePerGas);
-                } else {
-                    baseFee = await web3.eth.getGasPrice();
-                }
-
-                const gwei = (baseFee / 1e9)*2;
+                const gwei = (baseFee / 1e9) * 2;
                 const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
-
-               // console.log(`🟢 ${chain.label} | Gwei: ${gwei.toFixed(2)} | Token: ${symbol} | Price: $${tokenPrice} | Fee ≈ $${gasUSDT.toFixed(4)}`);
 
                 gasTextParts.push(
                     `<span class='badge bg-secondary text-white fs-8 fw-bold'>🔥 ${chain.label} [${gwei.toFixed(2)} | $${gasUSDT.toFixed(4)}]</span>`
@@ -731,6 +713,8 @@ class TokenPriceMonitor {
                     gasFeeUSDT: gasUSDT,
                     gasLimit: chain.gasLimit
                 };
+
+                successCount++;
             } catch (err) {
                 console.error(`❌ Gagal ambil data gas untuk ${chain.label}:`, err);
                 gasTextParts.push(`<span class='badge bg-danger fs-8'>${chain.label} [err]</span>`);
@@ -739,7 +723,12 @@ class TokenPriceMonitor {
 
         $('#gasTokenPrices').html(gasTextParts.join(" "));
         localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
+
+        if (successCount === 0) {
+            throw new Error("Gagal mengambil data gas untuk semua chain.");
+        }
     }
+
 
     fetchUSDTtoIDRRate() {
         const targetURL = 'https://indodax.com/api/ticker/usdtidr';
@@ -954,7 +943,7 @@ class TokenPriceMonitor {
             WalletAddress: '-'
         };
 
-        console.log("DATA SETTING: ",parsedSettings); // ← log sebelum return
+        //console.log("DATA SETTING: ",parsedSettings); // ← log sebelum return
         return parsedSettings;
     }
 
@@ -1602,8 +1591,15 @@ class TokenPriceMonitor {
         location.reload();
     }
 
-
     async CheckPrices() { 
+        try {
+            await this.fetchGasTokenPrices();
+        } catch (err) {
+            console.error('Gagal fetchGasTokenPrices:', err);
+            this.showAlert('Gagal mengambil harga Gas Token, scan dibatalkan', 'danger');
+            return;
+        }
+
         $('.chainFilterCheckbox').prop('disabled', true);
         $("#statERROR").html('');
 
@@ -1613,8 +1609,10 @@ class TokenPriceMonitor {
             return;
         }
 
-        const tokensPerBatch = settings.tokensPerBatch || 3;
-        const delayBetweenGrup = settings.delayBetweenGrup || 2000;
+        const tokensPerBatch = settings.tokensPerBatch;
+        const delayBetweenGrup = settings.delayBetweenGrup;
+        const delayPerDexDirection = 300;
+        const delayPerToken = 300;
 
         const allTokenUnits = [];
 
@@ -1656,13 +1654,10 @@ class TokenPriceMonitor {
         $('#scanTimeInfo').html(`<span class="text-dark">&nbsp;🔍 ${startStr}</span>&nbsp;`);
 
         for (const batch of unitBatches) {
-            this.fetchGasTokenPrices();
             await Promise.allSettled(batch.map(async tokenUnit => {
                 currentIndex++;
                 const percent = Math.round((currentIndex / totalUnits) * 100);
-               // $('#scanProgressPercent').text(`🔍 ${percent}%`);
                 $('#scanProgressBar').css('width', `${percent}%`);
-                
 
                 const priceData = {
                     token: tokenUnit,
@@ -1675,50 +1670,33 @@ class TokenPriceMonitor {
                 const shortCex = (CexShortMap[tokenUnit.cexName] || tokenUnit.cexName || '').toUpperCase();
                 const shortChain = (CHAIN_CONFIG[tokenUnit.chain?.toLowerCase()]?.short || tokenUnit.chain || '').toUpperCase();
 
-                 // Scroll ke token pertama di batch, setelah semua selesai
                 const firstToken = batch[0];
                 if (firstToken) {
                     this.tryAutoScrollToRow(firstToken);
                 }
 
-                // Jalankan arah cex_to_dex
-                const run_cex_to_dex = async () => {
-                    const direction = 'cex_to_dex';
-                    await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, direction);
-                    this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, direction);
-                    await new Promise(r => setTimeout(r, 100));
+                await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
+                this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
 
-                    for (const dexName of tokenUnit.selectedDexs) {
-                        $('#scanProgressText').html(`🔄 ${shortCex.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${dexName.toUpperCase()} [${percent}%]`);
-                        try {
-                            await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, direction);
-                        } catch (err) {
-                            console.warn(`[TIMEOUT] ${dexName} ${tokenUnit.symbol} (${direction}): ${err.message}`);
-                        }
-                        await new Promise(r => setTimeout(r, 300));
+                await Promise.allSettled(tokenUnit.selectedDexs.map(async dexName => {
+                    $('#scanProgressText').html(`🔄 ${shortCex} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${dexName} [${percent}%]`);
+                    try {
+                        await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex');
+                        await new Promise(r => setTimeout(r, delayPerDexDirection));
+
+                        await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+                        this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+
+                        await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex');
+
+                        $('#scanProgressText').html(`🔄 ${dexName} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${shortCex} [${percent}%]`);
+
+                    } catch (err) {
+                        console.warn(`[TIMEOUT] ${dexName} ${tokenUnit}: ${err.message}`);
                     }
-                };
+                }));
 
-                // Jalankan arah dex_to_cex dengan jeda setelah cex_to_dex
-                const run_dex_to_cex = async () => {
-                    const direction = 'dex_to_cex';
-                    await new Promise(r => setTimeout(r, 500)); // jeda antar arah dex yang sama
-                    await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, direction);
-                    this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, direction);
-                    await new Promise(r => setTimeout(r, 100));
-
-                    for (const dexName of tokenUnit.selectedDexs) {
-                        $('#scanProgressText').html(`🔄 ${dexName.toUpperCase()} → <b>[${tokenUnit.symbol} on ${shortChain.toUpperCase()}]</b> → ${shortCex.toUpperCase()} [${percent}%] `);
-                        try {
-                            await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, direction);
-                        } catch (err) {
-                            console.warn(`[TIMEOUT] ${dexName} ${tokenUnit.symbol} (${direction}): ${err.message}`);
-                        }
-                        await new Promise(r => setTimeout(r, 300));
-                    }
-                };
-
-                await Promise.allSettled([run_cex_to_dex(), run_dex_to_cex()]);
+                await new Promise(r => setTimeout(r, delayPerToken));
             }));
 
             await new Promise(resolve => setTimeout(resolve, delayBetweenGrup));
@@ -1728,7 +1706,7 @@ class TokenPriceMonitor {
         const durationSec = Math.floor((endTime - startTime) / 1000);
         const minutes = Math.floor(durationSec / 60).toString().padStart(2, '0');
         const seconds = (durationSec % 60).toString().padStart(2, '0');
-        
+
         $('#scanProgressText').html(``);
         $('#scanProgressPercent').html(`<span class="text-white fs-7">&nbsp;&nbsp;✅ Durasi Scan: ${minutes}:${seconds}</span>&nbsp;`);
         this.showAlertWithAudio();
@@ -1738,10 +1716,7 @@ class TokenPriceMonitor {
             const errorSummary = Object.entries(this.errorStats)
                 .map(([dex, stat]) => `${dex.toUpperCase()} <span class="text-warning">[${stat.timeout}🕒 | ${stat.dexError}⚠️]</span>`)
                 .join('  ');
-
-          //  $('#statERROR').append(`<span class="text-dark fw-bold">&nbsp;&nbsp;📊 ${errorSummary}</span>`);
         }
-
     }
 
     async showAlertWithAudio() {
@@ -1881,7 +1856,7 @@ class TokenPriceMonitor {
         const quoteSell = isQuoteUSDT ? 1 : getCEXRate(quoteSymbol, 'sell');
 
         if (!baseBuy || !baseSell || !quoteBuy || !quoteSell) {
-            console.warn(`${cexName} Harga tidak lengkap:`, { baseBuy, baseSell, quoteBuy, quoteSell });
+            console.warn(`${cexName} ${symbol} Harga tidak lengkap:`, { baseBuy, baseSell, quoteBuy, quoteSell });
             return;
         }
 
@@ -2079,31 +2054,7 @@ class TokenPriceMonitor {
 
            switch (dexName) {
                 case '1inch':
-                    
                     if (direction === 'cex_to_dex') {
-                        const MarbleData = await fetchWithCountdown(
-                            safeCellId, dexName,
-                            () => DEXAPIs.getMarblePrice(
-                                inputContract,
-                                outputContract,
-                                rawAmountIn,
-                                inputDecimals,
-                                outputDecimals,
-                                chainId,
-                                token,
-                                ['1inch'], 
-                                direction,
-                                network
-                            ),
-                            timeoutLimit
-                        );
-
-                        if (MarbleData?.status === 'timeout' || MarbleData?.error) {
-                            throw new Error(`1INCH (via Marble) error: ${MarbleData.error || MarbleData.status}`);
-                        }
-
-                        handleResult('1inch', { ...MarbleData });
-                    }else{
                         const dzapData = await fetchWithCountdown(
                             safeCellId, dexName,
                             () => DEXAPIs.getDZAPPrice({
@@ -2127,57 +2078,8 @@ class TokenPriceMonitor {
                         }
 
                         handleResult('1inch', dzapData);
-
-                    }
-                    
-                 /*  if (direction === 'cex_to_dex') {
-                        
-                        if (parseInt(chainId) === 1) {
-                            const MarbleData = await fetchWithCountdown(
-                                safeCellId, dexName,
-                                () => DEXAPIs.getMarblePrice(
-                                    inputContract,
-                                    outputContract,
-                                    rawAmountIn,
-                                    inputDecimals,
-                                    outputDecimals,
-                                    chainId,
-                                    token,
-                                    ['1inch'], 
-                                    direction,
-                                    network
-                                ),
-                                timeoutLimit
-                            );
-
-                            if (MarbleData?.status === 'timeout' || MarbleData?.error) {
-                                throw new Error(`1INCH (via Marble) error: ${MarbleData.error || MarbleData.status}`);
-                            }
-
-                            handleResult('1inch', { ...MarbleData });
-
-                        } else {
-                            const inchIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
-                            const inchOut = [{ tokenAddress: outputContract, proportion: 1 }];
-
-                            const inchData = await fetchWithCountdown(
-                                safeCellId, dexName,
-                                () => DEXAPIs.getHinkal1InchPrice(inchIn, inchOut, wallet, rawAmountIn.toString(), chainId,network),
-                                timeoutLimit
-                            );
-
-                            if (inchData?.status === 'timeout' || inchData?.error) {
-                                throw new Error(`1INCH (via Hinkal) error: ${inchData.error || inchData.status}`);
-                            }
-
-                            handleResult('1inch', {
-                                ...inchData,
-                                amountOut: inchData.outAmounts?.[0] || '0',
-                                exchange: '1inch'
-                            });
-                        }
-                            /*
-                        if (parseInt(chainId) === 1) {
+                    }else{
+                         if (parseInt(chainId) === 1) {
                             // 🔁 Gunakan ZERO untuk chain ETH
                             const zeroData = await fetchWithCountdown(
                                 safeCellId, dexName,
@@ -2222,57 +2124,8 @@ class TokenPriceMonitor {
                             });
                         }
 
-                    } else {
-                        // const dzapData = await fetchWithCountdown(
-                        //     safeCellId, dexName,
-                        //     () => DEXAPIs.getDZAPPrice({
-                        //         account: wallet,
-                        //         chainId: chainId,
-                        //         sellToken: inputContract,
-                        //         sellDecimals: inputDecimals,
-                        //         buyToken: outputContract,
-                        //         buyDecimals: outputDecimals,
-                        //         sellAmount: rawAmountIn,
-                        //         direction: direction,
-                        //         slippage: 0.3,
-                        //         integratorId: 'dzap',
-                        //         allowedSources: ['oneInchViaLifi'] // ✅ ini yang kamu minta: odos via dzap
-                        //     }),
-                        //     timeoutLimit
-                        // );
-
-                        // if (dzapData?.status === 'timeout' || dzapData?.error) {
-                        //     throw new Error(`DZAP error: ${dzapData.error || dzapData.status}`);
-                        // }
-
-                        // handleResult('1inch', dzapData);
-
-                         const INCHData = await fetchWithCountdown(
-                            safeCellId, dexName,
-                            () => DEXAPIs.get1inchQuotePrice(inputContract, outputContract, rawAmountIn,chainId, network,wallet),
-                            timeoutLimit
-                        );
-
-                        if (INCHData?.status === 'timeout' || INCHData?.error) {
-                            throw new Error(`1inHC NEW error: ${INCHData.error || INCHData.status}`);
-                        }
-
-                        handleResult('1inch', INCHData);
                     }
-                    */
-                    // const INCHData = await fetchWithCountdown(
-                    //     safeCellId, dexName,
-                    //     () => DEXAPIs.get1inchQuotePrice(inputContract, outputContract, rawAmountIn,chainId, network,wallet),
-                    //     timeoutLimit
-                    // );
-
-                    // if (INCHData?.status === 'timeout' || INCHData?.error) {
-                    //     throw new Error(`1inHC NEW error: ${INCHData.error || INCHData.status}`);
-                    // }
-
-                    // handleResult('1inch', INCHData);
-                    
-                    
+                        
                     break;
 
                 case 'KyberSwap': {
@@ -2319,72 +2172,6 @@ class TokenPriceMonitor {
                         handleResult('OKXDEX', okxData);
                         break;
                     }
-
-               case 'Magpie': {
-                    const MagpieData = await fetchWithCountdown(
-                        safeCellId, dexName,
-                        () => DEXAPIs.getFlyTradePrice(inputContract, outputContract, rawAmountIn, network, wallet),
-                        timeoutLimit
-                    );
-
-                    if (MagpieData?.status === 'timeout' || MagpieData?.error) {
-                        throw new Error(`Magpie error: ${MagpieData.error || MagpieData.status}`);
-                    }
-
-                    handleResult('Magpie', MagpieData);
-                    break;
-                }
-
-               case 'ParaSwap': {
-                    if (direction === 'cex_to_dex') {
-                        const paraData = await fetchWithCountdown(
-                            safeCellId, dexName,
-                            () => DEXAPIs.getParaSwapPrice(
-                                inputContract,
-                                outputContract,
-                                rawAmountIn,
-                                inputDecimals,
-                                outputDecimals,
-                                chainId,
-                                direction,
-                                wallet,
-                                network
-                            ),
-                            timeoutLimit
-                        );
-
-                        if (paraData?.status === 'timeout' || paraData?.error) {
-                            throw new Error(`ParaSwap error: ${paraData.error || paraData.status}`);
-                        }
-
-                        handleResult('ParaSwap', paraData);
-                    } else {
-                        const dzapData = await fetchWithCountdown(
-                            safeCellId, dexName,
-                                () => DEXAPIs.getDZAPPrice({
-                                    account: wallet,
-                                    chainId: chainId,
-                                    sellToken: inputContract,
-                                    sellDecimals: inputDecimals,
-                                    buyToken: outputContract,
-                                    buyDecimals: outputDecimals,
-                                    sellAmount: rawAmountIn,
-                                    direction: direction,
-                                    slippage: 0.3,
-                                    integratorId: 'dzap',
-                                    allowedSources: ['paraSwap'] // ✅ ini yang kamu minta: odos via dzap
-                            }),
-                            timeoutLimit
-                        );
-
-                        if (dzapData?.status === 'timeout' || dzapData?.error) {
-                            throw new Error(`DZAP via ParaSwap error: ${dzapData.error || dzapData.status}`);
-                        }
-
-                        handleResult('ParaSwap', dzapData);
-                    }
-                    break;
-                }
     
                 case 'ODOS': {
                     const odosIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
@@ -2542,7 +2329,7 @@ class TokenPriceMonitor {
 
         if (errorRaw.includes('timeout')) emoji = '🕒';
             else if (errorRaw.includes('network') || errorRaw.includes('fetch')) emoji = '❌';
-            else if (errorRaw.includes('unauthorized') || errorRaw.includes('401')) emoji = '🔒';
+            else if (errorRaw.includes('unauthorized') || errorRaw.includes('401')) emoji = '🛑';
             else if (errorRaw.includes('forbidden') || errorRaw.includes('403')) emoji = '🚫';
             else if (errorRaw.includes('slow') || errorRaw.includes('delay')) emoji = '🐌';
             else if (isFallbackError) emoji = '⚠️';
@@ -2845,7 +2632,7 @@ class TokenPriceMonitor {
             const textColor = this.getTextColorClassFromBadge(this.getBadgeColor(dex, 'dex'));
 
             const card = $(`
-                <div class="col-12 col-md-6 col-lg-3">
+                <div class="col-12 col-md-6 col-lg-4">
                     <div class="card border shadow-sm rounded-top no-rounded-bottom h-100">
                         <!-- HEADER -->
                         <div class="card-header px-1 py-1 d-flex justify-content-between align-items-center border-bottom-0 align-middle NameSinyalDEX" style="min-height: unset;">
