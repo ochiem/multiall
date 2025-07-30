@@ -1594,6 +1594,9 @@ class TokenPriceMonitor {
     }
 
     async CheckPrices() { 
+        this.errorStats = {};
+        $('#statERROR').html(''); // opsional: bersihkan tampilan lama
+
         try {
             $('#scanProgressPercent').html(`Cek Harga Gas Gwei..`);
             await this.fetchGasTokenPrices();
@@ -1604,7 +1607,6 @@ class TokenPriceMonitor {
         }
 
         $('.chainFilterCheckbox').prop('disabled', true);
-        $("#statERROR").html('');
         $('#scanProgressPercent').html(``);
 
         const settings = this.loadSettings();
