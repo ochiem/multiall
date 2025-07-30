@@ -1595,8 +1595,9 @@ class TokenPriceMonitor {
 
     async CheckPrices() { 
         try {
+            $('#scanProgressText').html(`Cek Harga Gas Gwei..`);
+
             await this.fetchGasTokenPrices();
-             $('#scanProgressText').html(`Cek Harga Gas Gwei..`);
         } catch (err) {
             console.error('Gagal fetchGasTokenPrices:', err);
             this.showAlert('Gagal mengambil harga Gas Token, scan dibatalkan', 'danger');
