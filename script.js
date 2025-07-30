@@ -1698,6 +1698,16 @@ class TokenPriceMonitor {
                     } catch (err) {
                         console.warn(`[TIMEOUT] ${dexName} for DATA:`, tokenUnit, `Error: ${err.message}`);
                     }
+
+                        // 🟨 Tampilkan errorStats SETIAP selesai 1 DEX
+                    if (this.errorStats) {
+                        const errorSummary = Object.entries(this.errorStats)
+                            .map(([dex, stat]) =>
+                                `<span class="text-white fs-7">❌ ${dex.toUpperCase()}</span> <span class="badge text-white bg-warning">[ 🕒: ${stat.timeout || 0} |  ⚠️: ${stat.dexError || 0}]</span><br/>`
+                            ).join('');
+                        $('#statERROR').html(`<span class="fw-bold text-white badge bg-warning fs-7"> ERROR LOG:</span><br/>${errorSummary}`);
+                    }
+
                 }));
 
                 await new Promise(r => setTimeout(r, delayPerToken));
@@ -1716,12 +1726,12 @@ class TokenPriceMonitor {
         this.showAlertWithAudio();
         $('.chainFilterCheckbox').prop('disabled', false);
 
-        if (this.errorStats) {
-            const errorSummary = Object.entries(this.errorStats)
-                .map(([dex, stat]) => `<span class="text-white fs-7">${dex.toUpperCase()}</span> <span class="text-warning">[${stat.timeout}🕒 | ${stat.dexError}⚠️]</span> <br/>`)
-                .join('  ');
-            $('#statERROR').append(`<span class="fw-bold text-white badge bg-warning fs-7"> ERROR LOG:</span><br/>${errorSummary}`);
-        }
+        // if (this.errorStats) {
+        //     const errorSummary = Object.entries(this.errorStats)
+        //         .map(([dex, stat]) => `<span class="text-white fs-7">${dex.toUpperCase()}</span> <span class="text-warning">[${stat.timeout}🕒 | ${stat.dexError}⚠️]</span> <br/>`)
+        //         .join('  ');
+        //     $('#statERROR').append(`<span class="fw-bold text-white badge bg-warning fs-7"> ERROR LOG:</span><br/>${errorSummary}`);
+        // }
     }
 
     async showAlertWithAudio() {
