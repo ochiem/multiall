@@ -702,6 +702,8 @@ class TokenPriceMonitor {
                 const gwei = (baseFee / 1e9) * 2;
                 const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
 
+                console.log(`🟢 ${chain.label} | Gwei: ${gwei.toFixed(2)} | Token: ${symbol} | Price: $${tokenPrice} | Fee ≈ $${gasUSDT.toFixed(4)}`);
+                
                 gasTextParts.push(
                     `<span class='badge bg-secondary text-white fs-8 fw-bold'>🔥 ${chain.label} [${gwei.toFixed(2)} | $${gasUSDT.toFixed(4)}]</span>`
                 );
@@ -1594,6 +1596,7 @@ class TokenPriceMonitor {
     async CheckPrices() { 
         try {
             await this.fetchGasTokenPrices();
+             $('#scanProgressText').html(`Cek Harga Gas Gwei..`);
         } catch (err) {
             console.error('Gagal fetchGasTokenPrices:', err);
             this.showAlert('Gagal mengambil harga Gas Token, scan dibatalkan', 'danger');
@@ -1602,6 +1605,7 @@ class TokenPriceMonitor {
 
         $('.chainFilterCheckbox').prop('disabled', true);
         $("#statERROR").html('');
+        $('#scanProgressPercent').html(``);
 
         const settings = this.loadSettings();
         if (!settings || settings.WalletAddress === '-' || settings.UserName === 'XXX') {
@@ -1611,8 +1615,8 @@ class TokenPriceMonitor {
 
         const tokensPerBatch = settings.tokensPerBatch;
         const delayBetweenGrup = settings.delayBetweenGrup;
-        const delayPerDexDirection = 300;
-        const delayPerToken = 300;
+        const delayPerDexDirection = 200;
+        const delayPerToken = 200;
 
         const allTokenUnits = [];
 
@@ -1692,7 +1696,7 @@ class TokenPriceMonitor {
                         $('#scanProgressText').html(`🔄 ${dexName} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${shortCex} [${percent}%]`);
 
                     } catch (err) {
-                        console.warn(`[TIMEOUT] ${dexName} ${tokenUnit}: ${err.message}`);
+                        console.warn(`[TIMEOUT] ${dexName} for DATA:`, tokenUnit, `Error: ${err.message}`);
                     }
                 }));
 
@@ -1777,11 +1781,11 @@ class TokenPriceMonitor {
         for (const symbol of symbols) {
             const pair = { baseSymbol: symbol, quoteSymbol: 'USDT' };
 
-            const assignData = (data) => {
+            const assignData = (symbol => data => {
                 tokenPriceData.analisis_data[direction][cexName][`${symbol}ToUSDT`] = data;
                 if (data.buy) this.gasTokenPrices[symbol] = data.buy;
-            };
-
+            })(symbol);
+            
             switch (cexName) {
                 case 'Binance':
                     promises.push(
