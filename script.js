@@ -1595,8 +1595,7 @@ class TokenPriceMonitor {
 
     async CheckPrices() { 
         try {
-            $('#scanProgressText').html(`Cek Harga Gas Gwei..`);
-
+            $('#scanProgressPercent').html(`Cek Harga Gas Gwei..`);
             await this.fetchGasTokenPrices();
         } catch (err) {
             console.error('Gagal fetchGasTokenPrices:', err);
@@ -1719,8 +1718,9 @@ class TokenPriceMonitor {
 
         if (this.errorStats) {
             const errorSummary = Object.entries(this.errorStats)
-                .map(([dex, stat]) => `${dex.toUpperCase()} <span class="text-warning">[${stat.timeout}🕒 | ${stat.dexError}⚠️]</span>`)
+                .map(([dex, stat]) => `<span class="text-white fs-7">${dex.toUpperCase()}</span> <span class="text-warning">[${stat.timeout}🕒 | ${stat.dexError}⚠️]</span> <br/>`)
                 .join('  ');
+            $('#statERROR').append(`<span class="fw-bold text-white badge bg-warning fs-7"> ERROR LOG:</span><br/>${errorSummary}`);
         }
     }
 

@@ -611,10 +611,7 @@
             <!-- Brand -->
             <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#">[ Monitoring Price Crypto ]</a>
 
-            <!-- Status Info -->
-            <div class="d-none d-md-flex flex-column align-items-end text-end me-2">
-                <small id="statERROR" class="text-danger"></small>
-            </div>
+            
               <!-- Overlay Loading -->
                 <div id="loadingOverlay" class="loading-overlay">
                     <span id="infoupdateWALLET" class="text-danger fs-6 ms-4"></span><br/>
@@ -731,7 +728,11 @@
                     <small class="badge bg-white fw-bold text-success">USDT/IDR: <span id="usdtIdrPrice">--</span></small>
                 </div>
 
-            
+                <hr class="my-1 bg-light"/>
+                <!-- Status Info -->
+                <div id="errorLOG">
+                    <small id="statERROR" class="text-danger"></small>
+                </div>
             </div>
         </div>
     </nav>
