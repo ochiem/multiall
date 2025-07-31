@@ -731,7 +731,6 @@ class TokenPriceMonitor {
         }
     }
 
-
     fetchUSDTtoIDRRate() {
         const targetURL = 'https://indodax.com/api/ticker/usdtidr';
         const fullURL = withProxy(targetURL); // menggunakan fungsi proxy
@@ -1654,6 +1653,7 @@ class TokenPriceMonitor {
         const unitBatches = chunkArray(allTokenUnits, tokensPerBatch);
         const totalUnits = allTokenUnits.length;
         let currentIndex = 0;
+        const skipDelayDEX = ['LIFI','ODOS','OKXDEX'];
 
         const startTime = new Date();
         const startStr = startTime.toLocaleTimeString();
@@ -1705,14 +1705,19 @@ class TokenPriceMonitor {
                     if (this.errorStats) {
                         const errorSummary = Object.entries(this.errorStats)
                             .map(([dex, stat]) =>
-                                `<span class="text-white fs-7">❌ ${dex.toUpperCase()}</span> <span class="badge text-white bg-warning">[ 🕒: ${stat.timeout || 0} |  ⚠️: ${stat.dexError || 0}]</span><br/>`
+                                `<span class="badge text-dark bg-warning fs-8">❌ ${dex.toUpperCase()} [ <span class="text-white "> 🕒: ${stat.timeout || 0} </span>|<span class="text-danger">  ⚠️: ${stat.dexError || 0}</span> ]</span> <br/>`
                             ).join('');
-                        $('#statERROR').html(`<span class="fw-bold text-white badge bg-warning fs-7"> ERROR LOG:</span><br/>${errorSummary}`);
+                        $('#statERROR').html(`<span class="fw-bold text-white fs-7">STATS ERROR: </span><br/>${errorSummary}`);
                     }
 
                 }));
 
-                await new Promise(r => setTimeout(r, delayPerToken));
+                if (!skipDelayDEX.includes(dexName)) {
+                    await new Promise(r => setTimeout(r, delayPerDexDirection));
+                }
+
+
+               // await new Promise(r => setTimeout(r, delayPerToken));
             }));
 
             await new Promise(resolve => setTimeout(resolve, delayBetweenGrup));
@@ -1728,12 +1733,6 @@ class TokenPriceMonitor {
         this.showAlertWithAudio();
         $('.chainFilterCheckbox').prop('disabled', false);
 
-        // if (this.errorStats) {
-        //     const errorSummary = Object.entries(this.errorStats)
-        //         .map(([dex, stat]) => `<span class="text-white fs-7">${dex.toUpperCase()}</span> <span class="text-warning">[${stat.timeout}🕒 | ${stat.dexError}⚠️]</span> <br/>`)
-        //         .join('  ');
-        //     $('#statERROR').append(`<span class="fw-bold text-white badge bg-warning fs-7"> ERROR LOG:</span><br/>${errorSummary}`);
-        // }
     }
 
     async showAlertWithAudio() {
@@ -1939,7 +1938,10 @@ class TokenPriceMonitor {
                 timestamp: Date.now()
             };
                 // ✅ LOG
-                const feeTrade = modal * 0.0015;
+                //const feeTrade = modal * 0.0015;
+                const isAnyNotUSDT = !isBaseUSDT || !isQuoteUSDT;
+                const feeTrade = modal * (isAnyNotUSDT ? 0.0035 : 0.0015);
+
                 const matchedCEXKey = Object.keys(token.cexInfo || {}).find(k => k.toUpperCase() === cexName.toUpperCase());
                 const feeWDToken = token.cexInfo?.[matchedCEXKey]?.[token.symbol.toUpperCase()]?.feewd ?? 0;
 
@@ -2059,8 +2061,6 @@ class TokenPriceMonitor {
             $(`#${cellId}`).html(html);
         };
 
-        
-       
         try {
             const cellId = direction === 'cex_to_dex'
                 ? `cell_${token.symbol}_${token.pairSymbol}_${token.chain}_${cexName}_${dexName}`
@@ -2401,7 +2401,19 @@ class TokenPriceMonitor {
         const matchedCEXKey = Object.keys(token.cexInfo || {}).find(k => k.toUpperCase() === cexName.toUpperCase());
         const feeWDToken = token.cexInfo?.[matchedCEXKey]?.[token.symbol.toUpperCase()]?.feewd ?? 0;
 
-        const feeTrade = modal * 0.0013;
+       // const feeTrade = modal * 0.0013;
+
+       // Deteksi jika bukan pair USDT
+        const symbolUpper = token.symbol.toUpperCase();
+        const pairSymbolUpper = token.pairSymbol.toUpperCase();
+
+        const isUSDTBase = symbolUpper === 'USDT';
+        const isUSDTQuote = pairSymbolUpper === 'USDT';
+
+        const feeTrade = (!isUSDTBase && !isUSDTQuote)
+            ? modal * 0.0035   // Fee 3% jika bukan USDT
+            : modal * 0.0013; // Fee default 0.13% jika salah satu USDT
+
         const feeWD = feeWDToken * baseBuy;
         const totalFee = feeTrade + feeWD + fee;
 

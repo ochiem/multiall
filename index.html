@@ -706,17 +706,20 @@
 
                 <!-- Tema -->
                 <div>
-                    <span class="fw-bold text-dark badge bg-white ">ACTION :</span><br/>
+                    <span class="fw-bold text-dark badge bg-white ">ACTION:</span><br/>
                     <span id="infostatus" class="text-white fw-bold fs-8">---</span>
                 </div>
 
                 <hr class="my-1 bg-light"/>
 
                 <!-- Gas Token Prices -->
-                <div id="gasTokenPrices" class="small text-light">
-                    <!-- Akan diisi otomatis: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
-                </div>
-
+                 <div>
+                    <span class="fw-bold text-dark badge bg-white ">GAS INFO:</span><br/>
+                        <div id="gasTokenPrices" class="small text-light">
+                            <!-- Akan diisi otomatis: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
+                        </div>                
+                    </div>
+                        
                 <hr class="my-1 bg-light"/>
 
                 <!-- Token Prices -->
@@ -1165,7 +1168,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Select DEX</label>
+                                    <label class="form-label">Select DEX (MAX 4)</label>
                                     <div class="border rounded p-3">
                                         <div class="row">
                                             <!-- Kolom Kiri -->
@@ -1182,26 +1185,27 @@
                                                     <input class="form-check-input" type="checkbox" value="Matcha" id="dexMatcha">
                                                     <label class="form-check-label" for="dexMatcha">Matcha</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="OKXDEX" id="dexOkx">
-                                                    <label class="form-check-label" for="dexOkx">OKX DEX</label>
-                                                </div>
+                                               
                                             </div>
 
                                             <!-- Kolom Kanan -->
                                             <div class="col-6">
+                                                 <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="OKXDEX" id="dexOkx">
+                                                    <label class="form-check-label" for="dexOkx">OKX DEX</label>
+                                                </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="ODOS" id="dexOdos">
                                                     <label class="form-check-label" for="dexOdos">ODOS</label>
                                                 </div>
-                                                <div class="form-check">
+                                                <!-- <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="ParaSwap" id="dexParaSwap">
                                                     <label class="form-check-label" for="dexParaSwap">ParaSwap</label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="Magpie" id="dexMagpie">
                                                     <label class="form-check-label" for="dexMagpie">Magpie</label>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="LIFI" id="dexLIFI">
                                                     <label class="form-check-label" for="dexLIFI">LIFI</label>
