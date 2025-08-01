@@ -1653,6 +1653,161 @@ class TokenPriceMonitor {
         const unitBatches = chunkArray(allTokenUnits, tokensPerBatch);
         const totalUnits = allTokenUnits.length;
         let currentIndex = 0;
+        const skipDelayDEX = ['LIFI'];
+
+        const startTime = new Date();
+        const startStr = startTime.toLocaleTimeString();
+        $('#scanTimeInfo').html(`<span class="text-dark">&nbsp;🔍 ${startStr}</span>&nbsp;`);
+
+        for (const batch of unitBatches) {
+            await Promise.allSettled(batch.map(async tokenUnit => {
+                currentIndex++;
+                const percent = Math.round((currentIndex / totalUnits) * 100);
+                $('#scanProgressBar').css('width', `${percent}%`);
+
+                const priceData = {
+                    token: tokenUnit,
+                    analisis_data: {
+                        cex_to_dex: {},
+                        dex_to_cex: {}
+                    }
+                };
+
+                const shortCex = (CexShortMap[tokenUnit.cexName] || tokenUnit.cexName || '').toUpperCase();
+                const shortChain = (CHAIN_CONFIG[tokenUnit.chain?.toLowerCase()]?.short || tokenUnit.chain || '').toUpperCase();
+
+                const firstToken = batch[0];
+                if (firstToken) {
+                    this.tryAutoScrollToRow(firstToken);
+                }
+
+                await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
+                this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
+
+                const skippedDexPromises = tokenUnit.selectedDexs
+                .filter(dex => skipDelayDEX.includes(dex))
+                .map(async dexName => {
+                    this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex')
+                    .then(() => this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex'))
+                    .then(() => this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex'))
+                    .catch(err => console.warn(`[SKIP_DELAY][${dexName}] Error:`, err));
+                });
+
+                const normalDexPromises = tokenUnit.selectedDexs
+                .filter(dex => !skipDelayDEX.includes(dex))
+                .map(async dexName => {
+                    $('#scanProgressText').html(`🔄 ${shortCex} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${dexName} [${percent}%]`);
+                    try {
+                    await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex');
+                    await new Promise(r => setTimeout(r, delayPerDexDirection));
+
+                    await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+                    this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+
+                    await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex');
+
+                    await new Promise(r => setTimeout(r, delayPerDexDirection));
+
+                    $('#scanProgressText').html(`🔄 ${dexName} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${shortCex} [${percent}%]`);
+                    } catch (err) {
+                    console.warn(`[NORMAL_DELAY][${dexName}] Error:`, err);
+                    }
+
+                    // Error stats
+                    if (this.errorStats) {
+                    const errorSummary = Object.entries(this.errorStats)
+                        .map(([dex, stat]) =>
+                        `<span class="badge text-dark bg-warning fs-8">❌ ${dex.toUpperCase()} [ <span class="text-white "> 🕒: ${stat.timeout || 0} </span>|<span class="text-danger">  ⚠️: ${stat.dexError || 0}</span> ]</span> <br/>`
+                        ).join('');
+                    $('#statERROR').html(`<span class="fw-bold text-white fs-7">STATS ERROR: </span><br/>${errorSummary}`);
+                    }
+                });
+
+                // Jalankan yang tidak delay secara non-blocking (tidak di-await)
+                skippedDexPromises.forEach(p => p);
+
+                // Tunggu hanya yang normal
+                await Promise.allSettled(normalDexPromises);
+
+
+            }));
+
+            await new Promise(resolve => setTimeout(resolve, delayBetweenGrup));
+        }
+
+        const endTime = new Date();
+        const durationSec = Math.floor((endTime - startTime) / 1000);
+        const minutes = Math.floor(durationSec / 60).toString().padStart(2, '0');
+        const seconds = (durationSec % 60).toString().padStart(2, '0');
+
+        $('#scanProgressText').html(``);
+        $('#scanProgressPercent').html(`<span class="text-white fs-7">&nbsp;&nbsp;✅ Durasi Scan: ${minutes}:${seconds}</span>&nbsp;`);
+        this.showAlertWithAudio();
+        $('.chainFilterCheckbox').prop('disabled', false);
+
+    }
+
+    async CheckPricesLAMA() { 
+        this.errorStats = {};
+        $('#statERROR').html(''); // opsional: bersihkan tampilan lama
+
+        try {
+            $('#scanProgressPercent').html(`Cek Harga Gas Gwei..`);
+            await this.fetchGasTokenPrices();
+        } catch (err) {
+            console.error('Gagal fetchGasTokenPrices:', err);
+            this.showAlert('Gagal mengambil harga Gas Token, scan dibatalkan', 'danger');
+            return;
+        }
+
+        $('.chainFilterCheckbox').prop('disabled', true);
+        $('#scanProgressPercent').html(``);
+
+        const settings = this.loadSettings();
+        if (!settings || settings.WalletAddress === '-' || settings.UserName === 'XXX') {
+            this.showAlert('SILAKAN SETTING APLIKASI', 'danger');
+            return;
+        }
+
+        const tokensPerBatch = settings.tokensPerBatch;
+        const delayBetweenGrup = settings.delayBetweenGrup;
+        const delayPerDexDirection = 200;
+        const delayPerToken = 200;
+
+        const allTokenUnits = [];
+
+        for (const token of this.tokens) {
+            if (!token.isActive || !this.selectedChains.includes(token.chain)) continue;
+            for (const cexName of token.selectedCexs) {
+                allTokenUnits.push({ ...token, cexName });
+            }
+        }
+
+        allTokenUnits.sort((a, b) => {
+            const symbolA = a.symbol.toLowerCase();
+            const symbolB = b.symbol.toLowerCase();
+            return this.sortAscending ? symbolA.localeCompare(symbolB) : symbolB.localeCompare(symbolA);
+        });
+
+        if (allTokenUnits.length === 0) {
+            this.showAlert('Tidak Ada Daftar Token, Silakan Pilih Chain', 'info');
+            $('#priceTableBody').html(`<tr><td colspan="13" class="text-center text-muted py-5">
+                <i class="bi bi-info-circle me-2"></i> Tidak ada DATA KOIN, Silakan ke Management TOKEN
+            </td></tr>`);
+            return;
+        }
+
+        const chunkArray = (arr, size) => {
+            const result = [];
+            for (let i = 0; i < arr.length; i += size) {
+                result.push(arr.slice(i, i + size));
+            }
+            return result;
+        };
+
+        const unitBatches = chunkArray(allTokenUnits, tokensPerBatch);
+        const totalUnits = allTokenUnits.length;
+        let currentIndex = 0;
         const skipDelayDEX = ['LIFI','ODOS','OKXDEX'];
 
         const startTime = new Date();
@@ -1710,14 +1865,15 @@ class TokenPriceMonitor {
                         $('#statERROR').html(`<span class="fw-bold text-white fs-7">STATS ERROR: </span><br/>${errorSummary}`);
                     }
 
+                    if (!skipDelayDEX.includes(dexName)) {
+                        await new Promise(r => setTimeout(r, delayPerDexDirection));
+                    } else {
+                        console.log(`⏭️ Skip delay untuk DEX: ${dexName}`);
+                    }
+
                 }));
+                
 
-                if (!skipDelayDEX.includes(dexName)) {
-                    await new Promise(r => setTimeout(r, delayPerDexDirection));
-                }
-
-
-               // await new Promise(r => setTimeout(r, delayPerToken));
             }));
 
             await new Promise(resolve => setTimeout(resolve, delayBetweenGrup));
@@ -2175,6 +2331,7 @@ class TokenPriceMonitor {
                         break;
                     }
 
+                    
                 case 'OKXDEX': {
                     const okxData = await fetchWithCountdown(
                         safeCellId, dexName,
@@ -2189,7 +2346,7 @@ class TokenPriceMonitor {
                         handleResult('OKXDEX', okxData);
                         break;
                     }
-    
+                   
                 case 'ODOS': {
                     const odosIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
                     const odosOut = [{ tokenAddress: outputContract, proportion: 1 }];
@@ -2224,7 +2381,7 @@ class TokenPriceMonitor {
 
                     break;
                 }
-                
+                /*
                 case 'LIFI':
                         const MarbleData = await fetchWithCountdown(
                                 safeCellId, dexName,
@@ -2250,6 +2407,29 @@ class TokenPriceMonitor {
                             handleResult('lifi', { ...MarbleData });                   
 
                     break;
+                    */
+
+                    case 'LIFI': {
+                        const MarbleData = await DEXAPIs.getMarblePrice(
+                            inputContract,
+                            outputContract,
+                            rawAmountIn,
+                            inputDecimals,
+                            outputDecimals,
+                            chainId,
+                            token,
+                            [],
+                            direction,
+                            network
+                        );
+
+                        if (MarbleData?.error) {
+                            throw new Error(`LIFI error: ${MarbleData.error}`);
+                        }
+
+                        handleResult('lifi', { ...MarbleData });
+                        break;
+                    }
 
                 default:
                     console.warn(`[⚠️ fetchDEXPrices] DEX tidak dikenal: ${dexName}`);
@@ -2261,7 +2441,7 @@ class TokenPriceMonitor {
                 'KyberSwap': 'kyberswap',
                 'Matcha': '0x',
                 'OKXDEX': 'okx',
-                'ODOS': 'odos',
+//                'ODOS': 'odos',
                 'ParaSwap': 'paraswap',
             };
             const slug = fallbackSlugMap[dexName];
