@@ -1664,7 +1664,7 @@ class TokenPriceMonitor {
         const unitBatches = chunkArray(allTokenUnits, tokensPerBatch);
         const totalUnits = allTokenUnits.length;
         let currentIndex = 0;
-        const skipDelayDEX = ['LIFI'];
+        const skipDelayDEX = ['LIFI','ODOS'];
 
         const startTime = new Date();
         const startStr = startTime.toLocaleTimeString();
@@ -2357,7 +2357,7 @@ class TokenPriceMonitor {
                         handleResult('OKXDEX', okxData);
                         break;
                     }
-                   
+                /*   
                 case 'ODOS': {
                     const odosIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
                     const odosOut = [{ tokenAddress: outputContract, proportion: 1 }];
@@ -2392,7 +2392,7 @@ class TokenPriceMonitor {
 
                     break;
                 }
-                /*
+                
                 case 'LIFI':
                         const MarbleData = await fetchWithCountdown(
                                 safeCellId, dexName,
@@ -2419,6 +2419,39 @@ class TokenPriceMonitor {
 
                     break;
                     */
+                    case 'ODOS': {
+                        const odosIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
+                        const odosOut = [{ tokenAddress: outputContract, proportion: 1 }];
+
+                        let odosData;
+
+                        if (direction === 'cex_to_dex') {
+                            odosData = await DEXAPIs.getODOSPrice(
+                                odosIn,
+                                odosOut,
+                                wallet,
+                                rawAmountIn.toString(),
+                                chainId,
+                                network
+                            );
+                        } else {
+                            odosData = await DEXAPIs.getHinkalODOSPrice(
+                                odosIn,
+                                odosOut,
+                                wallet,
+                                rawAmountIn.toString(),
+                                chainId,
+                                network
+                            );
+                        }
+
+                        if (odosData?.error) {
+                            throw new Error(`ODOS error: ${odosData.error}`);
+                        }
+
+                        handleResult('ODOS', { ...odosData, amountOut: odosData.outAmounts?.[0] || '0' });
+                        break;
+                    }
 
                     case 'LIFI': {
                         const MarbleData = await DEXAPIs.getMarblePrice(
