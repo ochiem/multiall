@@ -43,8 +43,7 @@ class TokenPriceMonitor {
         this.initPairSymbolAutocomplete();
 
          // ✅ Set timeout global dari settings ke window
-        const defaultTimeout = 5000;
-        const timeoutValue = this.settings?.TimeoutCount || defaultTimeout;
+        const timeoutValue = this.settings?.TimeoutCount || 4000;
         window.timeoutApi = timeoutValue;
 
         const lastWalletUpdate = localStorage.getItem("MULTI_ACTIONS");
@@ -938,11 +937,23 @@ class TokenPriceMonitor {
         const parsedSettings = settings ? JSON.parse(settings) : {
             tokensPerBatch: 3, // jumlah anggota
             UserName: 'XXX', // jeda antar member
-            delayBetweenGrup: 2000, // jeda batch
-            TimeoutCount: 3000,
+            delayBetweenGrup: 400, // jeda batch
+            TimeoutCount: 4000,
             PNLFilter: 0,
             WalletAddress: '-'
         };
+         // Tampilkan info config ke elemen #infoConfig
+        const shortened = this.shortenAddress(parsedSettings.WalletAddress);
+        // Buat HTML info dengan icon unicode
+        const infoHTML = `
+            🆔&nbsp; UserName: ${parsedSettings.UserName}<br>
+            👛&nbsp; Wallets: ${shortened}<br>
+            👥&nbsp; Anggota Grup: ${parsedSettings.tokensPerBatch} Koin<br>
+            ⏱️&nbsp; Jeda Grup: ${parsedSettings.delayBetweenGrup}ms<br>
+            ⌛&nbsp; Time Out: ${parsedSettings.TimeoutCount}ms<br>
+            💰&nbsp; PNLFilter: $${parsedSettings.PNLFilter}
+        `;
+        $('#infoConfig').html(infoHTML);
 
         //console.log("DATA SETTING: ",parsedSettings); // ← log sebelum return
         return parsedSettings;
@@ -1545,9 +1556,9 @@ class TokenPriceMonitor {
 
         const userName = $userEl.val()?.trim() || '';
         const wallet = $walletEl.val()?.trim() || '';
-        const tokensPerBatch = parseInt($('#tokensPerBatch').val(), 10) || 3;
-        const delayBetweenGrup = parseInt($('#delayBetweenGrup').val(), 10) || 2000;
-        const timeoutCount = parseInt($('#TimeoutCount').val(), 10) || 5000;
+        const tokensPerBatch = parseInt($('#tokensPerBatch').val(), 3) || 3;
+        const delayBetweenGrup = parseInt($('#delayBetweenGrup').val(), 400) || 400;
+        const timeoutCount = parseInt($('#TimeoutCount').val(), 4000) || 10000;
         const pnlFilter = parseFloat($('#PNLFilter').val()) || 0;
 
         if (!userName || userName === 'XXX') {
@@ -1570,7 +1581,7 @@ class TokenPriceMonitor {
             return false;
         }
 
-        if (!timeoutCount || timeoutCount < 2000 || timeoutCount > 15000) {
+        if (!timeoutCount || timeoutCount < 2000 || timeoutCount > 10000) {
             this.showAlert('Timeout harus antara 2000–15000 ms', 'danger');
             return false;
         }

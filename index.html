@@ -692,6 +692,7 @@
 
             <div class="offcanvas-body d-flex flex-column gap-1">
                
+                <!-- Tema -->
                 <div class="d-flex flex-wrap gap-2">
                     <strong class="fw-bold text-light d-block mb-1"> TEMA :</strong><br/>
                     <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
@@ -702,12 +703,22 @@
                     <div class="theme-box" data-theme="orange" style="background-color: orange;" title="Orange"></div>
                     <div class="theme-box" data-theme="ungu" style="background-color: #9c6cd1;" title="Ungu"></div>
                 </div>
+
                 <hr class="my-1 bg-light"/>
 
-                <!-- Tema -->
+                 <!-- action -->
                 <div>
                     <span class="fw-bold text-dark badge bg-white ">ACTION:</span><br/>
                     <span id="infostatus" class="text-white fw-bold fs-8">---</span>
+                </div>
+
+                <hr class="my-1 bg-light"/>
+
+                <!-- config setting -->
+
+                <div>
+                    <span class="fw-bold text-dark badge bg-white ">CONFIG:</span><br/>
+                    <span id="infoConfig" class="text-white fw-bold fs-8"></span>
                 </div>
 
                 <hr class="my-1 bg-light"/>
@@ -899,7 +910,6 @@
                             <i class="bi bi-coin"></i> Token Management
                             
                         </h5>
-
                         <!-- Tombol Aksi -->
                         <div class="d-flex align-items-center flex-wrap gap-2">
                             <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tokenModal">
@@ -993,10 +1003,13 @@
                     <div class="col-md-6">
                         <div class="card mt-4 shadow-sm rounded-3">
                             <div class="card-body">
-                                <h5 class="text-center mb-4 text-primary">
+                                <div class="modal-header mb-2">
+                                     <h5 class="align-middle text-white ps-3 mx-2 my-2 py-2">
                                     <i class="bi bi-gear"></i> Settings Aplikasi
                                 </h5>
 
+                                </div>
+                               
                                 <form id="settingsForm">
                                     <div class="mb-3">
                                         <label for="UserName" class="form-label">User Name</label>
@@ -1017,15 +1030,15 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="TimeoutCount" class="form-label">Waktu Tunggu (ms) [2000-150000]</label>
-                                        <input type="number" class="form-control" id="TimeoutCount" min="2000" max="150000" required>
+                                        <label for="TimeoutCount" class="form-label">Waktu Tunggu (ms) [2000-100000]</label>
+                                        <input type="number" class="form-control" id="TimeoutCount" min="2000" max="100000" required>
                                         <small class="form-text text-muted">Waktu maksimal menunggu proses (ms).</small>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="PNLFilter" class="form-label">PNL Filter</label>
                                         <input type="number" class="form-control" id="PNLFilter" min="0" step="0.01" value="0" required>
-                                        <small class="form-text text-muted">Minimal PNL agar ditampilkan (0 untuk menonaktifkan).</small>
+                                        <small class="form-text text-muted">Minimal PNL 0 agar ditampilkan.</small>
                                     </div>
 
                                     <div class="mb-3">
