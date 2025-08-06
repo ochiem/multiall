@@ -156,14 +156,14 @@
     .text-light       { color: var(--light-color) !important; }
 
     /* BACKGROUND COLORS */
-    .bg-primary       { background-color: var(--primary-color) !important;  }
-    .bg-secondary     { background-color: var(--secondary-color) !important;  }
-    .bg-success       { background-color: var(--success-color) !important; }
-    .bg-danger        { background-color: var(--danger-color) !important; }
-    .bg-warning       { background-color: var(--warning-color) !important;}
-    .bg-dark          { background-color: var(--dark-color) !important;  }
-    .bg-light         { background-color: var(--light-color) !important;  }
-    .bg-utama         { background-color: var(--utama) !important; }
+    .bg-primary       { background-color: var(--primary-color);  }
+    .bg-secondary     { background-color: var(--secondary-color) ; }
+    .bg-success       { background-color: var(--success-color) ; }
+    .bg-danger        { background-color: var(--danger-color) ; }
+    .bg-warning       { background-color: var(--warning-color) ;}
+    .bg-dark          { background-color: var(--dark-color) ;  }
+    .bg-light         { background-color: var(--light-color) ;  }
+    .bg-utama         { background-color: var(--utama) ; }
 
      /* BUTTON COLORS */
     .btn-primary       { background-color: var(--primary-color) ;  }
@@ -192,10 +192,10 @@
     .bg-magpie    { background-color: #00b8d9 !important; color: #000 !important; }
 
     /* Text-only (tanpa background) */
-    .text-binance  { color: #f3ba2f !important; }
-    .text-mexc     { color: #00e38e !important; }
-    .text-gate   { color: #b50028 !important; }
-    .text-indodax  { color: #0066cc !important; }
+    .text-binance  { color: #f3ba2f ; }
+    .text-mexc     { color: #00e38e ; }
+    .text-gate   { color: #b50028 ; }
+    .text-indodax  { color: #0066cc ; }
 
     .text-1inch     { color: #b70f60 !important; }
     .text-kyberswap { color: #29ab87 !important; }
@@ -972,7 +972,7 @@
                             <thead class="table-light sticky-top">
                                 <tr>
                                     <th>No</th>
-                                    <th>Symbol Token / Pair</th>
+                                    <th>Symbol & Pair [ Nama, Smart Contact & Decimal ]</th>
                                     <th>Chain & Status</th>
                                     <th>Modal {CEX & DEX}</th>
                                     <th>Exchanger (CEX)</th>
@@ -1420,7 +1420,8 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-  
+    <script src="https://unpkg.com/clusterize.js/clusterize.min.js"></script>
+
     <!-- Price APIs -->
     <script src="price-apis.js"></script>
     <!-- Custom JS -->

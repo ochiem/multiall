@@ -27,10 +27,8 @@ class TokenPriceMonitor {
 
     // Initialize the application
     init() {
-
         this.selectedChains =  [];
         this.loadTokenTable();
-        
         this.updateStats();
         this.bindEvents();
         this.loadSettingsForm();
@@ -1430,14 +1428,19 @@ class TokenPriceMonitor {
         return Object.values(CHAIN_CONFIG).map(c => c.name);
     }
 
-    loadTokenTable() {
-        const tbody = $('#tokenTableBody');
-        tbody.empty();
+
+     loadTokenTable() {
+        const tbody = $('#tokenTableBody')[0]; // native DOM element
+        tbody.innerHTML = ''; // kosongkan lebih cepat
 
         const keyword = $('#tokenSearch').val()?.toLowerCase().trim() || '';
         const selectedChains = $('.filter-chain-checkbox:checked').map(function () {
             return this.value.toLowerCase();
         }).get();
+
+        const cexList = this.getCexList();
+        const dexList = this.getDexList();
+        const chainList = this.getChainList();
 
         const filteredTokens = this.tokens.filter(token => {
             const chainMatch = selectedChains.length === 0 || selectedChains.includes(token.chain.toLowerCase());
@@ -1448,7 +1451,7 @@ class TokenPriceMonitor {
                 token.chain,
                 token.contractAddress,
                 token.pairContractAddress,
-                token.isActive ? 'active' : 'inactive', // ✔️ status ON/OFF ikut dicari
+                token.isActive ? 'active' : 'inactive',
                 ...(token.selectedCexs || []),
                 ...(token.selectedDexs || [])
             ].map(val => (val || '').toLowerCase());
@@ -1459,28 +1462,36 @@ class TokenPriceMonitor {
         });
 
         if (filteredTokens.length === 0) {
-            tbody.append(`
-                <tr>
-                    <td colspan="7" class="text-center py-4 text-muted">
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td colspan="7" class="text-center py-4 text-muted">
                     Tidak Ada DATA KOIN
-                    </td>
-                </tr>
-            `);
+                </td>
+            `;
+            tbody.appendChild(tr);
             return;
         }
 
         const sortedTokens = filteredTokens.slice().sort((a, b) => (b.isActive === true) - (a.isActive === true));
 
+        const fragment = document.createDocumentFragment();
+
         sortedTokens.forEach((token, index) => {
-            const cexTextList = this.getCexList().map(cex => {
+            // 💡 Optimalisasi satu kali sebelum cexList.map
+            const cexInfoMap = {};
+            for (const key in token.cexInfo || {}) {
+                cexInfoMap[key.toUpperCase()] = token.cexInfo[key];
+            }
+
+            const cexTextList = cexList.map(cex => {
                 const isChecked = token.selectedCexs.includes(cex);
                 const checkedAttr = isChecked ? 'checked' : '';
                 const tokenSymbol = token.symbol.toUpperCase();
                 const pairSymbol = token.pairSymbol.toUpperCase();
                 const cexUpper = cex.toUpperCase();
 
-                const matchedCEXKey = Object.keys(token.cexInfo || {}).find(k => k.toUpperCase() === cexUpper);
-                const info = token.cexInfo?.[matchedCEXKey] || {};
+                // ✅ akses langsung tanpa .find
+                const info = cexInfoMap[cexUpper] || {};
 
                 const tokenInfo = info[tokenSymbol] || {};
                 const pairInfo = info[pairSymbol] || {};
@@ -1495,7 +1506,7 @@ class TokenPriceMonitor {
                 const dpToken = formatStatus(tokenInfo.depo, 'DP', 'DX');
                 const wdPair = formatStatus(pairInfo.wd, 'WD', 'WX');
                 const dpPair = formatStatus(pairInfo.depo, 'DP', 'DX');
-
+                
                 const textColorClass = this.getTextColorClassFromBadge(this.getBadgeColor(cex, 'cex'));
 
                 return `
@@ -1517,10 +1528,9 @@ class TokenPriceMonitor {
                 `;
             }).join('');
 
-            const allDexs = this.getDexList();
-            let dexCheckboxes = '';
 
-            allDexs.forEach((dex, index) => {
+            let dexCheckboxes = '';
+            dexList.forEach((dex, i) => {
                 const isChecked = token.selectedDexs.includes(dex);
                 const checkedAttr = isChecked ? 'checked' : '';
                 const colorClass = this.getTextColorClassFromBadge(this.getBadgeColor(dex, 'dex'));
@@ -1531,127 +1541,73 @@ class TokenPriceMonitor {
                             data-token-id="${token.id}" data-dex="${dex}" value="${dex}" ${checkedAttr}/> ${dex.toUpperCase()}
                     </label>
                 `;
-
-                if ((index + 1) % 3 === 0) {
-                    dexCheckboxes += '<br/>';
-                }
+                if ((i + 1) % 3 === 0) dexCheckboxes += '<br/>';
             });
 
-            const chainOptions = this.getChainList().map(chain => {
-                const selected = chain === token.chain ? 'selected' : '';
-                return `<option value="${chain}" ${selected}>${chain}</option>`;
-            }).join('');
+            const warnaChain = this.getTextColorClassFromBadge(this.getBadgeColor(token.chain, 'chain'));
 
-            const chainSelect = `
-                <div class="d-flex align-items-center gap-1">
-                    <select class="form-select form-select-sm inline-edit"
-                        data-token-id="${token.id}"
-                        data-field="chain"
-                        style="width: 120px; height: 32px;">
-                        ${chainOptions}
-                    </select>
-                    <button class="btn btn-outline-dark btn-save-inline btn-sm"
-                            data-token-id="${token.id}" data-field="chain" title="Simpan Chain"
-                            style="height: 32px;">
-                        <i class="bi bi-check-lg small"></i>
-                    </button>
-                </div>
-            `;
-
-            const isActive = token.isActive;
-            const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
+            const statusText = token.isActive ? 'ACTIVE' : 'INACTIVE';
             const statusBtnClass = token.isActive ? 'btn-success' : 'btn-outline-secondary';
 
-            tbody.append(`
-                <tr class="align-middle token-data-row">
+            const tr = document.createElement('tr');
+                tr.className = 'align-middle token-data-row';
+                tr.innerHTML = `
                     <td>${index + 1}</td>
                     <td>
-                        <div class="d-flex flex-column small text-muted" style="line-height: 1.2;">
+                        <div class="d-flex flex-column small text-muted fs-6" >
                             <div class="d-flex flex-column gap-1">
-                                <div class="d-flex align-items-center">
-                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
-                                    data-token-id="${token.id}" data-field="symbol" value="${token.symbol}" style="width:100px;" />
-                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
-                                        data-token-id="${token.id}" data-field="contractAddress" value="${token.contractAddress}" style="width:360px;" />
-                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
-                                        data-token-id="${token.id}" data-field="decimals" value="${token.decimals}" style="width:60px;" />
-                                    <button class="btn btn-outline-dark btn-save-inline btn-sm"
-                                            data-token-id="${token.id}" data-field="contractAddress" title="Simpan SC">
-                                        <i class="bi bi-check-lg small"></i>
-                                    </button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span><strong>${token.symbol} </strong> | ${token.contractAddress} [ ${token.decimals} ]</span>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
-                                    data-token-id="${token.id}" data-field="pairSymbol" value="${token.pairSymbol}" style="width:100px;" />
-                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
-                                        data-token-id="${token.id}" data-field="pairContractAddress" value="${token.pairContractAddress}" style="width:360px;" />
-                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
-                                        data-token-id="${token.id}" data-field="pairDecimals" value="${token.pairDecimals}" style="width:60px;" />
-                                    <button class="btn btn-outline-dark btn-save-inline btn-sm"
-                                            data-token-id="${token.id}" data-field="pairContractAddress" title="Simpan Pair SC">
-                                        <i class="bi bi-check-lg small"></i>
-                                    </button>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <span><strong>${token.pairSymbol} </strong> | ${token.pairContractAddress} [ ${token.pairDecimals} ]</span>
                                 </div>
                             </div>
                         </div>
                     </td>
-
                     <td>
-                        <div class="d-flex flex-column gap-1">                        
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Control group">
-                                <span class="badge fw-bold small ${isActive ? 'text-success' : 'text-danger'}">
-                                    ${statusText}
-                                </span>
+                        <div class="d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex align-items-center gap-2 mt-2">
+                                <span class="badge ${warnaChain} fs-6"><strong>Chain:</strong> ${token.chain}</span>
+                            </div>
+                            <div class="btn-group btn-group-sm" role="group">
+                                
                                 <button class="btn ${statusBtnClass} btn-sm px-2 py-0"
-                                        onclick="app.toggleTokenStatus('${token.id}')" title="Toggle Status">
+                                        onclick="app.toggleTokenStatus('${token.id}')" title="Change Status">
                                     <i class="bi bi-power small"></i>
                                 </button>
+                                <button class="btn btn-outline-primary btn-sm px-2 py-0"
+                                        onclick="app.editToken('${token.id}')" title="Edit">
+                                    <i class="bi bi-pencil small"></i>
+                                </button>
+
                                 <button class="btn btn-outline-danger btn-sm px-2 py-0"
                                         onclick="app.deleteToken('${token.id}')" title="Delete">
                                     <i class="bi bi-trash small"></i>
                                 </button>
                             </div>
-                            ${chainSelect}
+
                         </div>
                     </td>
-
                     <td>
-                        <div class="input-group input-group-sm mb-1 d-flex align-items-center" style="width: 180px;">
-                            <span class="me-2 fs-7 fw-bold">CEX:</span>
-                            <input type="text"
-                                class="form-control form-control-sm inline-edit"
-                                data-token-id="${token.id}"
-                                data-field="modalCexToDex"
-                                value="${token.modalCexToDex}" />
-                            <button class="btn btn-outline-dark btn-save-inline btn-sm"
-                                    data-token-id="${token.id}"
-                                    data-field="modalCexToDex"
-                                    title="Simpan">
-                                <i class="bi bi-check-lg small"></i>
-                            </button>
-                        </div>
-
-                        <div class="input-group input-group-sm d-flex align-items-center" style="width: 180px;">
-                            <span class="me-2 fs-7 fw-bold">DEX:</span>
-                            <input type="text"
-                                class="form-control form-control-sm inline-edit"
-                                data-token-id="${token.id}"
-                                data-field="modalDexToCex"
-                                value="${token.modalDexToCex}" />
-                            <button class="btn btn-outline-dark btn-save-inline btn-sm"
-                                    data-token-id="${token.id}"
-                                    data-field="modalDexToCex"
-                                    title="Simpan">
-                                <i class="bi bi-check-lg small"></i>
-                            </button>
+                        <div class="d-flex flex-column gap-1">
+                            <div class="d-flex align-items-center gap-2">
+                                <span><strong>Modal CEX:</strong> ${token.modalCexToDex}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span><strong>Modal DEX:</strong> ${token.modalDexToCex}</span>
+                            </div>
                         </div>
                     </td>
-
                     <td>${cexTextList}</td>
                     <td>${dexCheckboxes}</td>
-                </tr>
-            `);
+                `;
+            
+            fragment.appendChild(tr);
+
         });
+
+        tbody.appendChild(fragment);
     }
 
     shortenAddress(address, start = 6, end = 6) {
