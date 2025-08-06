@@ -732,11 +732,10 @@
                 <!--  setting data token-->
 
                 <div>
-                    <span class="fw-bold text-dark badge bg-white ">SCANNER KOIN:</span><br/>
-                    <span id="infoScanKoin" class="text-white fw-bold fs-7"></span>
+                    <span class="fw-bold text-dark badge bg-white">CONFIG SCANNER:</span>
+                    <div id="infoScanKoin" class="text-white fw-bold fs-7 mt-1"></div>
                 </div>
 
-              
 
                 <hr class="my-1 bg-light"/>
 
@@ -1035,7 +1034,7 @@
                                         <small class="form-text text-muted">Alamat wallet Anda untuk filter & identifikasi.</small>
                                     </div>
                                     <div class="text-end">
-                                        <button type="submit" class="btn btn-primary" id="saveAppSettingsBtn">
+                                        <button type="button" class="btn btn-primary" id="saveAppSettingsBtn">
                                             <i class="bi bi-check-lg"></i> Simpan Konfig
                                         </button>
                                     </div>
@@ -1045,7 +1044,7 @@
                     </div>
 
                     <!-- Scan Data Koin -->
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="card shadow-sm rounded-3">
                             <div class="card-body">
                                 <div class="modal-header mb-2">
@@ -1062,7 +1061,7 @@
                                         <!-- Chain -->
                                         <div class="col-md-4">
                                             <div class="mb-3">
-                                                <label class="form-label fw-bold">PILIH Chain</label>
+                                                <label class="form-label fw-bold">PILIH CHAIN</label>
                                                 <div class="border rounded p-3">
                                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="BSC" id="ScanBSC"><label class="form-check-label" for="ScanBSC">BSC</label></div>
                                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="Ethereum" id="ScanETH"><label class="form-check-label" for="ScanETH">ERC</label></div>
@@ -1076,18 +1075,16 @@
                                         <!-- Market -->
                                         <div class="col-md-8">
                                             <div class="mb-3">
-                                                <label class="form-label fw-bold">PILIH Market</label>
+                                                <label class="form-label fw-bold">PILIH MARKET</label>
                                                 <div class="border rounded p-3">
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="Binance" id="ScanBinance"><label class="form-check-label" for="ScanBinance">Binance</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="Gate" id="ScanGate"><label class="form-check-label" for="ScanGate">Gate</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="MEXC" id="ScanMEXC"><label class="form-check-label" for="ScanMEXC">MEXC</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="INDODAX" id="ScanINDODAX"><label class="form-check-label" for="ScanINDODAX">INDODAX</label></div>
+                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="Binance" id="ScanBinance"><label class="form-check-label" for="ScanBinance">Binance</label> </div>
+                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="Gate" id="ScanGate"><label class="form-check-label" for="ScanGate">Gate</label> </div>
+                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="MEXC" id="ScanMEXC"><label class="form-check-label" for="ScanMEXC">MEXC</label> </div>
+                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="INDODAX" id="ScanINDODAX"><label class="form-check-label" for="ScanINDODAX">INDODAX</label> </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="mt-3 p-2 bg-white rounded border" id="DetailedConfigScan" style="font-size: 0.9rem;"></div>
                                     <br/>
                                     <div class="text-end">
                                         <button type="submit" class="btn btn-primary" id="saveScanSettingsBtn">
