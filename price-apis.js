@@ -1,1 +1,1913 @@
-const _0xe15843=_0x3066;(function(_0x5d6584,_0x22a303){const _0x3a6ea9=_0x3066,_0x14370e=_0x5d6584();while(!![]){try{const _0x52ae4b=parseInt(_0x3a6ea9(0x28c))/0x1+-parseInt(_0x3a6ea9(0x2ea))/0x2+-parseInt(_0x3a6ea9(0x321))/0x3+parseInt(_0x3a6ea9(0x2c7))/0x4+-parseInt(_0x3a6ea9(0x2db))/0x5*(-parseInt(_0x3a6ea9(0x1d9))/0x6)+parseInt(_0x3a6ea9(0x254))/0x7*(parseInt(_0x3a6ea9(0x2c0))/0x8)+-parseInt(_0x3a6ea9(0x2a0))/0x9;if(_0x52ae4b===_0x22a303)break;else _0x14370e['push'](_0x14370e['shift']());}catch(_0x25cdce){_0x14370e['push'](_0x14370e['shift']());}}}(_0xf45f,0xe2b81));function _0x3066(_0x42698,_0x374b71){const _0xf45f12=_0xf45f();return _0x3066=function(_0x3066e8,_0x3216b6){_0x3066e8=_0x3066e8-0x1ce;let _0xf4c4b9=_0xf45f12[_0x3066e8];return _0xf4c4b9;},_0x3066(_0x42698,_0x374b71);}const GasPriceUSD={'BSC':0x0,'Ethereum':0x0,'Polygon':0x0},CHAIN_CONFIG={'ethereum':{'name':_0xe15843(0x25d),'code':0x1,'short':'ERC','symbol':_0xe15843(0x236),'gasLimit':0x3d090,'explorer':_0xe15843(0x1d1),'rpc':_0xe15843(0x2e0)},'bsc':{'name':_0xe15843(0x343),'code':0x38,'short':_0xe15843(0x343),'symbol':_0xe15843(0x1e9),'gasLimit':0x13880,'explorer':_0xe15843(0x276),'rpc':'https://bsc-dataseed.binance.org/'},'polygon':{'name':'Polygon','code':0x89,'short':'POLY','symbol':_0xe15843(0x228),'gasLimit':0x13880,'explorer':_0xe15843(0x32a),'rpc':'https://polygon-pokt.nodies.app'},'arbitrum':{'name':_0xe15843(0x2d5),'code':0xa4b1,'short':_0xe15843(0x1ef),'symbol':_0xe15843(0x236),'gasLimit':0x186a0,'explorer':_0xe15843(0x2ca),'rpc':'https://arbitrum-one-rpc.publicnode.com'},'base':{'name':_0xe15843(0x290),'code':0x2105,'short':_0xe15843(0x207),'symbol':_0xe15843(0x236),'gasLimit':0x186a0,'explorer':_0xe15843(0x251),'rpc':'https://base.llamarpc.com'},'solana':{'name':_0xe15843(0x2ff),'code':0x1f5,'short':_0xe15843(0x26a),'symbol':_0xe15843(0x26a),'explorer':'https://solscan.io/','rpc':''}},CONFIG_CEX={'GATE':{'ApiKey':_0xe15843(0x231),'ApiSecret':_0xe15843(0x1e2),'WARNA':_0xe15843(0x277)},'BINANCE':{'ApiKey':_0xe15843(0x1f5),'ApiSecret':_0xe15843(0x224),'WARNA':'#e0a50c'},'MEXC':{'ApiKey':_0xe15843(0x24f),'ApiSecret':_0xe15843(0x1e0),'WARNA':_0xe15843(0x2af)}},CEXWallets={'polygon':{'Kode_Chain':0x89,'WALLET_CEX':{'GATEIO':{'address':_0xe15843(0x1fb),'chainCEX':'MATIC'},'BINANCE':{'address':'0x290275e3db66394C52272398959845170E4DCb88','chainCEX':'MATIC'},'MEXC':{'address':_0xe15843(0x244),'chainCEX':_0xe15843(0x228)},'INDODAX':{'address':_0xe15843(0x317),'chainCEX':_0xe15843(0x32d)}}},'arbitrum':{'Kode_Chain':0xa4b1,'WALLET_CEX':{'GATEIO':{'address':_0xe15843(0x1fb),'chainCEX':_0xe15843(0x2ec)},'BINANCE':{'address':_0xe15843(0x284),'chainCEX':_0xe15843(0x21f)},'MEXC':{'address':'0x4982085C9e2F89F2eCb8131Eca71aFAD896e89CB','chainCEX':_0xe15843(0x1ef)},'INDODAX':{'address':_0xe15843(0x29d),'chainCEX':_0xe15843(0x1ef)}}},'ethereum':{'Kode_Chain':0x1,'WALLET_CEX':{'GATEIO':{'address':_0xe15843(0x1fb),'chainCEX':'ETH'},'BINANCE':{'address':'0xDFd5293D8e347dFe59E90eFd55b2956a1343963d','chainCEX':_0xe15843(0x236)},'MEXC':{'address':_0xe15843(0x2fe),'chainCEX':'ETH'},'INDODAX':{'address':_0xe15843(0x317),'chainCEX':_0xe15843(0x236)}}},'bsc':{'Kode_Chain':0x38,'WALLET_CEX':{'GATEIO':{'address':_0xe15843(0x1fb),'chainCEX':_0xe15843(0x343)},'BINANCE':{'address':_0xe15843(0x223),'chainCEX':_0xe15843(0x343)},'MEXC':{'address':_0xe15843(0x313),'chainCEX':_0xe15843(0x343)},'INDODAX':{'address':'0xaBa3002AB1597433bA79aBc48eeAd54DC10A45F2','chainCEX':_0xe15843(0x343)}}},'base':{'Kode_Chain':0x2105,'WALLET_CEX':{'GATEIO':{'address':_0xe15843(0x1fb),'chainCEX':_0xe15843(0x2c9)},'BINANCE':{'address':_0xe15843(0x2b7),'chainCEX':'BASE'},'MEXC':{'address':'0x4e3ae00E8323558fA5Cac04b152238924AA31B60','chainCEX':'BASE'},'INDODAX':{'address':_0xe15843(0x29d),'chainCEX':_0xe15843(0x207)}}}};function getCEXKeyAlias(_0x4d021b){const _0x26c155=_0xe15843,_0x219076={'BINANCE':_0x26c155(0x245),'Binance':_0x26c155(0x245),'MEXC':_0x26c155(0x294),'Gateio':'GATEIO','GATE':'GATEIO','GATEIO':_0x26c155(0x2f4),'INDODAX':_0x26c155(0x2fc),'Indodax':_0x26c155(0x2fc)};return _0x219076[_0x4d021b]||_0x4d021b[_0x26c155(0x1eb)]();}window[_0xe15843(0x27d)]=function(_0x632245,_0x2e9f49=!![]){const _0x5bc7ad=_0xe15843;return _0x2e9f49?_0x5bc7ad(0x23d)+encodeURIComponent(_0x632245):_0x632245;};var settings=JSON[_0xe15843(0x27e)](localStorage[_0xe15843(0x238)](_0xe15843(0x2b6))||'{}'),timeoutApi=settings[_0xe15843(0x22e)]||0x1388;function withTimeout(_0x57a7c3,_0x2eb223){return Promise['race']([_0x57a7c3,new Promise((_0x4087ee,_0x47e7f1)=>setTimeout(()=>_0x47e7f1(new Error('Request\x20timeout')),_0x2eb223))]);}async function fetchWithCountdown(_0x925d6,_0x40fe4e,_0x331005){const _0xc289a9=_0xe15843,_0x339e77=$('#'+_0x925d6);let _0x4a47a5=Math[_0xc289a9(0x2c8)](timeoutApi/0x3e8);_0x339e77[_0xc289a9(0x2b0)]('⏳\x20'+_0x40fe4e+'\x20'+_0x4a47a5--+'s');const _0x49593f=setInterval(()=>{const _0x2bbc6a=_0xc289a9;_0x4a47a5>0x0&&_0x339e77[_0x2bbc6a(0x2b0)]('⏳\x20'+_0x40fe4e+'\x20'+_0x4a47a5--+'s');},0x3e8);try{const _0x48e649=await withTimeout(_0x331005(),timeoutApi);return clearInterval(_0x49593f),_0x48e649;}catch(_0x2ff377){clearInterval(_0x49593f);if(_0x2ff377[_0xc289a9(0x2b8)]===_0xc289a9(0x20f))console[_0xc289a9(0x252)](_0xc289a9(0x1d0)+_0x40fe4e+_0xc289a9(0x2bc));else _0x2ff377[_0xc289a9(0x279)]&&_0x2ff377['error']?console[_0xc289a9(0x1fe)](_0xc289a9(0x219)+_0x2ff377[_0xc289a9(0x279)]+':\x20'+_0x2ff377[_0xc289a9(0x1fe)]+_0xc289a9(0x2ac)+(_0x2ff377[_0xc289a9(0x25a)]||_0xc289a9(0x213))+')'):console[_0xc289a9(0x1fe)]('💥\x20Error\x20tidak\x20diketahui\x20dari\x20'+_0x40fe4e+':',_0x2ff377);throw _0x2ff377;}}function _0xf45f(){const _0x26088e=['Matcha','PassphraseOKX','TOKEN','coin','TimeoutCount','data','&slippage=10','577bb104ebb7977925c0ba7a292a722e','&amountIn=','chains','deposit_disabled','GET','ETH','🚀\x20Memulai\x20pengecekan\x20wallet\x20&\x20fee\x20WD\x20semua\x20CEX...','getItem','map','Invalid\x20quote\x20for\x20recommended\x20source','estimateGasFee','reload','https://vercel-proxycors.vercel.app/?url=','withdrawFee','fees','ajax','zerox','toLowerCase','/wallet/withdraw_status','0x51E3D44172868Acc60D68ca99591Ce4230bc75E0','BINANCE','100','srcAmount','#loadingOverlay','totalNetworkFee',']\x20API\x20Secret\x20atau\x20Data\x20untuk\x20Signature\x20tidak\x20valid!','gasUsd','DZAP','tool','idr?limit=5','mx0vglBh22wwHBY0il','gasFee','https://basescan.org/','warn','bids','82698NrWWDN','logAction','/api/v1/routes?tokenIn=','MULTIALL_TOKENS','bestResult','Parsing\x20error:\x20','status','buy','ODOS','Ethereum','https://api.fly.trade/aggregator/quote?network=','Hex','&destReceiver=','relayLink','\x20in\x20localStorage','tokenAddress','invalid_data','usdt','&toTokenAddress=','&side=SELL&network=','recvWindow=5000&timestamp=','✅\x20fetchGate():','SOL','ExchangeRates','toISOString','DEXAPIs','bluefin7k','iceCreamSwap','0.1','withdrawEnable','No\x20status\x20text','LiFi','okx','responseText','https://bscscan.com','#D5006D','&srcDecimals=','exchange','optimism','isArray','mayanWH','withProxy','parse','jupiter','&sellToken=','cexInfo','token','SHA512','0x290275e3db66394C52272398959845170E4DCb88',',\x20wd:\x20','items','https://api-gcp.binance.com/api/v3/depth?symbol=','Cek_Horeg_911','length','HINKAL\x20ODOS','CEXAPIs','319085HUJSJR','GATE','Unknown\x20error','Invalid\x20response\x20format','Base','priceRoute','❌\x20Order\x20book\x20Indodax\x20kosong\x20untuk\x20','woodSwap','MEXC','Hasil\x20Data\x20','izumi','Invalid\x20response','recommendedSource','#infoupdateWALLET','chainCEX','pow','CHEAPEST','0xaBa3002AB1597433bA79aBc48eeAd54DC10A45F2','fadeIn','\x20(CEX\x20','2817216kRUBRi','📡\x20Ambil\x20Data\x20dari\x20GATE...','✅\x20MATCHED:\x20','value','xyFinance','amountIn','&fromAddress=','https://indodax.com/api/depth/','across','stargateV2','/spot/currencies','UPDATE\x20WALLETS','\x20(status:\x20','secretKeyOKX','0.{','#1448ce','html','tokenName','_USDT&limit=5','getGasFeeUSD','ParaSwap','&preset=maxReturnResult&walletAddress=','MULTIALL_SETTING','0xDFd5293D8e347dFe59E90eFd55b2956a1343963d','name','outValues','odos','withdraw_fix_on_chains',':\x20permintaan\x20melebihi\x20batas\x20waktu','buyAmount','gasEstimateValue','steps','968pnBEVx','quoteRates','sell','chain','estimate','match','amountOutWei','2576752LbMKwP','floor','BASEEVM','https://arbiscan.io','stringify','gasLimit','HmacSHA512','depositEnable','\x20via\x20SWOOP\x20','routes','https://proxy-app.1inch.io/v2.0/v2.2/chain/','/router/v5/quotesv2?fromTokenAddress=','\x20|\x20fee:\x20','substring','Arbitrum','$0.0000','destAmount','fadeOut','routeSummary','FlyTrade','45vERSek','dzap','https://ethmainnet.server.hinkal.pro/OneInchSwapData','a4569d13-8a59-4ecd-9936-6c4e1233bff8','\x20token(s)','https://eth.llamarpc.com','now','cbridge','currency','https://api.zeroswap.io/quote/kyberswap','No\x20route\x20found','random','MULTIALL_gasTokenInfo','KyberSwap',']\x20Token:\x20','1784966xyeNpF','thorswap','ARBEVM','estimation','mayan','&sellAmount=','cex_to_dex','&signature=','allbridge','dodo','GATEIO','estimatedGas','squid','🔍\x20Cek\x20di:\x20','baseSymbol','&slippage=0.005&gasless=false','/api/v5/dex/aggregator/quote?amount=','LIFI','INDODAX','relay','0x75e89d5979E4f6Fba9F97c104c2F0AFB3F1dcB88','Solana','&buyToken=','msg','\x20on\x20','&destDecimals=','E6E4285106CB101B39FECC385B64CAB1','Invalid\x20response\x20structure','gasCost','eth','kyber','1inch','81a072cc-b079-410c-9963-fb8e49c16d9d','slice','✅\x20fetchBinance():','&disableEstimate=true','find','https://api.zeroswap.io/quote/1inch','MATCHA','resourceEstimate','replace','0x4982085C9e2F89F2eCb8131Eca71aFAD896e89CB','toString','sushiswap','6866441f-6510-4175-b032-342ad6798817','0x3C02290922a3618A4646E3BbCa65853eA45FE7C6','asks','gasCostUSD','🚀\x20Memulai\x20pengecekan\x20semua\x20wallet\x20&\x20fee\x20WD\x20CEX...','PARASWAP','gasPrice','superswap','https://proxykanan.awokawok.workers.dev/?https://api-gcp.binance.com/sapi/v1/capital/config/getall?','ApiKeyOKX','filter','1061679IOyAAK','gas','toAmount','&gasInclude=true','omni','HmacSHA256','tradeFee','oneInchViaLifi','networkList','https://polygonscan.com','enc','Base64','POLYGON','feeWDs','price','4484BC9B2FC22C35CB1071A2A520FDC8','message','✅\x20fetchMexc():',',\x20depo:\x20','&amount=','paraSwap','Bearer\x20eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNiZmY5ZDI3LThhYTEtNDExMy04MTc4LTJhNjkzYmNjYmUyNSIsImV4cCI6MTc1MzY5MjE5MCwiZGV2aWNlIjoiYnJvd3NlciIsImlhdCI6MTc1MzY4ODU5MH0.ECh_mhSEWGOH0v5L1OSd9YptQWOmHyVxKFSWUNnBYJIBIUZ_3f69F4q80_HsiLXLxNtaAR8W8AoFsUkWnIh2YA','network','❌\x20Gagal\x20menyimpan\x20MULTIALL_TOKENS:\x20','statusText','tokenAmount','exchanges','polygon','netWork','fee','Invalid\x20destAmount','outAmounts','BF44AE00CF775DC6DDB0FDADF61EC724','gwei','BSC','openocean','amountOut','🕒\x20Timeout\x20pada\x20','https://etherscan.io','⛔️\x20Tidak\x20ada\x20wallet\x20list\x20untuk\x20','json','Arekpinter123.','71cbe094-380a-4146-b619-e81a254c0702','application/json','&chainIndex=','Unknown','63516ljUtEG','&destToken=','https://api.paraswap.io/prices/?version=6.2&srcToken=','tokenPrice','log','https://api.mexc.com/api/v3/depth?symbol=','timestamp=','429877e0b47c41b68dd77613cdfded64','mayanMCTP','48b2cd4b122f076d2ebf8833359dfeffd268c5a0ce276b4cbe6ba5aa52e7f7cc','round','https://aggregator-api.kyberswap.com/','gasFeeUSDT','https://api.1inch.dev/swap/v5.2/','orbiter','USDT','BNB','merkle','toUpperCase','https://proxykiri.awokawok.workers.dev/?https://api.gateio.ws/api/v4/spot/order_book?currency_pair=','dex_to_cex','\x20in\x20','ARB','bebop','&toAddress=','kyberSwap','https://proxykiri.awokawok.workers.dev/?https://api.mexc.com/api/v3/capital/config/getall?','Invalid\x20quote\x20or\x20estimation','2U7YGMEUDri6tP3YEzmK3CcZWb9yQ5j3COp9s7pRRUv4vu8hJAlwH4NkbNK74hDU','join','https://api-v1.marbleland.io/api/v1/jumper/api/p/lifi/advanced/routes','push','amountUSD','POST','0x0D0707963952f2fBA59dD06f2b425ace40b492Fe','PriceUtils','&otherExchangePrices=true&partner=paraswap.io&userAddress=','error','OKX','36e8ccb2-d4e1-4321-8ca7-d78bae3d1461.5eacae7f-1e16-4ea9-9d5d-f9dcb03f7d50','Macpro-2025','1INCH','&gasPrice=','IndodaxUSDT','stargateV2Bus','quoteSymbol','BASE','odosResponse','celercircle','trading','\x0a📍\x20[','lifi','5116D48C1847EB2D7BDD6DDD1FC8B199','https://web3.okx.com','TimeoutError','#infostatus','https://proxykanan.awokawok.workers.dev/?https://matcha.xyz/api/swap/price?chainId=','https://proxykiri.awokawok.workers.dev/?https://matcha.xyz/api/swap/price?chainId=','unknown','totalUSD','oneInchResponse','&fromTokenAddress=','symbiosis','enso','❌\x20Error\x20','avalanche','KYBERSWAP','gasZipBridge','IDR','OKXDEX','ARBITRUM','toFixed','unizen','kyberswap','0x8894E0a0c962CB723c1976a4421c95949bE2D4E3','XHjPVjLzbs741xoznV3xz1Wj5SFrcechNBjvezyXLcg8GLWF21VW32f0YhAsQ9pn','USDT&limit=5','includes','gasEstimate','MATIC','🎉\x20Update\x20wallet\x20berhasil!\x20Halaman\x20akan\x20direfresh.'];_0xf45f=function(){return _0x26088e;};return _0xf45f();}function calculateSignature(_0x37b07b,_0xde0dc,_0x1b259d,_0x154c7a='HmacSHA256'){const _0x167b5b=_0xe15843;if(!_0xde0dc||!_0x1b259d)return console[_0x167b5b(0x1fe)]('['+_0x37b07b+_0x167b5b(0x24a)),null;switch(_0x37b07b[_0x167b5b(0x1eb)]()){case _0x167b5b(0x1ff):const _0x539458=CryptoJS[_0x167b5b(0x326)](_0x1b259d,_0xde0dc);return CryptoJS[_0x167b5b(0x32b)]['Base64'][_0x167b5b(0x2cb)](_0x539458);default:return CryptoJS[_0x167b5b(0x326)](_0x1b259d,_0xde0dc)['toString'](CryptoJS[_0x167b5b(0x32b)][_0x167b5b(0x25f)]);}}function calculateSignatureLAMA(_0x27cb88,_0x5c539e,_0x3107e8,_0x39155e=_0xe15843(0x326)){const _0x4ea0a4=_0xe15843;if(!_0x5c539e||!_0x3107e8)return console[_0x4ea0a4(0x1fe)]('['+_0x27cb88+']\x20API\x20Secret\x20atau\x20Data\x20untuk\x20Signature\x20tidak\x20valid!'),null;switch(_0x27cb88[_0x4ea0a4(0x1eb)]()){case _0x4ea0a4(0x1ff):const _0x1684dd=CryptoJS['HmacSHA256'](_0x3107e8,_0x5c539e);return CryptoJS[_0x4ea0a4(0x32b)][_0x4ea0a4(0x32c)][_0x4ea0a4(0x2cb)](_0x1684dd);default:return CryptoJS[_0x4ea0a4(0x326)](_0x3107e8,_0x5c539e)['toString'](CryptoJS['enc'][_0x4ea0a4(0x25f)]);}}const CEXAPIs={'getBinanceOrderBook':async function(_0x4be83e){const _0x5ce099=_0xe15843;if(_0x4be83e[_0x5ce099(0x2f8)]==='USDT'&&_0x4be83e[_0x5ce099(0x206)]===_0x5ce099(0x1e8))return{'buy':0x1,'sell':0x1,'topAsks':[],'topBids':[],'quotePriceUSDT':0x1};const _0x23b6f2=await withTimeout(fetch(_0x5ce099(0x287)+_0x4be83e[_0x5ce099(0x2f8)]+'USDT&limit=5'),timeoutApi),_0x616bf1=await _0x23b6f2[_0x5ce099(0x1d3)]();let _0x23bd1b=0x1;if(_0x4be83e[_0x5ce099(0x206)]!==_0x5ce099(0x1e8)){const _0x42e90d=await withTimeout(fetch(_0x5ce099(0x287)+_0x4be83e[_0x5ce099(0x206)]+_0x5ce099(0x225)),timeoutApi),_0x5e0bac=await _0x42e90d[_0x5ce099(0x1d3)]();_0x23bd1b=parseFloat(_0x5e0bac[_0x5ce099(0x318)][0x0][0x0]);}return{'buy':parseFloat(_0x616bf1[_0x5ce099(0x318)][0x0][0x0]),'sell':parseFloat(_0x616bf1[_0x5ce099(0x253)][0x0][0x0]),'topAsks':_0x616bf1[_0x5ce099(0x318)][_0x5ce099(0x30b)](0x0,0x5)[_0x5ce099(0x239)](_0x4ba1c8=>({'price':parseFloat(_0x4ba1c8[0x0]),'qty':parseFloat(_0x4ba1c8[0x1])})),'topBids':_0x616bf1['bids'][_0x5ce099(0x30b)](0x0,0x5)['map'](_0x11787b=>({'price':parseFloat(_0x11787b[0x0]),'qty':parseFloat(_0x11787b[0x1])})),'quotePriceUSDT':_0x23bd1b};},'getMEXCOrderBook':async function(_0x580b6e){const _0x383497=_0xe15843;if(_0x580b6e[_0x383497(0x2f8)]==='USDT'&&_0x580b6e[_0x383497(0x206)]===_0x383497(0x1e8))return{'buy':0x1,'sell':0x1,'topAsks':[],'topBids':[],'quotePriceUSDT':0x1};const _0x238cf0='https://api.mexc.com/api/v3/depth?symbol='+_0x580b6e['baseSymbol']+_0x383497(0x225),_0x2390f0=await withTimeout(fetch(withProxy(_0x238cf0)),timeoutApi),_0x1803ae=await _0x2390f0['json']();let _0x22b960=0x1;if(_0x580b6e[_0x383497(0x206)]!==_0x383497(0x1e8)){const _0x546ef6=await withTimeout(fetch(_0x383497(0x1de)+_0x580b6e[_0x383497(0x206)]+_0x383497(0x225)),timeoutApi),_0x3261d0=await _0x546ef6[_0x383497(0x1d3)]();_0x22b960=parseFloat(_0x3261d0[_0x383497(0x318)][0x0][0x0]);}return{'buy':parseFloat(_0x1803ae[_0x383497(0x318)][0x0][0x0]),'sell':parseFloat(_0x1803ae[_0x383497(0x253)][0x0][0x0]),'topAsks':_0x1803ae['asks']['slice'](0x0,0x5)['map'](_0x3c45a6=>({'price':parseFloat(_0x3c45a6[0x0]),'qty':parseFloat(_0x3c45a6[0x1])})),'topBids':_0x1803ae[_0x383497(0x253)][_0x383497(0x30b)](0x0,0x5)[_0x383497(0x239)](_0xea54f=>({'price':parseFloat(_0xea54f[0x0]),'qty':parseFloat(_0xea54f[0x1])})),'quotePriceUSDT':_0x22b960};},'getGateOrderBook':async function(_0x3d786f){const _0x4f0c4b=_0xe15843;if(_0x3d786f['baseSymbol']===_0x4f0c4b(0x1e8)&&_0x3d786f[_0x4f0c4b(0x206)]===_0x4f0c4b(0x1e8))return{'buy':0x1,'sell':0x1,'topAsks':[],'topBids':[],'quotePriceUSDT':0x1};const _0x455e9d=await withTimeout(fetch(_0x4f0c4b(0x1ec)+_0x3d786f[_0x4f0c4b(0x2f8)]+'_USDT&limit=5'),timeoutApi),_0x1b5679=await _0x455e9d[_0x4f0c4b(0x1d3)]();let _0xfebf33=0x1;if(_0x3d786f[_0x4f0c4b(0x206)]!==_0x4f0c4b(0x1e8)){const _0x551cfe=await withTimeout(fetch(_0x4f0c4b(0x1ec)+_0x3d786f[_0x4f0c4b(0x206)]+_0x4f0c4b(0x2b2)),timeoutApi),_0x50d5ea=await _0x551cfe[_0x4f0c4b(0x1d3)]();_0xfebf33=parseFloat(_0x50d5ea[_0x4f0c4b(0x318)][0x0][0x0]);}return{'buy':parseFloat(_0x1b5679[_0x4f0c4b(0x318)][0x0][0x0]),'sell':parseFloat(_0x1b5679[_0x4f0c4b(0x253)][0x0][0x0]),'topAsks':_0x1b5679['asks']['slice'](0x0,0x5)[_0x4f0c4b(0x239)](_0x39834c=>({'price':parseFloat(_0x39834c[0x0]),'qty':parseFloat(_0x39834c[0x1])})),'topBids':_0x1b5679[_0x4f0c4b(0x253)]['slice'](0x0,0x5)[_0x4f0c4b(0x239)](_0x19e00e=>({'price':parseFloat(_0x19e00e[0x0]),'qty':parseFloat(_0x19e00e[0x1])})),'quotePriceUSDT':_0xfebf33};},'getIndodaxOrderBook':async function(_0x530733){const _0x4ebcb0=_0xe15843,_0x3211d1=_0x530733[_0x4ebcb0(0x2f8)][_0x4ebcb0(0x242)](),_0x23fb7a=_0x530733[_0x4ebcb0(0x206)]['toLowerCase']();if(_0x3211d1==='usdt'&&_0x23fb7a===_0x4ebcb0(0x265))return{'buy':0x1,'sell':0x1,'topAsks':[],'topBids':[],'quotePriceUSDT':0x1};const _0x500fdd=_0x4ebcb0(0x2a7)+_0x3211d1+_0x4ebcb0(0x24e),_0x59ffb1=await withTimeout(fetch(withProxy(_0x500fdd)),timeoutApi),_0x5dbc2d=await _0x59ffb1[_0x4ebcb0(0x1d3)](),_0x28ff75=window[_0x4ebcb0(0x26b)]?.[_0x4ebcb0(0x204)]||0x3e80,_0x1f47b1=0x1/_0x28ff75;if(!_0x5dbc2d?.[_0x4ebcb0(0x2c2)]?.[_0x4ebcb0(0x289)]||!_0x5dbc2d?.[_0x4ebcb0(0x25b)]?.[_0x4ebcb0(0x289)])return console[_0x4ebcb0(0x252)](_0x4ebcb0(0x292)+_0x3211d1+_0x4ebcb0(0x21d)),{'buy':0x0,'sell':0x0,'topAsks':[],'topBids':[],'quotePriceUSDT':_0x1f47b1};const _0x3063bb=_0x5dbc2d[_0x4ebcb0(0x25b)][_0x4ebcb0(0x239)](([_0x583b19,_0x36b098])=>({'price':parseFloat(_0x583b19)*_0x1f47b1,'qty':parseFloat(_0x36b098)})),_0x186686=_0x5dbc2d[_0x4ebcb0(0x2c2)][_0x4ebcb0(0x239)](([_0x30969b,_0x309507])=>({'price':parseFloat(_0x30969b)*_0x1f47b1,'qty':parseFloat(_0x309507)}));return{'buy':_0x186686[0x0]['price'],'sell':_0x3063bb[0x0]['price'],'topAsks':_0x3063bb,'topBids':_0x186686,'quotePriceUSDT':_0x1f47b1};}},DEXAPIs={'getKyberSwapPrice':function(_0x261a93,_0x5749b0,_0x10a5de,_0x13aef2){const _0x47b0f8=_0xe15843,_0xa2c9e8=_0x13aef2==='avax'?_0x47b0f8(0x21a):_0x13aef2,_0x1f0a17=_0x47b0f8(0x1e4)+_0xa2c9e8+_0x47b0f8(0x256)+_0x261a93+'&tokenOut='+_0x5749b0+_0x47b0f8(0x232)+_0x10a5de+_0x47b0f8(0x324);return new Promise((_0x1e68e5,_0x5a41f5)=>{const _0x16887e=_0x47b0f8;$[_0x16887e(0x240)]({'url':_0x1f0a17,'method':_0x16887e(0x235),'success':function(_0x5ceadc){const _0x30cc4b=_0x16887e;if(_0x5ceadc&&_0x5ceadc['data']&&_0x5ceadc[_0x30cc4b(0x22f)][_0x30cc4b(0x2d9)]){const _0x177f9f=_0x5ceadc[_0x30cc4b(0x22f)][_0x30cc4b(0x2d9)],_0x170f60=PriceUtils['getGasFeeUSD'](_0x13aef2,_0x177f9f['gas']);_0x1e68e5({'exchange':_0x30cc4b(0x2e8),'amountIn':_0x10a5de,'amountOut':_0x177f9f[_0x30cc4b(0x1cf)],'price':parseFloat(_0x177f9f[_0x30cc4b(0x1cf)])/parseFloat(_0x10a5de),'gasEstimate':_0x177f9f[_0x30cc4b(0x227)]||0x0,'gasPrice':_0x177f9f[_0x30cc4b(0x31c)]||0x0,'feeDEX':parseFloat(_0x177f9f[_0x30cc4b(0x24b)]),'feeSwapUSDT':parseFloat(_0x170f60),'rawRate':parseFloat(_0x10a5de)/parseFloat(_0x177f9f['amountOut']),'timestamp':Date[_0x30cc4b(0x2e1)]()});}else _0x5a41f5({'exchange':'KyberSwap','error':_0x30cc4b(0x297),'status':'invalid_data'});},'error':function(_0x57251a,_0x154c07,_0x5c65b8){const _0x339068=_0x16887e;let _0x5d3022=_0x339068(0x28e),_0x3298bb=_0x57251a[_0x339068(0x25a)]||0x0,_0x2bb128=_0x57251a['statusText']||_0x339068(0x272),_0x5ce278=_0x57251a[_0x339068(0x275)];try{const _0x2769e1=JSON[_0x339068(0x27e)](_0x57251a['responseText']);_0x5d3022=_0x2769e1[_0x339068(0x331)]||_0x5c65b8?.['toString']()||_0x154c07;}catch{_0x5d3022=_0x5c65b8?.['toString']()||_0x154c07;}_0x5a41f5({'exchange':_0x339068(0x21b),'error':_0x5d3022,'status':_0x154c07,'httpCode':_0x3298bb,'httpText':_0x2bb128,'rawResponse':_0x5ce278});}});});},'getODOSPrice':function(_0x7fc989,_0x4b26ac,_0x3f79b8,_0x17d597,_0x417cb0,_0x257ebd){return new Promise((_0x4d18b0,_0x16be29)=>{const _0x3d00b0=_0x3066;$[_0x3d00b0(0x240)]({'url':'https://api.odos.xyz/sor/quote/v2','method':_0x3d00b0(0x1fa),'contentType':_0x3d00b0(0x1d6),'data':JSON[_0x3d00b0(0x2cb)]({'chainId':parseInt(_0x417cb0),'inputTokens':_0x7fc989,'outputTokens':_0x4b26ac,'userAddr':_0x3f79b8,'slippageLimitPercent':0.3,'sourceBlacklist':[],'sourceWhitelist':[],'simulate':![],'referralCode':0x0}),'success':function(_0x590d6a){const _0x3b1d7f=_0x3d00b0,_0x478827=PriceUtils[_0x3b1d7f(0x2b3)](_0x257ebd,_0x590d6a[_0x3b1d7f(0x227)]);_0x590d6a&&_0x590d6a[_0x3b1d7f(0x340)]&&_0x590d6a[_0x3b1d7f(0x340)]['length']>0x0?_0x4d18b0({'exchange':_0x3b1d7f(0x25c),'amountIn':_0x17d597,'outAmounts':_0x590d6a['outAmounts'],'amountOut':_0x590d6a['outAmounts']?.[0x0]||'0','price':parseFloat(_0x590d6a[_0x3b1d7f(0x340)][0x0])/parseFloat(_0x17d597),'rawRate':parseFloat(_0x17d597)/parseFloat(_0x590d6a['outAmounts'][0x0]),'feeDEX':parseFloat(_0x590d6a['gasEstimateValue']),'feeSwapUSDT':parseFloat(_0x478827),'timestamp':Date[_0x3b1d7f(0x2e1)]()}):_0x16be29({'exchange':'ODOS','error':'Invalid\x20response','status':_0x3b1d7f(0x264)});},'error':function(_0x58854d,_0xbd35fe,_0xe33139){const _0x5a4708=_0x3d00b0;let _0x13da65='Unknown\x20error',_0xa88eac=_0x58854d['status']||0x0,_0xe4c7e0=_0x58854d[_0x5a4708(0x339)]||_0x5a4708(0x272),_0x1495fe=_0x58854d[_0x5a4708(0x275)];try{const _0x1442db=JSON[_0x5a4708(0x27e)](_0x58854d[_0x5a4708(0x275)]);_0x13da65=_0x1442db['message']||_0xe33139?.[_0x5a4708(0x314)]()||_0xbd35fe;}catch{_0x13da65=_0xe33139?.[_0x5a4708(0x314)]()||_0xbd35fe;}_0x16be29({'exchange':_0x5a4708(0x25c),'error':_0x13da65,'status':_0xbd35fe,'httpCode':_0xa88eac,'httpText':_0xe4c7e0,'rawResponse':_0x1495fe});}});});},'getHinkalODOSPrice':function(_0xd7d016,_0x51d057,_0x12253d,_0x7d85d2,_0x5e6caa,_0x11dfaa){return new Promise((_0x473157,_0xf98449)=>{const _0xfde003=_0x3066;$['ajax']({'url':'https://ethmainnet.server.hinkal.pro/OdosSwapData','method':_0xfde003(0x1fa),'contentType':_0xfde003(0x1d6),'data':JSON[_0xfde003(0x2cb)]({'chainId':parseInt(_0x5e6caa),'inputTokens':_0xd7d016,'outputTokens':_0x51d057,'userAddr':_0x12253d,'slippageLimitPercent':0.3,'sourceBlacklist':[],'sourceWhitelist':[],'simulate':![],'referralCode':0x0}),'success':function(_0x3ea8b9){const _0xd4a08b=_0xfde003,_0x1a1ee7=PriceUtils[_0xd4a08b(0x2b3)](_0x11dfaa,_0x3ea8b9['gasEstimate']);_0x3ea8b9&&_0x3ea8b9[_0xd4a08b(0x340)]&&_0x3ea8b9[_0xd4a08b(0x340)][_0xd4a08b(0x289)]>0x0?_0x473157({'exchange':'ODOS','amountIn':_0x7d85d2,'outAmounts':_0x3ea8b9[_0xd4a08b(0x208)][_0xd4a08b(0x2b9)][0x0],'amountOut':_0x3ea8b9['odosResponse'][_0xd4a08b(0x2b9)][0x0]?.[0x0]||'0','price':parseFloat(_0x3ea8b9[_0xd4a08b(0x208)][_0xd4a08b(0x2b9)][0x0])/parseFloat(_0x7d85d2),'rawRate':parseFloat(_0x7d85d2)/parseFloat(_0x3ea8b9[_0xd4a08b(0x208)][_0xd4a08b(0x2b9)][0x0]),'feeDEX':parseFloat(_0x3ea8b9[_0xd4a08b(0x208)][_0xd4a08b(0x2be)]),'feeSwapUSDT':parseFloat(_0x1a1ee7),'timestamp':Date[_0xd4a08b(0x2e1)]()}):_0xf98449({'exchange':_0xd4a08b(0x28a),'error':'Invalid\x20response','status':_0xd4a08b(0x264)});},'error':function(_0x2cf94e,_0x3bdeb,_0x382d41){const _0x51cb07=_0xfde003;let _0x3022b2=_0x51cb07(0x28e),_0x9527f7=_0x2cf94e[_0x51cb07(0x25a)]||0x0,_0x2af25f=_0x2cf94e[_0x51cb07(0x339)]||_0x51cb07(0x272),_0x3d6a6c=_0x2cf94e[_0x51cb07(0x275)];try{const _0x23f182=JSON[_0x51cb07(0x27e)](_0x2cf94e[_0x51cb07(0x275)]);_0x3022b2=_0x23f182['message']||_0x382d41?.[_0x51cb07(0x314)]()||_0x3bdeb;}catch{_0x3022b2=_0x382d41?.['toString']()||_0x3bdeb;}_0xf98449({'exchange':_0x51cb07(0x28a),'error':_0x3022b2,'status':_0x3bdeb,'httpCode':_0x9527f7,'httpText':_0x2af25f,'rawResponse':_0x3d6a6c});}});});},'getHinkal1InchPrice':function(_0x27008f,_0x491c25,_0x350961,_0x2e94b8,_0x2669c0,_0x4abaec){return new Promise((_0x1a4053,_0x24d063)=>{const _0x268f86=_0x3066,_0x21c12a=_0x27008f[0x0]?.[_0x268f86(0x263)],_0x50c388=_0x491c25[0x0]?.[_0x268f86(0x263)],_0x32d199=_0x268f86(0x2dd),_0x522d1f={'url':_0x268f86(0x1e6)+_0x2669c0+'/swap?'+'fromTokenAddress='+_0x21c12a+_0x268f86(0x266)+_0x50c388+_0x268f86(0x334)+_0x2e94b8+_0x268f86(0x2a6)+_0x350961+_0x268f86(0x230)+_0x268f86(0x260)+_0x350961+_0x268f86(0x30d)};$[_0x268f86(0x240)]({'url':_0x32d199,'method':'POST','contentType':_0x268f86(0x1d6),'data':JSON[_0x268f86(0x2cb)](_0x522d1f),'success':function(_0x5eadaa){const _0x5ebcaa=_0x268f86,_0x22165a=_0x5eadaa?.[_0x5ebcaa(0x215)]?.[_0x5ebcaa(0x323)]||'0';let _0x284322=parseFloat(_0x5eadaa?.[_0x5ebcaa(0x215)]?.['tx']?.[_0x5ebcaa(0x322)]||0x0);if(!_0x284322||_0x284322===0x0)_0x284322=0x55730;const _0x5ea22e=0.1,_0x56b560=PriceUtils[_0x5ebcaa(0x2b3)](_0x4abaec,_0x284322,_0x5ea22e);parseFloat(_0x22165a)>0x0?_0x1a4053({'exchange':_0x5ebcaa(0x202),'amountIn':_0x2e94b8,'outAmounts':[_0x22165a],'amountOut':_0x22165a,'price':parseFloat(_0x22165a)/parseFloat(_0x2e94b8),'rawRate':parseFloat(_0x2e94b8)/parseFloat(_0x22165a),'gasEstimate':_0x284322,'gasPrice':_0x5ea22e,'feeDEX':0x0,'feeSwapUSDT':parseFloat(_0x56b560),'timestamp':Date[_0x5ebcaa(0x2e1)]()}):_0x24d063({'exchange':_0x5ebcaa(0x202),'error':_0x5ebcaa(0x297),'status':'invalid_data'});},'error':function(_0x312146,_0x456d8b,_0x49b4c0){const _0x5510b7=_0x268f86;let _0x58f948='Unknown\x20error',_0x351b2a=_0x312146[_0x5510b7(0x25a)]||0x0,_0x13e7a3=_0x312146[_0x5510b7(0x339)]||_0x5510b7(0x272),_0x2d2389=_0x312146[_0x5510b7(0x275)];try{const _0x44e150=JSON[_0x5510b7(0x27e)](_0x312146[_0x5510b7(0x275)]);_0x58f948=_0x44e150[_0x5510b7(0x331)]||_0x49b4c0?.[_0x5510b7(0x314)]()||_0x456d8b;}catch{_0x58f948=_0x49b4c0?.[_0x5510b7(0x314)]()||_0x456d8b;}_0x24d063({'exchange':_0x5510b7(0x202),'error':_0x58f948,'status':_0x456d8b,'httpCode':_0x351b2a,'httpText':_0x13e7a3,'rawResponse':_0x2d2389});}});});},'get0xPrice':function(_0x5cb04a,_0x10378c,_0x47d145,_0x4ee775,_0x37d9d0,_0x143a1b){return new Promise((_0x3c8d89,_0x5bd59c)=>{const _0x3e983e=_0x3066;if(_0x37d9d0===_0x3e983e(0x2f0))var _0x5607f9=_0x3e983e(0x212)+_0x4ee775+'&buyToken='+_0x10378c+_0x3e983e(0x280)+_0x5cb04a+_0x3e983e(0x2ef)+_0x47d145;else var _0x5607f9=_0x3e983e(0x211)+_0x4ee775+_0x3e983e(0x300)+_0x10378c+_0x3e983e(0x280)+_0x5cb04a+_0x3e983e(0x2ef)+_0x47d145;$[_0x3e983e(0x240)]({'url':_0x5607f9,'method':_0x3e983e(0x235),'success':function(_0x144994){const _0x298c47=_0x3e983e;let _0x4b604b=0x0;if(_0x144994[_0x298c47(0x249)])_0x4b604b=parseFloat(_0x144994[_0x298c47(0x249)])/0xde0b6b3a7640000;else _0x144994[_0x298c47(0x2f5)]&&_0x144994[_0x298c47(0x31c)]&&(_0x4b604b=parseFloat(_0x144994[_0x298c47(0x2f5)])*parseFloat(_0x144994[_0x298c47(0x31c)])/0xde0b6b3a7640000);const _0x27e907=PriceUtils[_0x298c47(0x2b3)](_0x143a1b,_0x144994['gas']);_0x3c8d89({'exchange':_0x298c47(0x22a),'sellToken':_0x5cb04a,'buyToken':_0x10378c,'sellAmount':_0x47d145,'buyAmount':_0x144994[_0x298c47(0x2bd)],'price':parseFloat(_0x144994['price']),'gasPrice':parseFloat(_0x144994[_0x298c47(0x31c)]||0x0),'estimatedGas':parseFloat(_0x144994[_0x298c47(0x2f5)]||0x0),'feeDEX':_0x27e907,'feeSwapUSDT':_0x27e907,'rawRate':0x1/parseFloat(_0x144994[_0x298c47(0x32f)]),'timestamp':Date[_0x298c47(0x2e1)]()});},'error':function(_0x18749c,_0x4854ae,_0x1ad078){const _0xb9f02d=_0x3e983e;let _0x5b7c6a=_0xb9f02d(0x28e),_0x26ccf6=_0x18749c[_0xb9f02d(0x25a)]||0x0,_0x448b5a=_0x18749c[_0xb9f02d(0x339)]||_0xb9f02d(0x272),_0x1c9ef4=_0x18749c['responseText'];try{const _0x3d23c9=JSON[_0xb9f02d(0x27e)](_0x18749c[_0xb9f02d(0x275)]);_0x5b7c6a=_0x3d23c9['message']||_0x1ad078?.[_0xb9f02d(0x314)]()||_0x4854ae;}catch{_0x5b7c6a=_0x1ad078?.[_0xb9f02d(0x314)]()||_0x4854ae;}_0x5bd59c({'exchange':_0xb9f02d(0x310),'error':_0x5b7c6a,'status':_0x4854ae,'httpCode':_0x26ccf6,'httpText':_0x448b5a,'rawResponse':_0x1c9ef4});}});});},'getFlyTradePrice':function(_0x47f3ea,_0x4882df,_0x45d5ca,_0x235e89,_0x35815d){const _0x48161a=_0xe15843,_0x5ab823=_0x48161a(0x25e)+_0x235e89+_0x48161a(0x216)+_0x47f3ea+'&toTokenAddress='+_0x4882df+_0x48161a(0x2a6)+_0x35815d+_0x48161a(0x1f1)+_0x35815d+_0x48161a(0x2ef)+_0x45d5ca+_0x48161a(0x2f9);return new Promise((_0x18cd29,_0x374c16)=>{const _0x6f1ae8=_0x48161a;$[_0x6f1ae8(0x240)]({'url':_0x5ab823,'method':_0x6f1ae8(0x235),'success':function(_0x14ff24){const _0x4fa760=_0x6f1ae8;console[_0x4fa760(0x1dd)]('MAGPIE',_0x14ff24);if(_0x14ff24&&_0x14ff24[_0x4fa760(0x1cf)]){const _0x3cb19b=parseFloat(_0x14ff24['typedData']?.[_0x4fa760(0x331)]?.[_0x4fa760(0x2a5)]||_0x45d5ca),_0x186335=parseFloat(_0x14ff24[_0x4fa760(0x1cf)]),_0x10a50b=parseFloat(_0x14ff24[_0x4fa760(0x23f)]?.[0x0]?.[_0x4fa760(0x2a3)]||0x0),_0x160d03=PriceUtils[_0x4fa760(0x2b3)](_0x235e89,_0x14ff24[_0x4fa760(0x311)][_0x4fa760(0x2cc)]);_0x18cd29({'exchange':_0x4fa760(0x2da),'amountOut':_0x186335,'price':_0x186335/_0x3cb19b,'feeDEX':_0x10a50b,'feeSwapUSDT':_0x160d03,'rawRate':_0x3cb19b/_0x186335,'timestamp':Date[_0x4fa760(0x2e1)]()});}else _0x374c16({'exchange':'FlyTrade','error':_0x4fa760(0x28f),'status':'invalid_data'});},'error':function(_0x30c6e9,_0x567bab,_0x33f6e8){const _0x1774b1=_0x6f1ae8;let _0x3ea637='Unknown\x20error',_0x136ece=_0x30c6e9[_0x1774b1(0x25a)]||0x0,_0x2f21cf=_0x30c6e9[_0x1774b1(0x339)]||_0x1774b1(0x272),_0x1110d1=_0x30c6e9[_0x1774b1(0x275)];try{const _0x514f4c=JSON[_0x1774b1(0x27e)](_0x30c6e9[_0x1774b1(0x275)]);_0x3ea637=_0x514f4c[_0x1774b1(0x331)]||_0x33f6e8?.[_0x1774b1(0x314)]()||_0x567bab;}catch{_0x3ea637=_0x33f6e8?.['toString']()||_0x567bab;}_0x374c16({'exchange':_0x1774b1(0x2da),'error':_0x3ea637,'status':_0x567bab,'httpCode':_0x136ece,'httpText':_0x2f21cf,'rawResponse':_0x1110d1});}});});},'getOKXDEXPrice':function(_0x282abf,_0x60cb0c,_0x783284,_0x307647){const _0x2f7e5a=_0xe15843,_0x39b19f=[{'ApiKeyOKX':_0x2f7e5a(0x2de),'secretKeyOKX':_0x2f7e5a(0x330),'PassphraseOKX':_0x2f7e5a(0x201)},{'ApiKeyOKX':_0x2f7e5a(0x1d5),'secretKeyOKX':_0x2f7e5a(0x20d),'PassphraseOKX':_0x2f7e5a(0x201)},{'ApiKeyOKX':_0x2f7e5a(0x30a),'secretKeyOKX':_0x2f7e5a(0x341),'PassphraseOKX':_0x2f7e5a(0x201)},{'ApiKeyOKX':'adad55d1-bf90-43ac-ac03-0a43dc7ccee2','secretKeyOKX':'528AFB3ECC88653A9070F05CC3839611','PassphraseOKX':_0x2f7e5a(0x288)},{'ApiKeyOKX':_0x2f7e5a(0x316),'secretKeyOKX':_0x2f7e5a(0x304),'PassphraseOKX':_0x2f7e5a(0x1d4)}],_0xdb1ccf=_0x39b19f[Math[_0x2f7e5a(0x2c8)](Math[_0x2f7e5a(0x2e6)]()*_0x39b19f[_0x2f7e5a(0x289)])],_0x59acd3={'bsc':0x38,'ethereum':0x1,'polygon':0x89,'arbitrum':0xa4b1,'base':0x2105,'solana':0x1f5},_0x1c5d99=_0x59acd3[_0x307647[_0x2f7e5a(0x242)]()]||0x1,_0x58cae9=_0x2f7e5a(0x2fa)+_0x783284+_0x2f7e5a(0x1d7)+_0x1c5d99+'&fromTokenAddress='+_0x282abf+_0x2f7e5a(0x266)+_0x60cb0c,_0x57f581=new Date()[_0x2f7e5a(0x26c)](),_0x38a6ca=_0x2f7e5a(0x235),_0x522def=_0x57f581+_0x38a6ca+_0x58cae9,_0x5ca9fa=calculateSignature(_0x2f7e5a(0x1ff),_0xdb1ccf[_0x2f7e5a(0x2ad)],_0x522def,_0x2f7e5a(0x326));return new Promise((_0x231495,_0x140bb1)=>{const _0x2692b7=_0x2f7e5a;$[_0x2692b7(0x240)]({'url':_0x2692b7(0x20e)+_0x58cae9,'method':_0x38a6ca,'headers':{'OK-ACCESS-KEY':_0xdb1ccf[_0x2692b7(0x31f)],'OK-ACCESS-SIGN':_0x5ca9fa,'OK-ACCESS-TIMESTAMP':_0x57f581,'OK-ACCESS-PASSPHRASE':_0xdb1ccf[_0x2692b7(0x22b)]},'success':function(_0x37955d){const _0x214329=_0x2692b7,_0x28d5b1=_0x37955d?.['data']?.[0x0];if(!_0x28d5b1){_0x140bb1({'exchange':_0x214329(0x21e),'error':'Invalid\x20response\x20format'});return;}const _0x56b53c=PriceUtils[_0x214329(0x2b3)](_0x307647,_0x28d5b1[_0x214329(0x23b)]);_0x231495({'exchange':_0x214329(0x21e),'amountOut':_0x28d5b1['toTokenAmount']||'0','price':parseFloat(_0x28d5b1[_0x214329(0x1cf)])/parseFloat(_0x783284),'rawRate':parseFloat(_0x783284)/parseFloat(_0x28d5b1[_0x214329(0x1cf)]),'feeDEX':parseFloat(_0x28d5b1[_0x214329(0x327)]||0x0),'feeSwapUSDT':_0x56b53c,'timestamp':Date[_0x214329(0x2e1)]()});},'error':function(_0x55532a,_0x3eb27a,_0x4ae1d7){const _0x38ff2a=_0x2692b7;let _0xcb0b5f='Unknown\x20error',_0x22795=_0x55532a[_0x38ff2a(0x25a)]||0x0,_0x536be9=_0x55532a['statusText']||_0x38ff2a(0x272),_0x67f2e0=_0x55532a[_0x38ff2a(0x275)];try{const _0x3c8c6c=JSON[_0x38ff2a(0x27e)](_0x55532a['responseText']);_0xcb0b5f=_0x3c8c6c[_0x38ff2a(0x331)]||_0x3c8c6c[_0x38ff2a(0x301)]||_0x4ae1d7?.[_0x38ff2a(0x314)]()||_0x3eb27a;}catch{_0xcb0b5f=_0x4ae1d7?.[_0x38ff2a(0x314)]()||_0x3eb27a;}_0x140bb1({'exchange':_0x38ff2a(0x21e),'apikey':_0xdb1ccf[_0x38ff2a(0x31f)],'error':_0xcb0b5f,'status':_0x3eb27a,'httpCode':_0x22795,'httpText':_0x536be9,'rawResponse':_0x67f2e0});}});});},'getParaSwapPrice':function(_0xfdadb2,_0x584fdd,_0x319617,_0x2fa8a4,_0xd36635,_0x3f27cc,_0x2caebe,_0x4e7b4d,_0x1f1f67){const _0xcb77fb=_0xe15843;return apiUrl=_0xcb77fb(0x1db)+_0xfdadb2+_0xcb77fb(0x1da)+_0x584fdd+_0xcb77fb(0x334)+_0x319617+_0xcb77fb(0x278)+_0x2fa8a4+_0xcb77fb(0x303)+_0xd36635+_0xcb77fb(0x267)+_0x3f27cc+_0xcb77fb(0x1fd)+_0x4e7b4d,new Promise((_0x3cd39d,_0x28203f)=>{const _0x1b47a2=_0xcb77fb;$[_0x1b47a2(0x240)]({'url':apiUrl,'method':_0x1b47a2(0x235),'success':function(_0x57b050){const _0x3813fb=_0x1b47a2;let _0xf51910=0x0,_0x493e3f=0x0,_0x1e09b2=0x0,_0x378cff=0x0;const _0x63c8b0=_0x57b050?.[_0x3813fb(0x291)];if(!_0x63c8b0||!_0x63c8b0[_0x3813fb(0x2d7)]||!_0x63c8b0[_0x3813fb(0x319)])return _0x28203f({'exchange':_0x3813fb(0x2b4),'error':'Invalid\x20response\x20structure','rawResponse':_0x57b050});_0xf51910=parseFloat(_0x63c8b0[_0x3813fb(0x2d7)]),_0x1e09b2=parseFloat(_0x63c8b0[_0x3813fb(0x319)]),_0x493e3f=parseFloat(_0x63c8b0[_0x3813fb(0x306)]),_0x378cff=0x0;const _0x11ea8b=PriceUtils[_0x3813fb(0x2b3)](_0x1f1f67,_0x493e3f);if(!_0xf51910||isNaN(_0xf51910)||_0xf51910===0x0)return _0x28203f({'exchange':'ParaSwap','error':_0x3813fb(0x33f),'rawResponse':_0x57b050});_0x3cd39d({'exchange':_0x3813fb(0x2b4),'amountIn':parseFloat(_0x319617),'amountOut':_0xf51910,'price':_0xf51910/parseFloat(_0x319617),'rawRate':parseFloat(_0x319617)/_0xf51910,'feeDEX':_0x1e09b2,'feeSwapUSDT':parseFloat(_0x11ea8b),'gasEstimate':_0x493e3f,'gasPrice':_0x378cff,'timestamp':Date[_0x3813fb(0x2e1)]()});},'error':function(_0x2c1379,_0x2016cf,_0x546f41){const _0x2ce13c=_0x1b47a2;let _0x52d281='Unknown\x20error',_0x4fc2cc=_0x2c1379[_0x2ce13c(0x25a)]||0x0,_0x3f0cc9=_0x2c1379[_0x2ce13c(0x339)]||_0x2ce13c(0x272),_0x5cd810=_0x2c1379['responseText'];try{const _0x2fc3ae=JSON['parse'](_0x2c1379[_0x2ce13c(0x275)]);_0x52d281=_0x2fc3ae[_0x2ce13c(0x331)]||_0x546f41?.['toString']()||_0x2016cf;}catch{_0x52d281=_0x546f41?.[_0x2ce13c(0x314)]()||_0x2016cf;}_0x28203f({'exchange':_0x2ce13c(0x31b),'error':_0x52d281,'status':_0x2016cf,'httpCode':_0x4fc2cc,'httpText':_0x3f0cc9,'rawResponse':_0x5cd810});}});});},'getSWOOPPrice':function(_0x4d8a48,_0x2ed3b6,_0x5caf5d,_0x5b7ba1,_0x4d830a,_0x52022f,_0x23a545,_0x1d14df,_0x211fe3,_0x4222b7,_0x271b5d){return new Promise((_0x3655ac,_0x50ba67)=>{const _0x516bcb=_0x3066,_0x35840e=JSON[_0x516bcb(0x27e)](localStorage[_0x516bcb(0x238)](_0x516bcb(0x2e7))||'{}'),_0x456eb3=_0x271b5d['toLowerCase'](),_0x3f23d6=parseFloat(_0x35840e[_0x456eb3]?.[_0x516bcb(0x1e5)]||0x0),_0xaffc5f={'chainId':_0x1d14df,'aggregatorSlug':_0x4d8a48,'sender':_0x211fe3,'inToken':{'chainId':_0x1d14df,'type':_0x516bcb(0x22c),'address':_0x5caf5d[_0x516bcb(0x242)](),'decimals':_0x52022f},'outToken':{'chainId':_0x1d14df,'type':'TOKEN','address':_0x5b7ba1['toLowerCase'](),'decimals':_0x23a545},'amountInWei':String(_0x4d830a),'slippageBps':_0x516bcb(0x246)};$[_0x516bcb(0x240)]({'url':'https://bzvwrjfhuefn.up.railway.app/swap','method':_0x516bcb(0x1fa),'contentType':_0x516bcb(0x1d6),'data':JSON[_0x516bcb(0x2cb)](_0xaffc5f),'success':function(_0x2a59b6){const _0x313226=_0x516bcb,_0x2530bb=parseFloat(_0x2a59b6['amountOutWei'])/Math[_0x313226(0x29b)](0xa,_0x23a545),_0x54d71f=parseFloat(_0x4d830a)/Math[_0x313226(0x29b)](0xa,_0x52022f),_0xf64d05=_0x2530bb/_0x54d71f,_0x5aac85=_0x54d71f/_0x2530bb;_0x3655ac({'exchange':_0x4d8a48+_0x313226(0x2cf),'amountOut':_0x2a59b6[_0x313226(0x2c6)],'price':_0xf64d05*_0x4222b7,'rawRate':_0x5aac85,'feeDEX':_0x3f23d6,'feeSwapUSDT':_0x3f23d6,'isFallback':!![],'gasEstimate':_0x35840e[_0x456eb3]?.[_0x313226(0x2cc)]||0x0,'gasPrice':_0x35840e[_0x456eb3]?.[_0x313226(0x342)]||0x0,'timestamp':Date[_0x313226(0x2e1)]()});},'error':function(_0x875de4,_0xfd1fd5,_0x4897a9){const _0x5c7202=_0x516bcb;let _0x3c376c=_0x5c7202(0x28e),_0xddf01=_0x875de4[_0x5c7202(0x25a)]||0x0,_0xeb3cf=_0x875de4[_0x5c7202(0x339)]||_0x5c7202(0x272),_0x69e565=_0x875de4['responseText'];try{const _0x5428b6=JSON['parse'](_0x875de4[_0x5c7202(0x275)]);_0x3c376c=_0x5428b6[_0x5c7202(0x331)]||_0x4897a9?.['toString']()||_0xfd1fd5;}catch{_0x3c376c=_0x4897a9?.[_0x5c7202(0x314)]()||_0xfd1fd5;}_0x50ba67({'exchange':_0x4d8a48+'\x20','error':_0x3c376c,'status':_0xfd1fd5,'httpCode':_0xddf01,'httpText':_0xeb3cf,'rawResponse':_0x69e565});}});});},'getMarblePrice':function(_0xada4f0,_0x11eed5,_0x45b17d,_0x5cb9be,_0xdf5bf5,_0x106c33,_0x25d933,_0x39cf4b,_0x24000b,_0x212da8){const _0x13b48e=_0xe15843,_0x2ea536=_0x13b48e(0x1f7),_0x1d24cc=['1inch','0x','paraswap',_0x13b48e(0x2f3),_0x13b48e(0x218),_0x13b48e(0x2ba),_0x13b48e(0x1ce),'stable',_0x13b48e(0x222),'lifidexaggregator',_0x13b48e(0x27f),_0x13b48e(0x315),_0x13b48e(0x1f0),'aftermath',_0x13b48e(0x31d),_0x13b48e(0x26e),'liquidswap','hyperbloom','okx',_0x13b48e(0x1ea)],_0x8fd902={'integrator':'swap.marbleland.io','order':_0x13b48e(0x29c),'slippage':0.003,'maxPriceImpact':0.4,'allowSwitchChain':!![],'bridges':{'deny':[_0x13b48e(0x2e2),_0x13b48e(0x27a),'arbitrum',_0x13b48e(0x2a8),_0x13b48e(0x325),_0x13b48e(0x209),_0x13b48e(0x2f2),_0x13b48e(0x2eb),_0x13b48e(0x217),_0x13b48e(0x2f6),_0x13b48e(0x2ee),_0x13b48e(0x27c),_0x13b48e(0x1e1),_0x13b48e(0x2fd),_0x13b48e(0x33c),'glacis',_0x13b48e(0x2a9),_0x13b48e(0x205),'chainflip',_0x13b48e(0x21c)]}};if(Array['isArray'](_0x39cf4b)&&_0x39cf4b[_0x13b48e(0x289)]>0x0){const _0x46ff12=_0x39cf4b[_0x13b48e(0x239)](_0x42436c=>_0x42436c['toLowerCase']());if(_0x46ff12[_0x13b48e(0x289)]===0x1){const _0x578de1=_0x1d24cc[_0x13b48e(0x320)](_0x1d1d07=>!_0x46ff12[_0x13b48e(0x226)](_0x1d1d07));_0x8fd902[_0x13b48e(0x33b)]={'deny':_0x578de1};}else _0x8fd902[_0x13b48e(0x33b)]={'allow':_0x46ff12};}const _0x3e3706={'fromAmount':_0x45b17d[_0x13b48e(0x314)](),'fromChainId':parseInt(_0x106c33),'fromTokenAddress':_0xada4f0,'toChainId':parseInt(_0x106c33),'toTokenAddress':_0x11eed5,'options':_0x8fd902};return new Promise((_0x31d2cb,_0x1def67)=>{const _0x5168d2=_0x13b48e;$['ajax']({'url':_0x2ea536,'method':'POST','contentType':_0x5168d2(0x1d6),'headers':_0x24000b===_0x5168d2(0x1ed)?{'x-lifi-api-key':_0x5168d2(0x200)}:{},'data':JSON[_0x5168d2(0x2cb)](_0x3e3706),'success':function(_0x385095){const _0x1d1f41=_0x5168d2,_0x5b7f4a=_0x385095[_0x1d1f41(0x2d0)]?.[0x0];if(!_0x5b7f4a)return _0x1def67({'exchange':_0x1d1f41(0x273),'error':_0x1d1f41(0x2e5)});const _0x432dd7=_0x5b7f4a[_0x1d1f41(0x323)],_0x5db60a=_0x5b7f4a[_0x1d1f41(0x2bf)]?.[0x0]?.[_0x1d1f41(0x24d)]||_0x1d1f41(0x1d8),_0x25dc89=parseFloat(_0x5b7f4a[_0x1d1f41(0x2bf)]?.[0x0]?.[_0x1d1f41(0x2c4)]?.['gasCosts']?.[0x0]?.[_0x1d1f41(0x2c4)]||0x0),_0x35dbbe=parseFloat(_0x5b7f4a['steps']?.[0x0]?.['estimate']?.['gasCosts']?.[0x0]?.[_0x1d1f41(0x32f)]||0x0),_0x4ba522=PriceUtils['getGasFeeUSD'](_0x212da8,_0x25dc89);_0x31d2cb({'exchange':_0x5db60a,'amountIn':_0x45b17d,'amountOut':_0x432dd7,'price':parseFloat(_0x432dd7)/parseFloat(_0x45b17d),'gasEstimate':_0x25dc89,'gasPrice':_0x35dbbe,'feeDEX':parseFloat(_0x5b7f4a['gasCostUSD']||'0'),'feeSwapUSDT':_0x4ba522,'rawRate':parseFloat(_0x45b17d)/parseFloat(_0x432dd7),'timestamp':Date['now']()});},'error':function(_0x1d490d,_0x19620d,_0x410f27){const _0x2f5248=_0x5168d2;let _0x1ba245='Unknown\x20error';try{const _0x172f70=JSON[_0x2f5248(0x27e)](_0x1d490d[_0x2f5248(0x275)]);_0x1ba245=_0x172f70[_0x2f5248(0x331)]||_0x410f27?.['toString']()||_0x19620d;}catch{_0x1ba245=_0x410f27?.[_0x2f5248(0x314)]()||_0x19620d;}_0x1def67({'exchange':_0x2f5248(0x2fb),'error':_0x1ba245,'status':_0x19620d,'httpCode':_0x1d490d['status']||0x0,'httpText':_0x1d490d[_0x2f5248(0x339)]||_0x2f5248(0x272),'rawResponse':_0x1d490d['responseText']});}});});},'getDZAPPrice':function({account:_0x2d2a26,chainId:_0x2e4415,sellToken:_0x4066b4,sellDecimals:_0x18012f,buyToken:_0x189247,buyDecimals:_0x29293c,sellAmount:_0x5e9837,direction:_0x144b9e,slippage:slippage=0.3,integratorId:integratorId=_0xe15843(0x2dc),allowedSources:allowedSources=[]}){return new Promise((_0xb464dd,_0x10c3c0)=>{const _0x3845e6=_0x3066;$[_0x3845e6(0x240)]({'url':'https://api.dzap.io/v1/quotes','method':_0x3845e6(0x1fa),'contentType':'application/json','dataType':_0x3845e6(0x1d3),'data':JSON['stringify']({'account':_0x2d2a26||'0x0000000000000000000000000000000000000000','fromChain':_0x2e4415,'integratorId':integratorId,'allowedSources':allowedSources[_0x3845e6(0x289)]>0x0?allowedSources:[_0x3845e6(0x1f0),_0x3845e6(0x218),_0x3845e6(0x26f),_0x3845e6(0x296),_0x3845e6(0x1f2),_0x3845e6(0x20c),'magpie',_0x3845e6(0x2ba),_0x3845e6(0x274),_0x3845e6(0x328),'openOcean',_0x3845e6(0x335),_0x3845e6(0x315),'synapse','uniswap',_0x3845e6(0x221),'vaporDex',_0x3845e6(0x293),_0x3845e6(0x2a4),_0x3845e6(0x241),_0x3845e6(0x1e7),_0x3845e6(0x261),'mayanFinance',_0x3845e6(0x27f)],'data':[{'amount':_0x5e9837?.[_0x3845e6(0x314)](),'srcToken':_0x4066b4,'srcDecimals':parseInt(_0x18012f),'destToken':_0x189247,'destDecimals':parseInt(_0x29293c),'slippage':slippage,'toChain':_0x2e4415}]}),'success':function(_0x44fc4f){const _0x50fbc0=_0x3845e6;try{const _0x3c5f58=Object['keys'](_0x44fc4f)[0x0],_0x4f9395=_0x44fc4f[_0x3c5f58];if(!_0x4f9395||!_0x4f9395[_0x50fbc0(0x298)]||!_0x4f9395[_0x50fbc0(0x2c1)])return _0x10c3c0({'exchange':_0x50fbc0(0x24c),'error':_0x50fbc0(0x305),'rawResponse':_0x44fc4f});const _0x10be5e=_0x4f9395[_0x50fbc0(0x298)],_0x15526a=_0x4f9395[_0x50fbc0(0x2c1)][_0x10be5e];if(!_0x15526a||!_0x15526a['destAmount']||!_0x15526a['srcAmount'])return _0x10c3c0({'exchange':'DZAP','error':_0x50fbc0(0x23a),'rawResponse':_0x15526a});const _0x8ad75f=_0x15526a[_0x50fbc0(0x2d7)],_0x46ab3a=_0x15526a[_0x50fbc0(0x247)],_0x13f2a1=parseFloat(_0x8ad75f)/parseFloat(_0x46ab3a),_0x4e3c44=parseFloat(_0x46ab3a)/parseFloat(_0x8ad75f),_0x305084=parseFloat(_0x15526a?.[_0x50fbc0(0x33e)]?.[_0x50fbc0(0x214)]||0x0),_0xbfd8af=_0x15526a?.[_0x50fbc0(0x33e)]?.[_0x50fbc0(0x250)]?.[0x0],_0x1adfb4=_0xbfd8af?.['amount']||0x0,_0x369773=parseFloat(_0x1adfb4),_0x552c8e=parseFloat(_0xbfd8af?.[_0x50fbc0(0x1f9)]||0x0),_0x21b39b=_0x369773>0x0?_0x369773/0x3b9aca00:0x0,_0x27e7b4=0x0;_0xb464dd({'exchange':_0x50fbc0(0x202),'amountIn':_0x46ab3a,'amountOut':_0x8ad75f,'price':_0x13f2a1,'rawRate':_0x4e3c44,'gasEstimate':_0x21b39b,'gasPrice':_0x27e7b4,'feeDEX':_0x305084,'feeSwapUSDT':_0x552c8e,'timestamp':Date[_0x50fbc0(0x2e1)]()});}catch(_0x239d46){_0x10c3c0({'exchange':_0x50fbc0(0x24c),'error':_0x50fbc0(0x259)+_0x239d46['message'],'rawResponse':_0x44fc4f});}},'error':function(_0x2f0b12,_0xe92df2,_0x10d0d6){const _0x4fabf9=_0x3845e6;let _0x51c9b1=_0x4fabf9(0x28e);try{const _0x448395=JSON[_0x4fabf9(0x27e)](_0x2f0b12[_0x4fabf9(0x275)]);_0x51c9b1=_0x448395['message']||_0x10d0d6;}catch{_0x51c9b1=_0x10d0d6;}_0x10c3c0({'exchange':(allowedSources[_0x4fabf9(0x289)]?allowedSources[_0x4fabf9(0x1f6)](',\x20'):'unknown')+'\x20','error':_0x51c9b1,'status':_0xe92df2,'httpCode':_0x2f0b12[_0x4fabf9(0x25a)]||0x0,'rawResponse':_0x2f0b12[_0x4fabf9(0x275)]});}});});},'getZero1inchPrice':function(_0x402d22,_0x388509,_0x302243,_0x1247cf,_0x20de94,_0x15b077,_0x3d9e93,_0x3226eb){return new Promise((_0xf204d9,_0x33c221)=>{const _0x14f0e9=_0x3066,_0xf8555a=_0x14f0e9(0x30f),_0x16ff8f=new URLSearchParams({'fromChain':_0x15b077,'fromTokenAddress':_0x402d22,'toTokenAddress':_0x388509,'fromTokenDecimals':_0x1247cf,'toTokenDecimals':_0x20de94,'sellAmount':_0x302243[_0x14f0e9(0x314)](),'slippage':_0x14f0e9(0x270)}),_0x3cbc51=_0xf8555a+'?'+_0x16ff8f[_0x14f0e9(0x314)]();$['ajax']({'url':_0x3cbc51,'method':_0x14f0e9(0x235),'success':function(_0x526e75){const _0x18fadb=_0x14f0e9,_0x3fe033=_0x526e75?.['quote'];if(!_0x3fe033||!_0x3fe033[_0x18fadb(0x2ed)]||!_0x3fe033['estimation'][_0x18fadb(0x2bd)])return _0x33c221({'exchange':'ZeroSwap','error':_0x18fadb(0x1f4)});const _0x1385e8=_0x3fe033[_0x18fadb(0x2ed)],_0x4bbcd4=_0x1385e8[_0x18fadb(0x2bd)],_0x1b4dea=parseFloat(_0x302243)/0xa**_0x1247cf,_0x384251=parseFloat(_0x4bbcd4)/0xa**_0x20de94,_0x2b1499=_0x384251>0x0?_0x384251/_0x1b4dea:0x0,_0x51e10d=_0x384251>0x0?_0x1b4dea/_0x384251:0x0,_0x257812=parseFloat(_0x3fe033['tx']?.[_0x18fadb(0x322)]||_0x3fe033['tx']?.[_0x18fadb(0x2f5)]||0x0),_0x53039d=parseFloat(_0x3fe033['tx']?.[_0x18fadb(0x31c)]||0x0)/0x3b9aca00,_0xf902c5=PriceUtils[_0x18fadb(0x2b3)](_0x3226eb||'',_0x257812);_0xf204d9({'exchange':_0x18fadb(0x309),'amountIn':_0x302243,'amountOut':_0x4bbcd4,'price':_0x2b1499,'gasEstimate':_0x257812,'gasPrice':_0x53039d,'feeDEX':0x0,'feeSwapUSDT':parseFloat(_0xf902c5),'rawRate':_0x51e10d,'timestamp':Date[_0x18fadb(0x2e1)]()});},'error':function(_0x1deb6e,_0x35c931,_0x3103d5){const _0x20cb84=_0x14f0e9;let _0x4be900=_0x20cb84(0x28e),_0x238b1d=_0x1deb6e[_0x20cb84(0x275)];try{const _0x180994=JSON['parse'](_0x238b1d);_0x4be900=_0x180994['message']||_0x3103d5?.[_0x20cb84(0x314)]()||_0x35c931;}catch{_0x4be900=_0x3103d5?.[_0x20cb84(0x314)]()||_0x35c931;}_0x33c221({'exchange':'1inch','error':_0x4be900,'status':_0x35c931,'httpCode':_0x1deb6e[_0x20cb84(0x25a)]||0x0,'httpText':_0x1deb6e[_0x20cb84(0x339)]||'','rawResponse':_0x238b1d});}});});},'get1inchQuotePrice':function(_0x580d49,_0x22b9b3,_0x5db80a,_0x3899dd,_0x36d439,_0x4f1780){return new Promise((_0x5bd356,_0x610516)=>{const _0x104a32=_0x3066,_0x2f6cd2=JSON[_0x104a32(0x27e)](localStorage[_0x104a32(0x238)](_0x104a32(0x2e7))||'{}'),_0x577da5=_0x2f6cd2[_0x36d439];if(!_0x577da5||!_0x577da5[_0x104a32(0x1dc)]||!_0x577da5[_0x104a32(0x342)])return _0x610516({'exchange':_0x104a32(0x309),'error':'Missing\x20gas\x20info\x20for\x20'+_0x36d439+_0x104a32(0x262)});const _0x4f8e2d=_0x577da5['gwei'],_0x34d122=(_0x4f8e2d*0x3b9aca00)[_0x104a32(0x220)](0x0)['toString'](),_0x11dc08=_0x104a32(0x2d1)+_0x3899dd+_0x104a32(0x2d2)+_0x580d49+_0x104a32(0x266)+_0x22b9b3+_0x104a32(0x334)+_0x5db80a+_0x104a32(0x203)+_0x34d122+_0x104a32(0x2b5)+_0x4f1780;$[_0x104a32(0x240)]({'url':_0x11dc08,'method':_0x104a32(0x235),'headers':{'Authorization':_0x104a32(0x336),'accept':'application/json','content-type':_0x104a32(0x1d6)},'success':function(_0x268dd2){const _0x407162=_0x104a32,_0x51a594=_0x268dd2?.[_0x407162(0x258)];if(!_0x51a594||!_0x51a594[_0x407162(0x33a)]||!_0x51a594[_0x407162(0x322)]||!_0x51a594[_0x407162(0x307)])return _0x610516({'exchange':_0x407162(0x309),'error':_0x407162(0x305),'rawResponse':_0x268dd2});const _0x48b901=PriceUtils[_0x407162(0x2b3)](_0x36d439,_0x51a594[_0x407162(0x322)]),_0x567e5d=_0x51a594['tokenAmount'],_0xc36bf6=parseFloat(_0x51a594[_0x407162(0x322)]);_0x5bd356({'exchange':'1inch','amountIn':_0x5db80a,'amountOut':_0x567e5d,'price':parseFloat(_0x567e5d)/parseFloat(_0x5db80a),'gasEstimate':_0xc36bf6,'gasPrice':_0x34d122,'feeDEX':_0x48b901,'feeSwapUSDT':_0x48b901,'rawRate':parseFloat(_0x5db80a)/parseFloat(_0x567e5d),'timestamp':Date[_0x407162(0x2e1)]()});},'error':function(_0x3465b3,_0x40bdf9,_0x2c05dc){const _0x9a6568=_0x104a32;let _0x595d07=_0x9a6568(0x28e);try{const _0x1183b4=JSON[_0x9a6568(0x27e)](_0x3465b3['responseText']);_0x595d07=_0x1183b4['message']||_0x2c05dc?.['toString']()||_0x40bdf9;}catch{_0x595d07=_0x2c05dc?.[_0x9a6568(0x314)]()||_0x40bdf9;}_0x610516({'exchange':_0x9a6568(0x309),'error':_0x595d07,'status':_0x40bdf9,'httpCode':_0x3465b3['status']||0x0,'httpText':_0x3465b3[_0x9a6568(0x339)]||'','rawResponse':_0x3465b3['responseText']});}});});},'getZeroKyberPrice':function(_0x1d79b8,_0x29384d,_0x4e54cc,_0x4e506e,_0x4d977f,_0x5adf3a,_0x2107e4,_0x14a10c){return new Promise((_0x539c0b,_0x5af031)=>{const _0xf6ccbc=_0x3066,_0x18cb56=_0xf6ccbc(0x2e4),_0x4a3545=new URLSearchParams({'fromChain':_0x5adf3a,'fromTokenAddress':_0x1d79b8,'toTokenAddress':_0x29384d,'fromTokenDecimals':_0x4e506e,'toTokenDecimals':_0x4d977f,'sellAmount':_0x4e54cc[_0xf6ccbc(0x314)](),'slippage':_0xf6ccbc(0x270)}),_0x579508=_0x18cb56+'?'+_0x4a3545[_0xf6ccbc(0x314)]();$[_0xf6ccbc(0x240)]({'url':_0x579508,'method':_0xf6ccbc(0x235),'success':function(_0x5739b0){const _0x5b69bb=_0xf6ccbc,_0x11f621=_0x5739b0?.['quote'];if(!_0x11f621||!_0x11f621[_0x5b69bb(0x2ed)]||!_0x11f621['estimation'][_0x5b69bb(0x2bd)])return _0x5af031({'exchange':'ZeroSwap','error':_0x5b69bb(0x1f4)});const _0xaeed39=_0x11f621[_0x5b69bb(0x2ed)],_0x24512f=_0xaeed39['buyAmount'],_0x1dd1b1=parseFloat(_0x4e54cc)/0xa**_0x4e506e,_0x39450b=parseFloat(_0x24512f)/0xa**_0x4d977f,_0x39f1d2=_0x39450b>0x0?_0x39450b/_0x1dd1b1:0x0,_0x48adaf=_0x39450b>0x0?_0x1dd1b1/_0x39450b:0x0,_0x53d0d4=parseFloat(_0x11f621['tx']?.[_0x5b69bb(0x322)]||_0x11f621['tx']?.['estimatedGas']||0x0),_0x4d8a8d=parseFloat(_0x11f621['tx']?.[_0x5b69bb(0x31c)]||0x0)/0x3b9aca00,_0x4ef0a8=PriceUtils['getGasFeeUSD'](_0x14a10c||'',_0x53d0d4);_0x539c0b({'exchange':_0x5b69bb(0x308),'amountIn':_0x4e54cc,'amountOut':_0x24512f,'price':_0x39f1d2,'gasEstimate':_0x53d0d4,'gasPrice':_0x4d8a8d,'feeDEX':0x0,'feeSwapUSDT':parseFloat(_0x4ef0a8),'rawRate':_0x48adaf,'timestamp':Date['now']()});},'error':function(_0x20e029,_0x48cd71,_0x285623){const _0x12580c=_0xf6ccbc;let _0xedc6e3='Unknown\x20error',_0x14b35d=_0x20e029[_0x12580c(0x275)];try{const _0x335e6b=JSON['parse'](_0x14b35d);_0xedc6e3=_0x335e6b[_0x12580c(0x331)]||_0x285623?.[_0x12580c(0x314)]()||_0x48cd71;}catch{_0xedc6e3=_0x285623?.[_0x12580c(0x314)]()||_0x48cd71;}_0x5af031({'exchange':'kyber','error':_0xedc6e3,'status':_0x48cd71,'httpCode':_0x20e029[_0x12580c(0x25a)]||0x0,'httpText':_0x20e029['statusText']||'','rawResponse':_0x14b35d});}});});}},PriceUtils={'normalizeAmount'(_0x32384a,_0x4b8408){const _0x245290=_0xe15843;return parseFloat(_0x32384a)/Math[_0x245290(0x29b)](0xa,_0x4b8408);},'getGasFeeUSD'(_0x400636,_0x58ccc2){const _0x374041=_0xe15843,_0x1609d5=JSON[_0x374041(0x27e)](localStorage[_0x374041(0x238)]('MULTIALL_gasTokenInfo')||'{}'),_0x31b4a6=_0x1609d5[_0x400636],_0x45e2ff=_0x31b4a6[_0x374041(0x1dc)],_0x19fcaa=_0x31b4a6[_0x374041(0x342)],_0x544d71=_0x58ccc2*_0x19fcaa/0x3b9aca00;return _0x544d71*_0x45e2ff;},'formatCEXSymbol':function(_0x304843,_0x5bf99c){return''+_0x304843+_0x5bf99c;},'formatGateSymbol':function(_0x318700,_0x1fe5a1){return _0x318700+'_'+_0x1fe5a1;},'getChainId':function(_0x2cba06){const _0x4ae827={'BSC':0x38,'Ethereum':0x1,'Polygon':0x89,'Arbitrum':0xa4b1,'Base':0x2105,'Aolana':0x1f5};return _0x4ae827[_0x2cba06]||'1';},'calculateAmount':function(_0x31d733,_0x244762){const _0x79bafa=_0xe15843;return BigInt(Math[_0x79bafa(0x1e3)](Math[_0x79bafa(0x29b)](0xa,_0x244762)*_0x31d733));},'calculatePNL':function(_0x3d67bb,_0x4cf391,_0x260792,_0xc850cb){const _0xb4286e=_0x4cf391*_0x260792,_0x346bdb=_0x3d67bb*_0x260792+_0xc850cb;return _0xb4286e-_0x346bdb;},'formatFee':function(_0x365ca9){const _0x480778=_0xe15843;return'$'+_0x365ca9[_0x480778(0x220)](0x4);},'formatPNL':function(_0x378f3f){const _0x21aa46=_0xe15843,_0x3b2271=_0x378f3f>=0x0?'+':'';return _0x3b2271+'$'+_0x378f3f[_0x21aa46(0x220)](0x2);},'formatPrice'(_0x51410a){const _0x4118aa=_0xe15843,_0x2e1503=parseFloat(_0x51410a);if(isNaN(_0x2e1503))return'-';if(_0x2e1503===0x0)return _0x4118aa(0x2d6);if(_0x2e1503>=0x1)return''+_0x2e1503[_0x4118aa(0x220)](0x4);let _0x1631f7=_0x2e1503[_0x4118aa(0x220)](0x14)[_0x4118aa(0x312)](/0+$/,''),_0x296deb=_0x1631f7[_0x4118aa(0x2c5)](/0\.(0*)(\d+)/);if(_0x296deb){const _0x38ec28=_0x296deb[0x1]['length'];let _0x4d418b=_0x296deb[0x2][_0x4118aa(0x2d4)](0x0,0x4)['padEnd'](0x4,'0');return _0x38ec28>=0x2?_0x4118aa(0x2ae)+_0x38ec28+'}'+_0x4d418b:'0.'+_0x296deb[0x1]+_0x4d418b;}return''+_0x2e1503[_0x4118aa(0x220)](0x8);},'formatFee'(_0x4efdc6){const _0x5b6ed6=_0xe15843;return'$'+parseFloat(_0x4efdc6)[_0x5b6ed6(0x220)](0x2);},'formatPNL'(_0x4a949b){const _0x1346ad=_0x4a949b>=0x0?'+':'';return''+_0x1346ad+parseFloat(_0x4a949b)['toFixed'](0x2);}};async function checkAllCEXWalletsPerChain(){const _0x49da3d=_0xe15843;$(_0x49da3d(0x248))[_0x49da3d(0x29e)](0x96);const _0x41aaef={};console[_0x49da3d(0x1dd)](_0x49da3d(0x237)),$(_0x49da3d(0x299))['html'](_0x49da3d(0x31a)),$('#infoupdateWALLET')[_0x49da3d(0x2b0)]('📡\x20Ambil\x20Data\x20dari\x20BINANCE...');const _0xd3b0d8=await fetchBinance();$('#infoupdateWALLET')['html']('📡\x20Ambil\x20Data\x20dari\x20MEXC...');const _0x384b8b=await fetchMexc();$(_0x49da3d(0x299))[_0x49da3d(0x2b0)](_0x49da3d(0x2a1));const _0x34aae5=await fetchGate();for(const _0x573dd2 in CEXWallets){const _0x1aefcd=CEXWallets[_0x573dd2]['WALLET_CEX'];for(const _0x5f3b93 in _0x1aefcd){const _0x968c62=getCEXKeyAlias(_0x5f3b93),_0x7bb758=_0x1aefcd[_0x5f3b93][_0x49da3d(0x29a)],_0x929146=_0x7bb758+'_'+_0x968c62;let _0x4fabf0=[];if(_0x968c62===_0x49da3d(0x245))_0x4fabf0=_0xd3b0d8;else{if(_0x968c62===_0x49da3d(0x294))_0x4fabf0=_0x384b8b;else{if(_0x968c62===_0x49da3d(0x2f4))_0x4fabf0=_0x34aae5;}}_0x41aaef[_0x929146]=_0x4fabf0[_0x49da3d(0x320)](_0x1d9190=>_0x1d9190[_0x49da3d(0x2c3)]?.[_0x49da3d(0x1eb)]()===_0x7bb758[_0x49da3d(0x1eb)]()),$(_0x49da3d(0x210))[_0x49da3d(0x2b0)](_0x49da3d(0x295)+_0x929146+':\x20'+_0x41aaef[_0x929146][_0x49da3d(0x289)]+_0x49da3d(0x2df));}}const _0x315614=JSON[_0x49da3d(0x27e)](localStorage[_0x49da3d(0x238)](_0x49da3d(0x257))||'[]'),_0x3114ba=_0x315614['map']((_0x4d255f,_0x259655)=>{const _0x134e57=_0x49da3d,{symbol:_0x428b11,pairSymbol:_0x3637e0,chain:_0x1f0b5a,selectedCexs:_0x4f38f2}=_0x4d255f,_0x4a8a8e={},_0x471025=CEXWallets[_0x1f0b5a[_0x134e57(0x242)]()];console[_0x134e57(0x1dd)](_0x134e57(0x20b)+(_0x259655+0x1)+_0x134e57(0x2e9)+_0x428b11+_0x134e57(0x302)+_0x1f0b5a);for(const _0xc3c907 of _0x4f38f2||[]){const _0x278b04=getCEXKeyAlias(_0xc3c907),_0x11275f=_0x471025?.['WALLET_CEX']?.[_0x278b04]?.[_0x134e57(0x29a)],_0x2a61d2=_0x11275f+'_'+_0x278b04,_0x4ca633=_0x41aaef[_0x2a61d2];console[_0x134e57(0x1dd)](_0x134e57(0x2f7)+_0x2a61d2+_0x134e57(0x29f)+_0xc3c907+')');if(!_0x4ca633||!Array['isArray'](_0x4ca633)){console[_0x134e57(0x252)](_0x134e57(0x1d2)+_0x2a61d2);continue;}const _0x2036aa=_0x2df006=>{const _0x403c6d=_0x134e57,_0x1382cc=_0x2df006?.[_0x403c6d(0x1eb)]()[_0x403c6d(0x312)](/[^A-Z0-9]/g,''),_0x3c8728=_0x4ca633[_0x403c6d(0x30e)](_0x1336a3=>_0x1336a3[_0x403c6d(0x2b1)]?.[_0x403c6d(0x1eb)]()[_0x403c6d(0x312)](/[^A-Z0-9]/g,'')===_0x1382cc||_0x1336a3[_0x403c6d(0x282)]?.[_0x403c6d(0x1eb)]()[_0x403c6d(0x312)](/[^A-Z0-9]/g,'')===_0x1382cc);if(_0x3c8728){if(!_0x4a8a8e[_0xc3c907])_0x4a8a8e[_0xc3c907]={};_0x4a8a8e[_0xc3c907][_0x1382cc]={'depo':!!_0x3c8728[_0x403c6d(0x2ce)],'wd':!!_0x3c8728[_0x403c6d(0x271)],'feewd':parseFloat(_0x3c8728['feeWDs']||0x0)},console[_0x403c6d(0x1dd)](_0x403c6d(0x2a2)+_0x1382cc+'\x20in\x20'+_0x2a61d2+_0x403c6d(0x2d3)+_0x3c8728[_0x403c6d(0x32e)]+_0x403c6d(0x333)+_0x3c8728[_0x403c6d(0x2ce)]+_0x403c6d(0x285)+_0x3c8728[_0x403c6d(0x271)]);}else console[_0x403c6d(0x252)]('❌\x20NOT\x20FOUND:\x20'+_0x1382cc+_0x403c6d(0x1ee)+_0x2a61d2);};_0x2036aa(_0x428b11);if(_0x3637e0)_0x2036aa(_0x3637e0);}return{..._0x4d255f,'cexInfo':Object['keys'](_0x4a8a8e)[_0x134e57(0x289)]>0x0?_0x4a8a8e:_0x4d255f[_0x134e57(0x281)]||{}};});try{localStorage['setItem'](_0x49da3d(0x257),JSON[_0x49da3d(0x2cb)](_0x3114ba)),console[_0x49da3d(0x1dd)]('✅\x20MULTIALL_TOKENS\x20updated:',_0x3114ba),app[_0x49da3d(0x255)](_0x49da3d(0x2ab)),setTimeout(()=>{const _0x3ef96a=_0x49da3d;$('#loadingOverlay')[_0x3ef96a(0x2d8)](0xc8),alert(_0x3ef96a(0x229)),location[_0x3ef96a(0x23c)]();},0x320);}catch(_0x502a67){$(_0x49da3d(0x248))[_0x49da3d(0x2d8)](0xc8),console['error']('❌\x20Gagal\x20menyimpan\x20MULTIALL_TOKENS:',_0x502a67),alert(_0x49da3d(0x338)+_0x502a67['message']);}}async function fetchBinance(){const _0x436dcb=_0xe15843,{ApiKey:_0x5265d3,ApiSecret:_0x43e0e2}=CONFIG_CEX[_0x436dcb(0x245)],_0x39ed49=Date[_0x436dcb(0x2e1)]()[_0x436dcb(0x314)](),_0x4eb5b5=_0x436dcb(0x1df)+_0x39ed49,_0x45e289=calculateSignature(_0x436dcb(0x245),_0x43e0e2,_0x4eb5b5,_0x436dcb(0x326)),_0x11234c=_0x436dcb(0x31e)+_0x4eb5b5+_0x436dcb(0x2f1)+_0x45e289,_0xadd8ee=await $['ajax']({'url':_0x11234c,'headers':{'X-MBX-ApiKey':_0x5265d3},'method':_0x436dcb(0x235)}),_0x35a743=[];for(const _0x586479 of _0xadd8ee){if(!_0x586479[_0x436dcb(0x20a)]||!Array[_0x436dcb(0x27b)](_0x586479[_0x436dcb(0x329)]))continue;for(const _0x8a2759 of _0x586479[_0x436dcb(0x329)]){_0x35a743[_0x436dcb(0x1f8)]({'cex':_0x436dcb(0x245),'tokenName':_0x586479[_0x436dcb(0x22d)],'chain':_0x8a2759[_0x436dcb(0x337)],'feeWDs':parseFloat(_0x8a2759[_0x436dcb(0x23e)]||0x0),'depositEnable':!!_0x8a2759['depositEnable'],'withdrawEnable':!!_0x8a2759[_0x436dcb(0x271)]});}}return console[_0x436dcb(0x1dd)](_0x436dcb(0x30c),_0x35a743['length'],_0x436dcb(0x286)),_0x35a743;}async function fetchMexc(){const _0x54d5ff=_0xe15843,{ApiKey:_0x5f00eb,ApiSecret:_0x35ca74}=CONFIG_CEX[_0x54d5ff(0x294)],_0x2e666b=Date[_0x54d5ff(0x2e1)](),_0x1c5a25=_0x54d5ff(0x268)+_0x2e666b,_0x578912=calculateSignature(_0x54d5ff(0x294),_0x35ca74,_0x1c5a25),_0x2f0aaf=_0x54d5ff(0x1f3)+_0x1c5a25+_0x54d5ff(0x2f1)+_0x578912,_0x5df954=await $[_0x54d5ff(0x240)]({'url':_0x2f0aaf,'headers':{'X-MEXC-APIKEY':_0x5f00eb},'method':'GET'}),_0x45d70f=[];for(const _0x53be85 of _0x5df954){if(!Array['isArray'](_0x53be85['networkList']))continue;for(const _0x3d3906 of _0x53be85[_0x54d5ff(0x329)]){_0x45d70f[_0x54d5ff(0x1f8)]({'cex':'MEXC','tokenName':_0x53be85[_0x54d5ff(0x22d)],'chain':_0x3d3906[_0x54d5ff(0x33d)],'feeWDs':parseFloat(_0x3d3906[_0x54d5ff(0x23e)]||0x0),'depositEnable':!!_0x3d3906[_0x54d5ff(0x2ce)],'withdrawEnable':!!_0x3d3906[_0x54d5ff(0x271)]});}}return console[_0x54d5ff(0x1dd)](_0x54d5ff(0x332),_0x45d70f[_0x54d5ff(0x289)],'items'),_0x45d70f;}async function fetchGate(){const _0x81c897=_0xe15843,{ApiKey:_0x2a53c9,ApiSecret:_0xda529f}=CONFIG_CEX[_0x81c897(0x28d)],_0x1b4dfa='https://proxykiri.awokawok.workers.dev/?https://api.gateio.ws',_0x540e11=Math[_0x81c897(0x2c8)](Date[_0x81c897(0x2e1)]()/0x3e8),_0x105ff1=_0x81c897(0x235),_0x329443='/api/v4',_0x4bf53d=(_0x18e8bc,_0x40b3c3)=>{const _0x5841b9=_0x81c897,_0x358288=CryptoJS[_0x5841b9(0x283)](_0x40b3c3)[_0x5841b9(0x314)](CryptoJS['enc'][_0x5841b9(0x25f)]),_0x38196c=_0x105ff1+'\x0a'+_0x329443+_0x18e8bc+'\x0a\x0a'+_0x358288+'\x0a'+_0x540e11;return CryptoJS[_0x5841b9(0x2cd)](_0x38196c,_0xda529f)[_0x5841b9(0x314)](CryptoJS['enc'][_0x5841b9(0x25f)]);},_0x55e803={'KEY':_0x2a53c9,'SIGN':_0x4bf53d('/wallet/withdraw_status',''),'Timestamp':_0x540e11},_0x26312a=await $[_0x81c897(0x240)]({'url':''+_0x1b4dfa+_0x329443+_0x81c897(0x243),'method':_0x105ff1,'headers':_0x55e803}),_0x461b7e=await $[_0x81c897(0x240)]({'url':''+_0x1b4dfa+_0x329443+_0x81c897(0x2aa),'method':_0x105ff1,'headers':_0x55e803}),_0x12b1fd=[];for(const _0x9c4c40 of _0x461b7e){if(!Array[_0x81c897(0x27b)](_0x9c4c40[_0x81c897(0x233)]))continue;for(const _0x368165 of _0x9c4c40[_0x81c897(0x233)]){const _0xb72158=_0x26312a['find'](_0x335e79=>_0x335e79[_0x81c897(0x2e3)]?.[_0x81c897(0x1eb)]()===_0x9c4c40[_0x81c897(0x2e3)]?.[_0x81c897(0x1eb)]()&&_0x335e79[_0x81c897(0x2bb)]&&_0x335e79[_0x81c897(0x2bb)][_0x368165[_0x81c897(0x2b8)]]);_0x12b1fd[_0x81c897(0x1f8)]({'cex':_0x81c897(0x2f4),'tokenName':_0x9c4c40[_0x81c897(0x2e3)],'chain':_0x368165[_0x81c897(0x2b8)],'feeWDs':_0xb72158?parseFloat(_0xb72158[_0x81c897(0x2bb)][_0x368165[_0x81c897(0x2b8)]]):0x0,'depositEnable':!_0x368165[_0x81c897(0x234)],'withdrawEnable':!_0x368165['withdraw_disabled']});}}return console[_0x81c897(0x1dd)](_0x81c897(0x269),_0x12b1fd[_0x81c897(0x289)],_0x81c897(0x286)),_0x12b1fd;}window[_0xe15843(0x28b)]=CEXAPIs,window[_0xe15843(0x26d)]=DEXAPIs,window[_0xe15843(0x1fc)]=PriceUtils;
+// jQuery API Functions for CEX and DEX Price Fetching
+const GasPriceUSD = {
+    BSC: 0,
+    Ethereum: 0,
+    Polygon: 0
+};
+
+const CHAIN_CONFIG = {
+    ethereum: {
+        name: 'Ethereum',
+        code: 1,
+        short: 'ERC',
+        symbol: 'ETH',
+        gasLimit: 250000,
+        explorer: 'https://etherscan.io',
+        rpc: 'https://eth.llamarpc.com'
+    },
+    bsc: {
+        name: 'BSC',
+        code: 56,
+        short: 'BSC',
+        symbol: 'BNB',
+        gasLimit: 80000,
+        explorer: 'https://bscscan.com',
+        rpc: 'https://bsc-dataseed.binance.org/'
+    },
+    polygon: {
+        name: 'Polygon',
+        code: 137,
+        short: 'POLY',
+        symbol: 'MATIC',
+        gasLimit: 80000,
+        explorer: 'https://polygonscan.com',
+        rpc: 'https://polygon-pokt.nodies.app'
+    },
+    arbitrum: {
+        name: 'Arbitrum',
+        code: 42161,
+        short: 'ARB',
+        symbol: 'ETH',
+        gasLimit: 100000,
+        explorer: 'https://arbiscan.io',
+        rpc: 'https://arbitrum-one-rpc.publicnode.com'
+    },
+    base: {
+        name: 'Base',
+        code: 8453,
+        short: 'BASE',
+        symbol: 'ETH',
+        gasLimit: 100000,
+        explorer: 'https://basescan.org/',
+        rpc: 'https://base.llamarpc.com'
+    },
+    solana: {
+        name: 'Solana',
+        code: 501,
+        short: 'SOL',
+        symbol: 'SOL',
+        explorer: 'https://solscan.io/',
+        rpc: ''
+    }
+};
+
+const CONFIG_CEX = {
+    GATE: {
+        ApiKey: "577bb104ebb7977925c0ba7a292a722e",
+        ApiSecret: "48b2cd4b122f076d2ebf8833359dfeffd268c5a0ce276b4cbe6ba5aa52e7f7cc",
+        WARNA: "#D5006D",  // Pink tua
+    },
+    BINANCE: {
+        ApiKey: "2U7YGMEUDri6tP3YEzmK3CcZWb9yQ5j3COp9s7pRRUv4vu8hJAlwH4NkbNK74hDU",
+        ApiSecret: "XHjPVjLzbs741xoznV3xz1Wj5SFrcechNBjvezyXLcg8GLWF21VW32f0YhAsQ9pn",
+        WARNA: "#e0a50c",  // Orange tua
+    },
+    MEXC: {
+        ApiKey: "mx0vglBh22wwHBY0il", // Ganti dengan ApiKey asli
+        ApiSecret: "429877e0b47c41b68dd77613cdfded64", // Ganti dengan ApiSecret asli
+        WARNA: "#1448ce",  // Biru muda
+    }
+    
+};
+
+const CEXWallets = {
+    polygon: {
+        Kode_Chain: 137,
+        WALLET_CEX: {
+        GATEIO: {
+            address: '0x0D0707963952f2fBA59dD06f2b425ace40b492Fe',
+            chainCEX: 'MATIC'
+        },
+        BINANCE: {
+            address: '0x290275e3db66394C52272398959845170E4DCb88',
+            chainCEX: 'MATIC'
+        },
+        MEXC: {
+            address: '0x51E3D44172868Acc60D68ca99591Ce4230bc75E0',
+            chainCEX: 'MATIC'
+        },
+        INDODAX: {
+            address : '0x3C02290922a3618A4646E3BbCa65853eA45FE7C6',
+            chainCEX : 'POLYGON',
+            },   
+        }
+    },
+    arbitrum: {
+        Kode_Chain: 42161,
+        WALLET_CEX: {
+            GATEIO: {
+                address: '0x0D0707963952f2fBA59dD06f2b425ace40b492Fe',
+                chainCEX: 'ARBEVM'
+            },
+            BINANCE: {
+                address: '0x290275e3db66394C52272398959845170E4DCb88',
+                chainCEX: 'ARBITRUM'
+            },
+            MEXC: {
+                address: '0x4982085C9e2F89F2eCb8131Eca71aFAD896e89CB',
+                chainCEX: 'ARB'
+            },
+            INDODAX: {
+                address : '0xaBa3002AB1597433bA79aBc48eeAd54DC10A45F2',
+                chainCEX : 'ARB',
+            } 
+        }
+    },
+    ethereum: {
+        Kode_Chain: 1,
+        WALLET_CEX: {
+            GATEIO: {
+                address: '0x0D0707963952f2fBA59dD06f2b425ace40b492Fe',
+                chainCEX: 'ETH'
+            },
+            BINANCE: {
+                address: '0xDFd5293D8e347dFe59E90eFd55b2956a1343963d',
+                chainCEX: 'ETH'
+            },
+            MEXC: {
+                address: '0x75e89d5979E4f6Fba9F97c104c2F0AFB3F1dcB88',
+                chainCEX: 'ETH'
+            },
+            INDODAX: {
+                address : '0x3C02290922a3618A4646E3BbCa65853eA45FE7C6',
+                chainCEX : 'ETH'
+            }
+        }
+    },
+    bsc: {
+        Kode_Chain: 56,
+        WALLET_CEX: {
+            GATEIO: {
+                address: '0x0D0707963952f2fBA59dD06f2b425ace40b492Fe',
+                chainCEX: 'BSC'
+            },
+            BINANCE: {
+                address: '0x8894E0a0c962CB723c1976a4421c95949bE2D4E3',
+                chainCEX: 'BSC'
+            },
+            MEXC: {
+                address: '0x4982085C9e2F89F2eCb8131Eca71aFAD896e89CB',
+                chainCEX: 'BSC'
+            },
+            INDODAX: {
+                address : '0xaBa3002AB1597433bA79aBc48eeAd54DC10A45F2',
+                chainCEX : 'BSC',
+            } 
+        }
+    },
+    base: {
+        Kode_Chain: 8453,
+        WALLET_CEX: {
+            GATEIO: {
+                address: '0x0D0707963952f2fBA59dD06f2b425ace40b492Fe',
+                chainCEX: 'BASEEVM'
+            },
+            BINANCE: {
+                address: '0xDFd5293D8e347dFe59E90eFd55b2956a1343963d',
+                chainCEX: 'BASE'
+            },
+            MEXC: {
+                address: '0x4e3ae00E8323558fA5Cac04b152238924AA31B60',
+                chainCEX: 'BASE'
+            },  
+            INDODAX: {
+                address : '0xaBa3002AB1597433bA79aBc48eeAd54DC10A45F2',
+                chainCEX : 'BASE',
+            } 
+        }
+    }
+ };
+
+function getCEXKeyAlias(name) {
+    const map = {
+        "BINANCE": "BINANCE",
+        "Binance": "BINANCE",
+        "MEXC": "MEXC",
+        "Gateio": "GATEIO",
+        "GATE": "GATEIO",
+        "GATEIO": "GATEIO",
+        "INDODAX": "INDODAX",
+        "Indodax": "INDODAX"
+    };
+    return map[name] || name.toUpperCase();
+}
+
+window.withProxy = function(url, useProxy = true) {
+    return useProxy ? `https://vercel-proxycors.vercel.app/?url=${encodeURIComponent(url)}` : url;
+};
+
+var settings = JSON.parse(localStorage.getItem('MULTIALL_SETTING') || '{}');
+var timeoutApi = settings.TimeoutCount || 5000;
+
+function withTimeout(promise, timeout) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Request timeout")), timeout))
+    ]);
+}
+
+async function fetchWithCountdown(cellId,dexName, promiseFn) {
+    const cell = $(`#${cellId}`);
+    let countdown = Math.floor(timeoutApi / 1000);
+
+    //cell.html(`⏳ ${countdown--}s`);
+    cell.html(`⏳ ${dexName} ${countdown--}s`);
+    const interval = setInterval(() => {
+        if (countdown > 0) {
+            cell.html(`⏳ ${dexName} ${countdown--}s`);
+        }
+    }, 1000);
+
+    try {
+        const result = await withTimeout(promiseFn(), timeoutApi);
+        clearInterval(interval);
+        return result;
+    } catch (err) {
+        clearInterval(interval);
+// ✅ Tangani error structured dari getMagpiePrice()
+        if (err.name === 'TimeoutError') {
+            console.warn(`🕒 Timeout pada ${dexName}: permintaan melebihi batas waktu`);
+        } else if (err.exchange && err.error) {
+            console.error(`❌ Error ${err.exchange}: ${err.error} (status: ${err.status || 'unknown'})`);
+        } else {
+            console.error(`💥 Error tidak diketahui dari ${dexName}:`, err);
+        }
+
+        throw err;
+    }
+    
+}
+
+function calculateSignature(exchange, apiSecret, dataToSign, hashMethod = "HmacSHA256") {
+    if (!apiSecret || !dataToSign) {
+        console.error(`[${exchange}] API Secret atau Data untuk Signature tidak valid!`);
+        return null;
+    }
+
+    switch (exchange.toUpperCase()) {
+        case "OKX":
+            const hmac = CryptoJS.HmacSHA256(dataToSign, apiSecret);
+            return CryptoJS.enc.Base64.stringify(hmac); // OKX Wajib BASE64
+        default:
+            return CryptoJS.HmacSHA256(dataToSign, apiSecret).toString(CryptoJS.enc.Hex);
+    }
+}
+
+function calculateSignatureLAMA(exchange, apiSecret, dataToSign, hashMethod = "HmacSHA256") {
+    if (!apiSecret || !dataToSign) {
+        console.error(`[${exchange}] API Secret atau Data untuk Signature tidak valid!`);
+        return null;
+    }
+
+    switch (exchange.toUpperCase()) {
+        case "OKX":
+            const hmac = CryptoJS.HmacSHA256(dataToSign, apiSecret);
+            return CryptoJS.enc.Base64.stringify(hmac);
+        default:
+            return CryptoJS.HmacSHA256(dataToSign, apiSecret).toString(CryptoJS.enc.Hex);
+    }
+}
+
+const CEXAPIs = {
+    getBinanceOrderBook: async function(pair) {
+        if (pair.baseSymbol === 'USDT' && pair.quoteSymbol === 'USDT') {
+            //console.warn('⏭️ Skip Binance USDT/USDT ');
+            return {
+                buy: 1, sell: 1, topAsks: [], topBids: [], quotePriceUSDT: 1
+            };
+        }
+
+        const baseResp = await withTimeout(fetch(`https://api-gcp.binance.com/api/v3/depth?symbol=${pair.baseSymbol}USDT&limit=5`), timeoutApi);
+        const baseData = await baseResp.json();
+
+        let quotePriceUSDT = 1;
+        if (pair.quoteSymbol !== 'USDT') {
+            const quoteResp = await withTimeout(fetch(`https://api-gcp.binance.com/api/v3/depth?symbol=${pair.quoteSymbol}USDT&limit=5`), timeoutApi);
+            const quoteData = await quoteResp.json();
+            quotePriceUSDT = parseFloat(quoteData.asks[0][0]);
+        }
+
+        return {
+            buy: parseFloat(baseData.asks[0][0]),
+            sell: parseFloat(baseData.bids[0][0]),
+            topAsks: baseData.asks.slice(0, 5).map(x => ({ price: parseFloat(x[0]), qty: parseFloat(x[1]) })),
+            topBids: baseData.bids.slice(0, 5).map(x => ({ price: parseFloat(x[0]), qty: parseFloat(x[1]) })),
+            quotePriceUSDT
+        };
+    },
+
+    getMEXCOrderBook: async function(pair) {
+        if (pair.baseSymbol === 'USDT' && pair.quoteSymbol === 'USDT') {
+          //  console.warn('⏭️ Skip MEXC USDT/USDT ');
+            return {
+                buy: 1, sell: 1, topAsks: [], topBids: [], quotePriceUSDT: 1
+            };
+        }
+
+        const baseUrl = `https://api.mexc.com/api/v3/depth?symbol=${pair.baseSymbol}USDT&limit=5`;
+        const baseResp = await withTimeout(fetch(withProxy(baseUrl)), timeoutApi);
+        const baseData = await baseResp.json();
+
+        let quotePriceUSDT = 1;
+        if (pair.quoteSymbol !== 'USDT') {
+            const quoteResp = await withTimeout(fetch(`https://api.mexc.com/api/v3/depth?symbol=${pair.quoteSymbol}USDT&limit=5`), timeoutApi);
+            const quoteData = await quoteResp.json();
+            quotePriceUSDT = parseFloat(quoteData.asks[0][0]);
+        }
+
+        return {
+            buy: parseFloat(baseData.asks[0][0]),
+            sell: parseFloat(baseData.bids[0][0]),
+            topAsks: baseData.asks.slice(0, 5).map(x => ({ price: parseFloat(x[0]), qty: parseFloat(x[1]) })),
+            topBids: baseData.bids.slice(0, 5).map(x => ({ price: parseFloat(x[0]), qty: parseFloat(x[1]) })),
+            quotePriceUSDT
+        };
+    },
+
+    getGateOrderBook: async function(pair) {
+        if (pair.baseSymbol === 'USDT' && pair.quoteSymbol === 'USDT') {
+           // console.warn('⏭️ Skip Gate.io USDT/USDT ');
+            return {
+                buy: 1, sell: 1, topAsks: [], topBids: [], quotePriceUSDT: 1
+            };
+        }
+
+        //const baseUrl = `https://api.gateio.ws/api/v4/spot/order_book?currency_pair=${pair.baseSymbol}_USDT&limit=5`;
+       // const baseResp = await withTimeout(fetch(withProxy(baseUrl)), timeoutApi);
+
+        const baseResp = await withTimeout(fetch(`https://proxykiri.awokawok.workers.dev/?https://api.gateio.ws/api/v4/spot/order_book?currency_pair=${pair.baseSymbol}_USDT&limit=5`), timeoutApi); 
+        const baseData = await baseResp.json();       
+
+        let quotePriceUSDT = 1;
+        if (pair.quoteSymbol !== 'USDT') {
+
+           // const quoteUrl = `https://api.gateio.ws/api/v4/spot/order_book?currency_pair=${pair.quoteSymbol}_USDT&limit=5`;
+            //const quoteResp = await withTimeout(fetch(withProxy(quoteUrl)), timeoutApi);
+            
+            const quoteResp = await withTimeout(fetch(`https://proxykiri.awokawok.workers.dev/?https://api.gateio.ws/api/v4/spot/order_book?currency_pair=${pair.quoteSymbol}_USDT&limit=5`), timeoutApi);
+            const quoteData = await quoteResp.json();
+            quotePriceUSDT = parseFloat(quoteData.asks[0][0]);
+        }
+
+        return {
+            buy: parseFloat(baseData.asks[0][0]),
+            sell: parseFloat(baseData.bids[0][0]),
+            topAsks: baseData.asks.slice(0, 5).map(x => ({ price: parseFloat(x[0]), qty: parseFloat(x[1]) })),
+            topBids: baseData.bids.slice(0, 5).map(x => ({ price: parseFloat(x[0]), qty: parseFloat(x[1]) })),
+            quotePriceUSDT
+        };
+    },
+    
+    getIndodaxOrderBook: async function (pair) {
+        const base = pair.baseSymbol.toLowerCase();
+        const quote = pair.quoteSymbol.toLowerCase();
+
+        // Jika pair adalah USDT/USDT
+        if (base === 'usdt' && quote === 'usdt') {
+            return {
+                buy: 1, sell: 1, topAsks: [], topBids: [], quotePriceUSDT: 1
+            };
+        }
+
+        const baseUrl = `https://indodax.com/api/depth/${base}idr?limit=5`;
+        const baseResp = await withTimeout(fetch(withProxy(baseUrl)), timeoutApi);
+        const baseData = await baseResp.json();
+
+        // ✅ Ambil rate USDT/IDR global agar konsisten dengan CellResult()
+        const usdtToIDR = window.ExchangeRates?.IndodaxUSDT || 16000; // fallback default
+        const rateIDRtoUSDT = 1 / usdtToIDR;
+
+        if (!baseData?.sell?.length || !baseData?.buy?.length) {
+            console.warn(`❌ Order book Indodax kosong untuk ${base}IDR`);
+            return {
+                buy: 0,
+                sell: 0,
+                topAsks: [],
+                topBids: [],
+                quotePriceUSDT: rateIDRtoUSDT
+            };
+        }
+
+        const topAsks = baseData.buy.map(([price, qty]) => ({
+            price: parseFloat(price) * rateIDRtoUSDT, // ✅ harga beli → dikonversi ke USDT
+            qty: parseFloat(qty)
+        }));
+
+        const topBids = baseData.sell.map(([price, qty]) => ({
+            price: parseFloat(price) * rateIDRtoUSDT, // ✅ harga jual → dikonversi ke USDT
+            qty: parseFloat(qty)
+        }));
+
+        return {
+            // ✅ BENAR: buy = harga jual (bid), sell = harga beli (ask)
+            buy: topBids[0].price,
+            sell: topAsks[0].price,
+            topAsks,
+            topBids,
+            quotePriceUSDT: rateIDRtoUSDT
+        };
+    }
+
+};
+
+// DEX API Functions
+const DEXAPIs = {
+    // KyberSwap API
+    getKyberSwapPrice: function(tokenIn, tokenOut, amountIn, chainName) {
+        const net = chainName === 'avax' ? 'avalanche' : chainName;
+        const url = `https://aggregator-api.kyberswap.com/${net}/api/v1/routes?tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&gasInclude=true`;
+ 
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                method: 'GET',
+                //timeout: timeoutApi,
+                success: function(data) {
+                    if (data && data.data && data.data.routeSummary) {
+                        const route = data.data.routeSummary;
+                        // Hitung feeSwap manual via PriceUtils
+                        const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, route.gas);
+                        resolve({
+                            exchange: 'KyberSwap',
+                            amountIn: amountIn,
+                            amountOut: route.amountOut,
+                            price: parseFloat(route.amountOut) / parseFloat(amountIn),
+                            gasEstimate: route.gasEstimate || 0,
+                            gasPrice: route.gasPrice || 0,
+                            feeDEX: parseFloat(route.gasUsd),
+                            feeSwapUSDT : parseFloat(feeSwapUSDT),
+                            rawRate: parseFloat(amountIn) / parseFloat(route.amountOut),
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        reject({ exchange: 'KyberSwap', error: 'Invalid response', status: 'invalid_data' });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'KYBERSWAP',
+                        error: errText,
+                        status,             // jQuery's internal error status (e.g., 'timeout', 'error')
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+
+            });
+        });
+    },
+
+    // ODOS API
+    getODOSPrice: function(inputTokens, outputTokens, userAddr,amountIn, chainId,chainName) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: 'https://api.odos.xyz/sor/quote/v2',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    chainId: parseInt(chainId),
+                    inputTokens,
+                    outputTokens,
+                    userAddr,
+                    slippageLimitPercent: 0.3,
+                    sourceBlacklist: [],
+                    sourceWhitelist: [],
+                    simulate: false,
+                    referralCode: 0
+                }),
+                //timeout: timeoutApi,
+                success: function(data) {
+                    // Hitung feeSwap manual via PriceUtils
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, data.gasEstimate);
+
+                    if (data && data.outAmounts && data.outAmounts.length > 0) {
+                        resolve({
+                            exchange: 'ODOS',
+                            amountIn: amountIn,
+                            outAmounts: data.outAmounts,
+                            amountOut: data.outAmounts?.[0] || '0',
+                            price: parseFloat(data.outAmounts[0]) / parseFloat(amountIn),
+                            rawRate: parseFloat(amountIn) / parseFloat(data.outAmounts[0]),
+                            feeDEX: parseFloat(data.gasEstimateValue),
+                            feeSwapUSDT: parseFloat(feeSwapUSDT),
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        reject({ exchange: 'ODOS', error: 'Invalid response', status: 'invalid_data' });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'ODOS',
+                        error: errText,
+                        status,             // jQuery's internal error status (e.g., 'timeout', 'error')
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+
+            });
+        });
+    },
+
+    getHinkalODOSPrice: function(inputTokens, outputTokens, userAddr,amountIn, chainId,chainName) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `https://ethmainnet.server.hinkal.pro/OdosSwapData`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    chainId: parseInt(chainId),
+                    inputTokens,
+                    outputTokens,
+                    userAddr,
+                    slippageLimitPercent: 0.3,
+                    sourceBlacklist: [],
+                    sourceWhitelist: [],
+                    simulate: false,
+                    referralCode: 0
+                }),
+                //timeout: timeoutApi,
+                success: function(data) {
+                    // Hitung feeSwap manual via PriceUtils
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, data.gasEstimate);
+
+                    if (data && data.outAmounts && data.outAmounts.length > 0) {
+                        resolve({
+                            exchange: 'ODOS',
+                            amountIn: amountIn,
+                            outAmounts: data.odosResponse.outValues[0],
+                            amountOut: data.odosResponse.outValues[0]?.[0] || '0',
+                            price: parseFloat(data.odosResponse.outValues[0]) / parseFloat(amountIn),
+                            rawRate: parseFloat(amountIn) / parseFloat(data.odosResponse.outValues[0]),
+                            feeDEX: parseFloat(data.odosResponse.gasEstimateValue),
+                            feeSwapUSDT: parseFloat(feeSwapUSDT),
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        reject({ exchange: 'HINKAL ODOS', error: 'Invalid response', status: 'invalid_data' });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'HINKAL ODOS',
+                        error: errText,
+                        status,             // jQuery's internal error status (e.g., 'timeout', 'error')
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+
+            });
+        });
+    },
+
+    getHinkal1InchPrice: function(inputTokens, outputTokens, userAddr, amountIn, chainId, chainName) {
+        return new Promise((resolve, reject) => {
+            const sc_input = inputTokens[0]?.tokenAddress;
+            const sc_output = outputTokens[0]?.tokenAddress;
+            const apiUrl = "https://ethmainnet.server.hinkal.pro/OneInchSwapData";
+
+            const requestData = {
+                url: "https://api.1inch.dev/swap/v5.2/" + chainId + "/swap?" +
+                    "fromTokenAddress=" + sc_input +
+                    "&toTokenAddress=" + sc_output +
+                    "&amount=" + amountIn +
+                    "&fromAddress=" + userAddr +
+                    "&slippage=10" +
+                    "&destReceiver=" + userAddr +
+                    "&disableEstimate=true"
+            };
+
+            $.ajax({
+                url: apiUrl,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(requestData),
+                //timeout: timeoutApi,
+                success: function(data) {
+                    const outAmount = data?.oneInchResponse?.toAmount || '0';
+
+                    // Ambil gasEstimate, fallback ke 350000 jika tidak tersedia
+                    let gasEstimate = parseFloat(data?.oneInchResponse?.tx?.gas || 0);
+                    if (!gasEstimate || gasEstimate === 0) gasEstimate = 350000;
+
+                    // Gunakan gasPrice pribadi override: 0.1 Gwei
+                    const gweiOverride = 0.1;
+
+                    // Hitung feeSwapUSDT manual
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, gasEstimate, gweiOverride);
+
+                    if (parseFloat(outAmount) > 0) {
+                        resolve({
+                            exchange: '1INCH',
+                            amountIn: amountIn,
+                            outAmounts: [outAmount],
+                            amountOut: outAmount,
+                            price: parseFloat(outAmount) / parseFloat(amountIn),
+                            rawRate: parseFloat(amountIn) / parseFloat(outAmount),
+                            gasEstimate: gasEstimate,
+                            gasPrice: gweiOverride, // ditampilkan sesuai override
+                            feeDEX: 0, // kosong karena tidak tersedia dari 1inch
+                            feeSwapUSDT: parseFloat(feeSwapUSDT),
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        reject({ exchange: '1INCH', error: 'Invalid response', status: 'invalid_data' });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: '1INCH',
+                        error: errText,
+                        status,
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+            });
+        });
+    },
+
+    get0xPrice: function (sellToken, buyToken, sellAmount, chainId, direction,chainName) {
+         //https://api.0x.org/swap/v1/quote?buyToken=0xdAC17F958D2ee523a2206206994597C13D831ec7&sellAmount=1000000000000000000&sellToken=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&slippagePercentage=0.01&affiliateAddress=0x8c128f336B479b142429a5f351Af225457a987Fa&enableSlippageProtection=false&intentOnFilling=true&takerAddress=0x0000000000000000000000000000000000000000&skipValidation=true&feeRecipientTradeSurplus=0x8c128f336B479b142429a5f351Af225457a987Fa
+            // api key 6f5d5c4d-bfdd-4fc7-8d3f-d3137094feb5
+            //url: `https://polygon.api.0x.org/swap/v1/price?sellToken=${sellToken}&buyToken=${buyToken}&sellAmount=${sellAmount}`
+       // console.log(direction);
+        return new Promise((resolve, reject) => {
+             if (direction === 'cex_to_dex') {
+                var proxiedUrl = `https://proxykiri.awokawok.workers.dev/?https://matcha.xyz/api/swap/price?chainId=${chainId}&buyToken=${buyToken}&sellToken=${sellToken}&sellAmount=${sellAmount}`;
+             }else{
+                var proxiedUrl = `https://proxykanan.awokawok.workers.dev/?https://matcha.xyz/api/swap/price?chainId=${chainId}&buyToken=${buyToken}&sellToken=${sellToken}&sellAmount=${sellAmount}`;
+             }
+
+            // const rawUrl = `https://matcha.xyz/api/swap/price?chainId=${chainId}&buyToken=${buyToken}&sellToken=${sellToken}&sellAmount=${sellAmount}`;
+            // const proxiedUrl = window.withProxy ? window.withProxy(rawUrl) : rawUrl;
+
+            $.ajax({
+                url: proxiedUrl,
+                method: 'GET',
+                //timeout: timeoutApi,
+                success: function (data) {
+                    let feeETH = 0;
+                    if (data.totalNetworkFee) {
+                        feeETH = parseFloat(data.totalNetworkFee) / 1e18;
+                    } else if (data.estimatedGas && data.gasPrice) {
+                        feeETH = (parseFloat(data.estimatedGas) * parseFloat(data.gasPrice)) / 1e18;
+                    }
+
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, data.gas);
+                   
+                    resolve({
+                        exchange: 'Matcha',
+                        sellToken: sellToken,
+                        buyToken: buyToken,
+                        sellAmount: sellAmount,
+                        buyAmount: data.buyAmount,
+                        price: parseFloat(data.price),
+                        gasPrice: parseFloat(data.gasPrice || 0),
+                        estimatedGas: parseFloat(data.estimatedGas || 0),
+                        feeDEX: feeSwapUSDT,
+                        feeSwapUSDT : feeSwapUSDT,
+                        rawRate: 1 / parseFloat(data.price),
+                        timestamp: Date.now()
+                    });
+                },
+                error: function (xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'MATCHA',
+                        error: errText,
+                        status,
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+            });
+        });
+    },
+
+    getFlyTradePrice: function(fromToken, toToken, amount, chainName, userAddr) {
+        const url = `https://api.fly.trade/aggregator/quote?network=${chainName}&fromTokenAddress=${fromToken}&toTokenAddress=${toToken}&fromAddress=${userAddr}&toAddress=${userAddr}&sellAmount=${amount}&slippage=0.005&gasless=false`;
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                method: 'GET',
+                //timeout: timeoutApi,
+                success: function(data) {
+                     console.log("MAGPIE",data);
+                    if (data && data.amountOut) {
+                        const amountIn = parseFloat(data.typedData?.message?.amountIn || amount);
+                        const amountOut = parseFloat(data.amountOut);
+                        const fee = parseFloat(data.fees?.[0]?.value || 0);
+                        const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, data.resourceEstimate.gasLimit);
+                        
+                        resolve({
+                            exchange: 'FlyTrade',
+                            amountOut: amountOut,
+                            price: amountOut / amountIn,
+                            feeDEX: fee,
+                            feeSwapUSDT:feeSwapUSDT,
+                            rawRate: amountIn / amountOut,
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        reject({ exchange: 'FlyTrade', error: 'Invalid response format', status: 'invalid_data' });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'FlyTrade',
+                        error: errText,
+                        status,
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+            });
+        });
+    },
+
+     getOKXDEXPrice: function(fromToken, toToken, amountIn, chainName) {
+        const apiKeys = [        
+            {
+            ApiKeyOKX : "a4569d13-8a59-4ecd-9936-6c4e1233bff8",
+            secretKeyOKX : "4484BC9B2FC22C35CB1071A2A520FDC8",
+            PassphraseOKX : "Macpro-2025",
+            },
+             {
+            ApiKeyOKX : "71cbe094-380a-4146-b619-e81a254c0702",
+            secretKeyOKX : "5116D48C1847EB2D7BDD6DDD1FC8B199",
+            PassphraseOKX : "Macpro-2025"
+            },
+             {
+            ApiKeyOKX : "81a072cc-b079-410c-9963-fb8e49c16d9d",
+            secretKeyOKX : "BF44AE00CF775DC6DDB0FDADF61EC724",
+            PassphraseOKX : "Macpro-2025"
+            },
+            {
+            ApiKeyOKX : "adad55d1-bf90-43ac-ac03-0a43dc7ccee2",
+            secretKeyOKX : "528AFB3ECC88653A9070F05CC3839611",
+            PassphraseOKX : "Cek_Horeg_911",
+            },
+            {
+            ApiKeyOKX : "6866441f-6510-4175-b032-342ad6798817",
+            secretKeyOKX : "E6E4285106CB101B39FECC385B64CAB1",
+            PassphraseOKX : "Arekpinter123.",
+            }
+            
+        ];
+        
+        const selectedKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
+
+        const chainIdMap = {
+            bsc: 56,
+            ethereum: 1,
+            polygon: 137,
+            arbitrum: 42161,
+            base: 8453,
+            solana: 501
+        };
+
+        const chainId = chainIdMap[chainName.toLowerCase()] || 1;
+        const queryString = `/api/v5/dex/aggregator/quote?amount=${amountIn}&chainIndex=${chainId}&fromTokenAddress=${fromToken}&toTokenAddress=${toToken}`;
+        const timestamp = new Date().toISOString();
+        const method = "GET";
+        const dataToSign = timestamp + method + queryString;
+        const signature = calculateSignature("OKX", selectedKey.secretKeyOKX, dataToSign, "HmacSHA256");
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `https://web3.okx.com${queryString}`,
+                method: method,
+                headers: {
+                    'OK-ACCESS-KEY': selectedKey.ApiKeyOKX,
+                    'OK-ACCESS-SIGN': signature,
+                    'OK-ACCESS-TIMESTAMP': timestamp,
+                    'OK-ACCESS-PASSPHRASE': selectedKey.PassphraseOKX
+                },
+                //timeout: timeoutApi,
+                success: function (data) {
+
+                    const result = data?.data?.[0];
+                    if (!result) {
+                        reject({ exchange: 'OKXDEX', error: 'Invalid response format' });
+                        return;
+                    }
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, result.estimateGasFee);
+                    
+                    resolve({
+                        exchange: 'OKXDEX',
+                        amountOut: result.toTokenAmount || "0",
+                        price: parseFloat(result.amountOut) / parseFloat(amountIn),
+                        rawRate: parseFloat(amountIn) / parseFloat(result.amountOut), 
+                        feeDEX: parseFloat(result.tradeFee || 0),
+                        feeSwapUSDT : feeSwapUSDT,
+                        timestamp: Date.now()
+                    });
+
+                },
+               error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || res.msg || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'OKXDEX',
+                        apikey:selectedKey.ApiKeyOKX,
+                        error: errText,
+                        status,             // jQuery's internal error status (e.g., 'timeout', 'error')
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+
+            });
+        });
+    },
+    getParaSwapPrice: function (fromToken, toToken, amountIn, fromDecimals, toDecimals, networkId, direction,userAddr,chainName) {
+        
+        apiUrl = `https://api.paraswap.io/prices/?version=6.2&srcToken=${fromToken}&destToken=${toToken}&amount=${amountIn}&srcDecimals=${fromDecimals}&destDecimals=${toDecimals}&side=SELL&network=${networkId}&otherExchangePrices=true&partner=paraswap.io&userAddress=${userAddr}`;
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                //timeout: timeoutApi,
+                success: function (response) {
+                    let amountOut = 0;
+                    let gasEstimate = 0;
+                    let fee = 0;
+                    let gasPrice = 0;
+
+                    const pr = response?.priceRoute;
+                    if (!pr || !pr.destAmount || !pr.gasCostUSD) {
+                        return reject({
+                            exchange: 'ParaSwap',
+                            error: 'Invalid response structure',
+                            rawResponse: response
+                        });
+                    }
+
+                    amountOut = parseFloat(pr.destAmount);
+                    fee = parseFloat(pr.gasCostUSD);           // total biaya swap dalam USD
+                    gasEstimate = parseFloat(pr.gasCost);      // estimasi gas dalam unit
+                    gasPrice = 0;                              // tidak diberikan dalam response
+
+                    // Hitung feeSwapUSDT dari data gas langsung (bukan dari chainName)
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, gasEstimate);
+
+                    if (!amountOut || isNaN(amountOut) || amountOut === 0) {
+                        return reject({
+                            exchange: 'ParaSwap',
+                            error: 'Invalid destAmount',
+                            rawResponse: response
+                        });
+                    }
+
+                    resolve({
+                        exchange: 'ParaSwap',
+                        amountIn: parseFloat(amountIn),
+                        amountOut: amountOut,
+                        price: amountOut / parseFloat(amountIn),
+                        rawRate: parseFloat(amountIn) / amountOut,
+                        feeDEX: fee,
+                        feeSwapUSDT: parseFloat(feeSwapUSDT),
+                        gasEstimate: gasEstimate,
+                        gasPrice: gasPrice,
+                        timestamp: Date.now()
+                    });
+                },
+
+                error: function (xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: 'PARASWAP',
+                        error: errText,
+                        status,
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+            });
+        });
+    },
+
+    getSWOOPPrice: function ( dexSlug,direction,inputAddress, outputAddress, rawAmountIn, decimalsIn, decimalsOut, chainId, userAddr, quotePriceUSDT,chainName ) {
+        return new Promise((resolve, reject) => {
+            const gasData = JSON.parse(localStorage.getItem('MULTIALL_GAS') || '{}');
+            const chainKey = chainName.toLowerCase(); // Misalnya: 'ethereum', 'bsc', dsb
+            const feeUSDT = parseFloat(gasData[chainKey]?.gasFeeUSDT || 0); 
+            
+            const payload = {
+                chainId,
+                aggregatorSlug: dexSlug,
+                sender: userAddr,
+                inToken: {
+                    chainId,
+                    type: 'TOKEN',
+                    address: inputAddress.toLowerCase(),
+                    decimals: decimalsIn
+                },
+                outToken: {
+                    chainId,
+                    type: 'TOKEN',
+                    address: outputAddress.toLowerCase(),
+                    decimals: decimalsOut
+                },
+                amountInWei: String(rawAmountIn),
+                slippageBps: "100",
+               // gasPriceGwei: gasGwei
+            };
+
+            $.ajax({
+                url: 'https://bzvwrjfhuefn.up.railway.app/swap',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: function (res) {
+                    // console.log("SWOOP",res);
+                    const amountOut = parseFloat(res.amountOutWei) / Math.pow(10, decimalsOut);
+                    const normalizedIn = parseFloat(rawAmountIn) / Math.pow(10, decimalsIn);
+                    const priceRaw = amountOut / normalizedIn;
+                    const rawRate = normalizedIn / amountOut;
+                    
+                   resolve({
+                        exchange: dexSlug + " via SWOOP ",
+                        amountOut: res.amountOutWei,
+                        price: priceRaw * quotePriceUSDT,
+                        rawRate,
+                        feeDEX: feeUSDT,
+                        feeSwapUSDT: feeUSDT,
+                        isFallback: true,
+                        gasEstimate: gasData[chainKey]?.gasLimit || 0,
+                        gasPrice: gasData[chainKey]?.gwei || 0,
+                        timestamp: Date.now()
+                    });
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let httpStatus = xhr.status || 0;
+                    let statusText = xhr.statusText || 'No status text';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: dexSlug+' ',
+                        error: errText,
+                        status,             // jQuery's internal error status (e.g., 'timeout', 'error')
+                        httpCode: httpStatus,
+                        httpText: statusText,
+                        rawResponse: responseText
+                    });
+                }
+
+            });
+        });
+    },
+
+    getMarblePrice: function ( fromToken, toToken, amountIn, fromDecimals, toDecimals, chainId, token,  allowedExchanges, direction,chainName ) {
+        const apiUrl = "https://api-v1.marbleland.io/api/v1/jumper/api/p/lifi/advanced/routes";
+        
+        const ALL_KNOWN_DEX = [
+            "1inch", "0x", "paraswap", "dodo", "enso", "odos", "openocean",
+            "stable", "kyberswap", "lifidexaggregator", "jupiter", "sushiswap",
+            "bebop", "aftermath", "superswap", "bluefin7k", "liquidswap", "hyperbloom",
+            "okx", "merkle"
+        ];
+        
+        const optionsObj = {
+            integrator: "swap.marbleland.io",
+            order: "CHEAPEST",
+            slippage: 0.003,
+            maxPriceImpact: 0.4,
+            allowSwitchChain: true,
+            bridges: {
+            deny: [
+                "cbridge", "optimism", "arbitrum", "across", "omni", "celercircle", "allbridge",
+                "thorswap", "symbiosis", "squid", "mayan", "mayanWH", "mayanMCTP", "relay",
+                "polygon", "glacis", "stargateV2", "stargateV2Bus", "chainflip", "gasZipBridge"
+            ]
+            }
+        };
+
+        // Exchange config
+        if (Array.isArray(allowedExchanges) && allowedExchanges.length > 0) {
+            const allowed = allowedExchanges.map(e => e.toLowerCase());
+            if (allowed.length === 1) {
+            const denyList = ALL_KNOWN_DEX.filter(dex => !allowed.includes(dex));
+            optionsObj.exchanges = { deny: denyList };
+            } else {
+            optionsObj.exchanges = { allow: allowed };
+            }
+        }
+
+        const requestData = {
+            fromAmount: amountIn.toString(),
+            fromChainId: parseInt(chainId),
+            fromTokenAddress: fromToken,
+            toChainId: parseInt(chainId),
+            toTokenAddress: toToken,
+            options: optionsObj
+        };
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+            url: apiUrl,
+            method: 'POST',
+            contentType: 'application/json',
+            headers: direction === 'dex_to_cex'
+                ? { 'x-lifi-api-key': '36e8ccb2-d4e1-4321-8ca7-d78bae3d1461.5eacae7f-1e16-4ea9-9d5d-f9dcb03f7d50' }
+                : {},
+            data: JSON.stringify(requestData),
+            //timeout: timeoutApi,
+
+            success: function (response) {
+                const bestRoute = response.routes?.[0];
+                if (!bestRoute) return reject({ exchange: 'LiFi', error: 'No route found' });
+
+                const rawOut = bestRoute.toAmount;
+                const dexUsed = bestRoute.steps?.[0]?.tool || 'Unknown';
+
+                const gasEstimate = parseFloat(
+                bestRoute.steps?.[0]?.estimate?.gasCosts?.[0]?.estimate || 0
+                );
+                const gasPrice = parseFloat(
+                bestRoute.steps?.[0]?.estimate?.gasCosts?.[0]?.price || 0
+                );
+
+                const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, gasEstimate);
+
+                resolve({
+                exchange: dexUsed,
+                amountIn: amountIn,
+                amountOut: rawOut,
+                price: parseFloat(rawOut) / parseFloat(amountIn),
+                gasEstimate: gasEstimate,
+                gasPrice: gasPrice,
+                feeDEX: parseFloat(bestRoute.gasCostUSD || "0"),
+                feeSwapUSDT: feeSwapUSDT,
+                rawRate: parseFloat(amountIn) / parseFloat(rawOut),
+                timestamp: Date.now()
+                });
+            },
+
+            error: function (xhr, status, error) {
+                let errText = 'Unknown error';
+                try {
+                const res = JSON.parse(xhr.responseText);
+                errText = res.message || error?.toString() || status;
+                } catch {
+                errText = error?.toString() || status;
+                }
+
+                reject({
+                exchange: 'LIFI',
+                error: errText,
+                status,
+                httpCode: xhr.status || 0,
+                httpText: xhr.statusText || 'No status text',
+                rawResponse: xhr.responseText
+                });
+            }
+            });
+        });
+    },
+
+    getDZAPPrice: function ({ account, chainId, sellToken, sellDecimals, buyToken, buyDecimals, sellAmount,direction, slippage = 0.3, integratorId = 'dzap',  allowedSources = [] }) {
+        return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'https://api.dzap.io/v1/quotes',
+            method: 'POST',
+            //timeout: timeoutApi,
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                account: account || '0x0000000000000000000000000000000000000000',
+                fromChain: chainId,
+                integratorId,
+                allowedSources: allowedSources.length > 0 ? allowedSources : [ // fallback jika kosong
+                    "bebop",
+                    "enso",
+                    "iceCreamSwap",
+                    "izumi",
+                    "kyberSwap",
+                    "lifi",
+                    "magpie",
+                    "odos",
+                    "okx",
+                    "oneInchViaLifi",
+                    "openOcean",
+                    "paraSwap",
+                    "sushiswap",
+                    "synapse",
+                    "uniswap",
+                    "unizen",
+                    "vaporDex",
+                    "woodSwap",
+                    "xyFinance",
+                    "zerox",
+                    "orbiter",
+                    "relayLink",
+                    "mayanFinance",
+                    "jupiter"
+                ],
+                   
+                    data: [{
+                        amount: sellAmount?.toString(),
+                        srcToken: sellToken,
+                        srcDecimals: parseInt(sellDecimals),
+                        destToken: buyToken,
+                        destDecimals: parseInt(buyDecimals),
+                        slippage,
+                        toChain: chainId,
+                    }]
+
+                }),
+                success: function (response) {
+                    try {
+                        const key = Object.keys(response)[0];
+                        const result = response[key];
+
+                        if (!result || !result.recommendedSource || !result.quoteRates) {
+                            return reject({
+                                exchange: 'DZAP',
+                                error: 'Invalid response structure',
+                                rawResponse: response
+                            });
+                        }
+
+                        const recommended = result.recommendedSource;
+                        const bestQuote = result.quoteRates[recommended];
+
+                        if (!bestQuote || !bestQuote.destAmount || !bestQuote.srcAmount) {
+                            return reject({
+                                exchange: 'DZAP',
+                                error: 'Invalid quote for recommended source',
+                                rawResponse: bestQuote
+                            });
+                        }
+
+                        const rawOut = bestQuote.destAmount;
+                        const rawIn = bestQuote.srcAmount;
+
+                        const price = parseFloat(rawOut) / parseFloat(rawIn);
+                        const rawRate = parseFloat(rawIn) / parseFloat(rawOut);
+
+                        // Estimasi feeSwapUSDT: dari gasFee (ETH → USD)
+                        const feeDEX = parseFloat(bestQuote?.fee?.totalUSD || 0); // ambil dari DZAP
+                        const gasData = bestQuote?.fee?.gasFee?.[0];
+                        const gasAmount = gasData?.amount || 0;
+                        const gasAmountFloat = parseFloat(gasAmount);
+                        const feeSwapUSDT = parseFloat(gasData?.amountUSD || 0);
+                        const gasEstimate = gasAmountFloat > 0 ? gasAmountFloat / 1e9 : 0; // → satuan Gwei (opsional)
+                        const gasPrice = 0; // DZAP tidak sediakan langsung
+
+                        resolve({
+                            exchange: '1INCH', // agar konsisten kolom, atau ganti 'DZAP' kalau beda kolom
+                            amountIn: rawIn,
+                            amountOut: rawOut,
+                            price: price,
+                            rawRate: rawRate,
+                            gasEstimate: gasEstimate,
+                            gasPrice: gasPrice,
+                            feeDEX: feeDEX, // Jika DZAP sediakan fee lain, tambahkan di sini
+                            feeSwapUSDT: feeSwapUSDT,
+                            timestamp: Date.now()
+                        });
+
+                    } catch (e) {
+                        reject({
+                            exchange: 'DZAP',
+                            error: 'Parsing error: ' + e.message,
+                            rawResponse: response
+                        });
+                    }
+                },
+
+                error: function (xhr, status, error) {
+                    let errText = 'Unknown error';
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error;
+                    } catch {
+                        errText = error;
+                    }
+
+                    reject({
+                        exchange: (allowedSources.length ? allowedSources.join(', ') : 'unknown') + ' ',
+                        error: errText,
+                        status,
+                        httpCode: xhr.status || 0,
+                        rawResponse: xhr.responseText
+                    });
+                }
+            });
+        });
+    },
+
+    getZero1inchPrice: function (fromToken, toToken, amountIn, fromDecimals, toDecimals, chainId, direction , chainName) {
+        return new Promise((resolve, reject) => {
+            const baseUrl = "https://api.zeroswap.io/quote/1inch";
+            const params = new URLSearchParams({
+                fromChain: chainId,
+                fromTokenAddress: fromToken,
+                toTokenAddress: toToken,
+                fromTokenDecimals: fromDecimals,
+                toTokenDecimals: toDecimals,
+                sellAmount: amountIn.toString(),
+                slippage: "0.1"
+            });
+
+            const fullUrl = `${baseUrl}?${params.toString()}`;
+
+            $.ajax({
+                url: fullUrl,
+                method: 'GET',
+                //timeout: timeoutApi,
+                success: function (response) {
+                    const q = response?.quote;
+                    if (!q || !q.estimation || !q.estimation.buyAmount) {
+                        return reject({
+                            exchange: 'ZeroSwap',
+                            error: 'Invalid quote or estimation'
+                        });
+                    }
+
+                    const route = q.estimation; // samakan dengan Kyber
+                    const buyAmount = route.buyAmount;
+
+                    const amountInFloat = parseFloat(amountIn) / (10 ** fromDecimals);
+                    const amountOutFloat = parseFloat(buyAmount) / (10 ** toDecimals);
+
+                    const price = amountOutFloat > 0 ? amountOutFloat / amountInFloat : 0;
+                    const rawRate = amountOutFloat > 0 ? amountInFloat / amountOutFloat : 0;
+
+                    // Ambil gas dan gasPrice
+                    const gasEstimate = parseFloat(q.tx?.gas || q.tx?.estimatedGas || 0);
+                    const gasPrice = parseFloat(q.tx?.gasPrice || 0) / 1e9; // wei to gwei
+
+                    // Hitung feeSwap USDT (via localStorage MULTIALL_GAS)
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName || '', gasEstimate);
+
+                    resolve({
+                        exchange: '1inch', // disamakan
+                        amountIn: amountIn,
+                        amountOut: buyAmount,
+                        price: price,
+                        gasEstimate: gasEstimate,
+                        gasPrice: gasPrice,
+                        feeDEX: 0, // ZeroSwap belum punya info ini
+                        feeSwapUSDT: parseFloat(feeSwapUSDT),
+                        rawRate: rawRate,
+                        timestamp: Date.now()
+                    });
+                },
+
+                error: function (xhr, status, error) {
+                    let errText = 'Unknown error';
+                    let responseText = xhr.responseText;
+
+                    try {
+                        const res = JSON.parse(responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: '1inch',
+                        error: errText,
+                        status,
+                        httpCode: xhr.status || 0,
+                        httpText: xhr.statusText || '',
+                        rawResponse: responseText
+                    });
+                }
+            });
+        });
+    },
+
+    get1inchQuotePrice: function(tokenIn, tokenOut, amountIn, chainId, chainName, userAddr) {
+        return new Promise((resolve, reject) => {
+            const gasInfoMap = JSON.parse(localStorage.getItem('MULTIALL_GAS') || '{}');
+            const gasInfo = gasInfoMap[chainName];
+
+            if (!gasInfo || !gasInfo.tokenPrice || !gasInfo.gwei) {
+                return reject({
+                    exchange: '1inch',
+                    error: `Missing gas info for ${chainName} in localStorage`
+                });
+            }
+
+            const gasPriceGwei = gasInfo.gwei;
+            const gasPriceWei = (gasPriceGwei * 1e9).toFixed(0).toString();
+
+            const url = `https://proxy-app.1inch.io/v2.0/v2.2/chain/${chainId}/router/v5/quotesv2?fromTokenAddress=${tokenIn}&toTokenAddress=${tokenOut}&amount=${amountIn}&gasPrice=${gasPriceWei}&preset=maxReturnResult&walletAddress=${userAddr}`;
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                //timeout: timeoutApi,
+                headers: {
+                    'Authorization': 'Bearer eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNiZmY5ZDI3LThhYTEtNDExMy04MTc4LTJhNjkzYmNjYmUyNSIsImV4cCI6MTc1MzY5MjE5MCwiZGV2aWNlIjoiYnJvd3NlciIsImlhdCI6MTc1MzY4ODU5MH0.ECh_mhSEWGOH0v5L1OSd9YptQWOmHyVxKFSWUNnBYJIBIUZ_3f69F4q80_HsiLXLxNtaAR8W8AoFsUkWnIh2YA',
+                    'accept': 'application/json',
+                    'content-type': 'application/json'
+                },
+                success: function (response) {
+                    const result = response?.bestResult;
+                    if (!result || !result.tokenAmount || !result.gas || !result.eth) {
+                        return reject({
+                            exchange: '1inch',
+                            error: 'Invalid response structure',
+                            rawResponse: response
+                        });
+                    }
+
+                    // Hitung feeSwap manual via PriceUtils
+                    const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName, result.gas);
+                        
+                    const amountOut = result.tokenAmount;
+                    const gasEstimate = parseFloat(result.gas);
+
+                    resolve({
+                        exchange: '1inch',
+                        amountIn: amountIn,
+                        amountOut: amountOut,
+                        price: parseFloat(amountOut) / parseFloat(amountIn),
+                        gasEstimate: gasEstimate,
+                        gasPrice: gasPriceWei,
+                        feeDEX: feeSwapUSDT,
+                        feeSwapUSDT: feeSwapUSDT,
+                        rawRate: parseFloat(amountIn) / parseFloat(amountOut),
+                        timestamp: Date.now()
+                    });
+                },
+                error: function(xhr, status, error) {
+                    let errText = 'Unknown error';
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errText = res.message || error?.toString() || status;
+                    } catch {
+                        errText = error?.toString() || status;
+                    }
+
+                    reject({
+                        exchange: '1inch',
+                        error: errText,
+                        status,
+                        httpCode: xhr.status || 0,
+                        httpText: xhr.statusText || '',
+                        rawResponse: xhr.responseText
+                    });
+                }
+            });
+        });
+    },
+
+    getZeroKyberPrice: function (fromToken, toToken, amountIn, fromDecimals, toDecimals, chainId, direction , chainName) {
+            return new Promise((resolve, reject) => {
+                const baseUrl = "https://api.zeroswap.io/quote/kyberswap";
+                const params = new URLSearchParams({
+                    fromChain: chainId,
+                    fromTokenAddress: fromToken,
+                    toTokenAddress: toToken,
+                    fromTokenDecimals: fromDecimals,
+                    toTokenDecimals: toDecimals,
+                    sellAmount: amountIn.toString(),
+                    slippage: "0.1"
+                });
+
+                const fullUrl = `${baseUrl}?${params.toString()}`;
+
+                $.ajax({
+                    url: fullUrl,
+                    method: 'GET',
+                    //timeout: timeoutApi,
+                    success: function (response) {
+                        const q = response?.quote;
+                        if (!q || !q.estimation || !q.estimation.buyAmount) {
+                            return reject({
+                                exchange: 'ZeroSwap',
+                                error: 'Invalid quote or estimation'
+                            });
+                        }
+
+                        const route = q.estimation; // samakan dengan Kyber
+                        const buyAmount = route.buyAmount;
+
+                        const amountInFloat = parseFloat(amountIn) / (10 ** fromDecimals);
+                        const amountOutFloat = parseFloat(buyAmount) / (10 ** toDecimals);
+
+                        const price = amountOutFloat > 0 ? amountOutFloat / amountInFloat : 0;
+                        const rawRate = amountOutFloat > 0 ? amountInFloat / amountOutFloat : 0;
+
+                        // Ambil gas dan gasPrice
+                        const gasEstimate = parseFloat(q.tx?.gas || q.tx?.estimatedGas || 0);
+                        const gasPrice = parseFloat(q.tx?.gasPrice || 0) / 1e9; // wei to gwei
+
+                        // Hitung feeSwap USDT (via localStorage MULTIALL_GAS)
+                        const feeSwapUSDT = PriceUtils.getGasFeeUSD(chainName || '', gasEstimate);
+
+                        resolve({
+                            exchange: 'kyber', // disamakan
+                            amountIn: amountIn,
+                            amountOut: buyAmount,
+                            price: price,
+                            gasEstimate: gasEstimate,
+                            gasPrice: gasPrice,
+                            feeDEX: 0, // ZeroSwap belum punya info ini
+                            feeSwapUSDT: parseFloat(feeSwapUSDT),
+                            rawRate: rawRate,
+                            timestamp: Date.now()
+                        });
+                    },
+
+                    error: function (xhr, status, error) {
+                        let errText = 'Unknown error';
+                        let responseText = xhr.responseText;
+
+                        try {
+                            const res = JSON.parse(responseText);
+                            errText = res.message || error?.toString() || status;
+                        } catch {
+                            errText = error?.toString() || status;
+                        }
+
+                        reject({
+                            exchange: 'kyber',
+                            error: errText,
+                            status,
+                            httpCode: xhr.status || 0,
+                            httpText: xhr.statusText || '',
+                            rawResponse: responseText
+                        });
+                    }
+                });
+            });
+        },
+};
+
+// Utility Functions
+const PriceUtils = {
+     // Tambahan normalisasi dan perhitungan fee dalam USD
+    normalizeAmount(amount, decimals) {
+        return parseFloat(amount) / Math.pow(10, decimals);
+    },
+
+    getGasFeeUSD(chainKey, gasEstimate) {
+        const gasData = JSON.parse(localStorage.getItem("MULTIALL_GAS") || "{}");
+        const info = gasData[chainKey];
+
+        const tokenPrice = info.tokenPrice; // Harga native token dalam USDT
+        const gasPriceGwei = info.gwei;
+        const gasInNative = (gasEstimate * gasPriceGwei) / 1e9; // Konversi ke native token
+        return gasInNative * tokenPrice; // Konversi ke USDT
+    },
+
+    // Convert token symbol to CEX format
+    formatCEXSymbol: function(tokenSymbol, pairSymbol) {
+        return `${tokenSymbol}${pairSymbol}`;
+    },
+
+    // Convert token symbol to Gate.io format
+    formatGateSymbol: function(tokenSymbol, pairSymbol) {
+        return `${tokenSymbol}_${pairSymbol}`;
+    },
+
+    // Get chain ID from chain name
+    getChainId: function(chainName) {
+        const chainMap = {
+            "BSC": 56,
+            "Ethereum": 1,
+            "Polygon": 137,
+            "Arbitrum": 42161,
+            "Base": 8453,
+            "Aolana": 501
+        };
+        return chainMap[chainName] || '1';
+    },
+
+    // Calculate amount with decimals
+    calculateAmount: function(amount, decimals) {
+        return BigInt(Math.round(Math.pow(10, decimals) * amount));
+    },
+
+    // Calculate PNL
+    calculatePNL: function(buyPrice, sellPrice, amount, fee) {
+        const revenue = sellPrice * amount;
+        const cost = buyPrice * amount + fee;
+        return revenue - cost;
+    },
+
+    // Format fee display
+    formatFee: function(fee) {
+        return `$${fee.toFixed(4)}`;
+    },
+
+    // Format PNL display
+    formatPNL: function(pnl) {
+        const sign = pnl >= 0 ? '+' : '';
+        return `${sign}$${pnl.toFixed(2)}`;
+    },
+
+    formatPrice(val) {
+        const price = parseFloat(val);
+        if (isNaN(price)) return '-';
+        if (price === 0) return '$0.0000';
+
+        if (price >= 1) {
+            return `${price.toFixed(4)}`;
+        }
+
+        let strPrice = price.toFixed(20).replace(/0+$/, '');
+        let match = strPrice.match(/0\.(0*)(\d+)/); // nol dan angka signifikan
+
+        if (match) {
+            const zeroCount = match[1].length;
+            let significant = match[2].substring(0, 4).padEnd(4, '0');
+
+            if (zeroCount >= 2) {
+                return `0.{${zeroCount}}${significant}`;
+            } else {
+                return `0.${match[1]}${significant}`;
+            }
+        }
+
+        return `${price.toFixed(8)}`;
+    },
+
+    formatFee(val) {
+        return `$${parseFloat(val).toFixed(2)}`;
+    },
+
+    formatPNL(val) {
+        const prefix = val >= 0 ? '+' : '';
+        return `${prefix}${parseFloat(val).toFixed(2)}`;
+    }
+
+};
+
+async function checkAllCEXWalletsPerChain() {
+    $('#loadingOverlay').fadeIn(150);
+    const results = {};
+
+    console.log("🚀 Memulai pengecekan wallet & fee WD semua CEX...");
+    $('#infoupdateWALLET').html('🚀 Memulai pengecekan semua wallet & fee WD CEX...');
+
+    // ✅ Hanya panggil sekali per CEX
+    $('#infoupdateWALLET').html('📡 Ambil Data dari BINANCE...');
+    const binanceData = await fetchBinance();
+
+    $('#infoupdateWALLET').html('📡 Ambil Data dari MEXC...');
+    const mexcData = await fetchMexc();
+
+    $('#infoupdateWALLET').html('📡 Ambil Data dari GATE...');
+    const gateData = await fetchGate();
+
+    // 🔁 Proses berdasarkan kombinasi chain dan cexKey
+    for (const chainName in CEXWallets) {
+        const walletList = CEXWallets[chainName].WALLET_CEX;
+
+        for (const cexName in walletList) {
+            const cexKey = getCEXKeyAlias(cexName);
+            const chainCEX = walletList[cexName].chainCEX;
+            const storageKey = `${chainCEX}_${cexKey}`;
+
+            let allData = [];
+            if (cexKey === "BINANCE") allData = binanceData;
+            else if (cexKey === "MEXC") allData = mexcData;
+            else if (cexKey === "GATEIO") allData = gateData;
+
+            results[storageKey] = allData.filter(item =>
+                item.chain?.toUpperCase() === chainCEX.toUpperCase()
+            );
+
+           // console.log(`📦 Loaded data for ${storageKey}: ${results[storageKey].length} token(s)`);
+            $('#infostatus').html(`Hasil Data ${storageKey}: ${results[storageKey].length} token(s)`);
+        }
+    }
+
+   // console.log("🔧 Menyisipkan info wallet ke setiap token di MULTIALL_TOKENS...");
+
+    const tokenMulti = JSON.parse(localStorage.getItem("MULTIALL_TOKENS") || "[]");
+
+    const tokenMultiUpdated = tokenMulti.map((token, idx) => {
+        const { symbol, pairSymbol, chain, selectedCexs } = token;
+        const cexInfo = {};
+        const chainConfig = CEXWallets[chain.toLowerCase()];
+
+        console.log(`\n📍 [${idx + 1}] Token: ${symbol} on ${chain}`);
+
+        for (const cex of selectedCexs || []) {
+            const cexKey = getCEXKeyAlias(cex);
+            const chainCEX = chainConfig?.WALLET_CEX?.[cexKey]?.chainCEX;
+            const key = `${chainCEX}_${cexKey}`;
+            const walletList = results[key];
+
+            console.log(`🔍 Cek di: ${key} (CEX ${cex})`);
+
+            if (!walletList || !Array.isArray(walletList)) {
+                console.warn(`⛔️ Tidak ada wallet list untuk ${key}`);
+                continue;
+            }
+
+            const addToCexInfo = (tokenName) => {
+                const symbolClean = tokenName?.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                const match = walletList.find(entry =>
+                    entry.tokenName?.toUpperCase().replace(/[^A-Z0-9]/g, '') === symbolClean ||
+                    entry.token?.toUpperCase().replace(/[^A-Z0-9]/g, '') === symbolClean
+                );
+
+                if (match) {
+                    if (!cexInfo[cex]) cexInfo[cex] = {};
+                    cexInfo[cex][symbolClean] = {
+                        depo: !!match.depositEnable,
+                        wd: !!match.withdrawEnable,
+                        feewd: parseFloat(match.feeWDs || 0)
+                    };
+                    console.log(`✅ MATCHED: ${symbolClean} in ${key} | fee: ${match.feeWDs}, depo: ${match.depositEnable}, wd: ${match.withdrawEnable}`);
+                } else {
+                    console.warn(`❌ NOT FOUND: ${symbolClean} in ${key}`);
+                }
+            };
+
+            // Cek token utama (symbol) & pasangannya (pairSymbol)
+            addToCexInfo(symbol);
+            if (pairSymbol) addToCexInfo(pairSymbol);
+        }
+
+        return {
+            ...token,
+            cexInfo: Object.keys(cexInfo).length > 0 ? cexInfo : token.cexInfo || {}
+        };
+    });
+
+    try {
+        localStorage.setItem("MULTIALL_TOKENS", JSON.stringify(tokenMultiUpdated));
+        console.log("✅ MULTIALL_TOKENS updated:", tokenMultiUpdated);
+
+        app.logAction(`UPDATE WALLETS`);
+        setTimeout(() => {
+            $('#loadingOverlay').fadeOut(200);
+            alert("🎉 Update wallet berhasil! Halaman akan direfresh.");
+            location.reload();
+        }, 800);
+
+    } catch (e) {
+        $('#loadingOverlay').fadeOut(200);
+        console.error("❌ Gagal menyimpan MULTIALL_TOKENS:", e);
+        alert("❌ Gagal menyimpan MULTIALL_TOKENS: " + e.message);
+    }
+}
+
+async function fetchBinance() {
+    const { ApiKey, ApiSecret } = CONFIG_CEX.BINANCE;
+    const timestamp = Date.now().toString();
+    const queryString = `timestamp=${timestamp}`;
+    const signature = calculateSignature("BINANCE", ApiSecret, queryString, "HmacSHA256");
+    // bisa dibrowser
+    const url = `https://proxykanan.awokawok.workers.dev/?https://api-gcp.binance.com/sapi/v1/capital/config/getall?${queryString}&signature=${signature}`;
+    
+   // const originalUrl = `https://api3.binance.com/sapi/v1/capital/config/getall?${queryString}&signature=${signature}`;
+   // const url = withProxy(originalUrl); // 💡 gunakan proxy Vercel Anda
+
+    const response = await $.ajax({
+        url,
+        headers: { "X-MBX-ApiKey": ApiKey },
+        method: "GET"
+    });
+
+    const result = [];
+
+    for (const item of response) {
+        if (!item.trading || !Array.isArray(item.networkList)) continue;
+
+        for (const net of item.networkList) {
+            result.push({
+                cex: "BINANCE",
+                tokenName: item.coin,
+                chain: net.network,
+                feeWDs: parseFloat(net.withdrawFee || 0),
+                depositEnable: !!net.depositEnable,
+                withdrawEnable: !!net.withdrawEnable
+            });
+        }
+    }
+
+    console.log("✅ fetchBinance():", result.length, "items");
+    return result;
+}
+
+async function fetchMexc() {
+    const { ApiKey, ApiSecret } = CONFIG_CEX.MEXC;
+    const timestamp = Date.now();
+    const queryString = `recvWindow=5000&timestamp=${timestamp}`;
+    const signature = calculateSignature("MEXC", ApiSecret, queryString);
+
+    const url = `https://proxykiri.awokawok.workers.dev/?https://api.mexc.com/api/v3/capital/config/getall?${queryString}&signature=${signature}`;
+    const response = await $.ajax({
+        url,
+        headers: { "X-MEXC-APIKEY": ApiKey },
+        method: "GET"
+    });
+
+    const result = [];
+
+    for (const item of response) {
+        if (!Array.isArray(item.networkList)) continue;
+
+        for (const net of item.networkList) {
+            result.push({
+                cex: "MEXC",
+                tokenName: item.coin,
+                chain: net.netWork,
+                feeWDs: parseFloat(net.withdrawFee || 0),
+                depositEnable: !!net.depositEnable,
+                withdrawEnable: !!net.withdrawEnable
+            });
+        }
+    }
+
+    console.log("✅ fetchMexc():", result.length, "items");
+    return result;
+}
+
+async function fetchGate() {
+    const { ApiKey, ApiSecret } = CONFIG_CEX.GATE;
+    const host = "https://proxykiri.awokawok.workers.dev/?https://api.gateio.ws";
+    const timestamp = Math.floor(Date.now() / 1000);
+    const method = "GET";
+    const prefix = "/api/v4";
+
+    const buildSignature = (url, body) => {
+        const bodyHash = CryptoJS.SHA512(body).toString(CryptoJS.enc.Hex);
+        const signString = `${method}\n${prefix}${url}\n\n${bodyHash}\n${timestamp}`;
+        return CryptoJS.HmacSHA512(signString, ApiSecret).toString(CryptoJS.enc.Hex);
+    };
+
+    const headers = {
+        KEY: ApiKey,
+        SIGN: buildSignature("/wallet/withdraw_status", ""),
+        Timestamp: timestamp
+    };
+
+    const wdData = await $.ajax({
+        url: `${host}${prefix}/wallet/withdraw_status`,
+        method,
+        headers
+    });
+
+    const statusData = await $.ajax({
+        url: `${host}${prefix}/spot/currencies`,
+        method,
+        headers
+    });
+
+    const result = [];
+
+    for (const item of statusData) {
+        if (!Array.isArray(item.chains)) continue;
+
+        for (const chain of item.chains) {
+            const feeItem = wdData.find(f =>
+                f.currency?.toUpperCase() === item.currency?.toUpperCase() &&
+                f.withdraw_fix_on_chains &&
+                f.withdraw_fix_on_chains[chain.name]
+            );
+
+            result.push({
+                cex: "GATEIO",
+                tokenName: item.currency,
+                chain: chain.name,
+                feeWDs: feeItem ? parseFloat(feeItem.withdraw_fix_on_chains[chain.name]) : 0,
+                depositEnable: !chain.deposit_disabled,
+                withdrawEnable: !chain.withdraw_disabled
+            });
+        }
+    }
+
+    console.log("✅ fetchGate():", result.length, "items");
+    return result;
+}
+
+// Export for use in main application
+window.CEXAPIs = CEXAPIs;
+window.DEXAPIs = DEXAPIs;
+window.PriceUtils = PriceUtils;
+

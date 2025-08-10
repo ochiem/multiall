@@ -19,7 +19,7 @@ class TokenPriceMonitor {
         this.currentEditingToken = null;        
         this.searchKeyword = '';
         this.sortAscending = true;
-        this.selectedChains = JSON.parse(localStorage.getItem('MULTIALL_selectedChains')) || [];
+        this.selectedChains = JSON.parse(localStorage.getItem('MULTIALL_CHAINS')) || [];
         this.isAutorun = false;
         this.autorunTimer = null;
 
@@ -29,7 +29,7 @@ class TokenPriceMonitor {
 
     // Initialize the application
     init() {
-        this.selectedChains = JSON.parse(localStorage.getItem('MULTIALL_selectedChains')) || [];
+        this.selectedChains = JSON.parse(localStorage.getItem('MULTIALL_CHAINS')) || [];
 
         this.loadTokenTable();
         this.updateStats();
@@ -236,7 +236,7 @@ class TokenPriceMonitor {
                 return $(this).val();
             }).get();
 
-            localStorage.setItem('MULTIALL_selectedChains', JSON.stringify(selectedChains));
+            localStorage.setItem('MULTIALL_CHAINS', JSON.stringify(selectedChains));
             this.selectedChains = selectedChains; // <-- Penting!
 
             this.generateEmptyTable();
@@ -670,12 +670,12 @@ class TokenPriceMonitor {
     // 🔍 Ambil selectedChains dari localStorage
     let selectedChains = [];
     try {
-        const stored = localStorage.getItem("MULTIALL_selectedChains");
+        const stored = localStorage.getItem("MULTIALL_CHAINS");
         if (stored) {
             selectedChains = JSON.parse(stored).map(c => c.toLowerCase());
         }
     } catch (e) {
-        console.warn("MULTIALL_selectedChains invalid:", e);
+        console.warn("MULTIALL_CHAINS invalid:", e);
     }
 
     // 🔗 Filter hanya chain yang terpilih
@@ -735,7 +735,7 @@ class TokenPriceMonitor {
     }
 
     $('#gasTokenPrices').html(gasTextParts.join(" "));
-    localStorage.setItem('MULTIALL_gasTokenInfo', JSON.stringify(gasTokenInfo));
+    localStorage.setItem('MULTIALL_GAS', JSON.stringify(gasTokenInfo));
 
     if (successCount === 0) {
         throw new Error("Gagal mengambil data gas untuk semua chain.");
@@ -826,7 +826,7 @@ class TokenPriceMonitor {
         }
 
         $('#gasTokenPrices').html(gasTextParts.join(" "));
-        localStorage.setItem('MULTIALL_gasTokenInfo', JSON.stringify(gasTokenInfo));
+        localStorage.setItem('MULTIALL_GAS', JSON.stringify(gasTokenInfo));
 
         if (successCount === 0) {
             throw new Error("Gagal mengambil data gas untuk semua chain.");
@@ -1680,9 +1680,9 @@ class TokenPriceMonitor {
 
         const userName = $userEl.val()?.trim() || '';
         const wallet = $walletEl.val()?.trim() || '';
-        const tokensPerBatch = parseInt($('#tokensPerBatch').val(), 3) || 3;
-        const delayBetweenGrup = parseInt($('#delayBetweenGrup').val(), 400) || 400;
-        const timeoutCount = parseInt($('#TimeoutCount').val(), 4000) || 10000;
+        const tokensPerBatch = parseInt($('#tokensPerBatch').val(), 10) || 3;
+        const delayBetweenGrup = parseInt($('#delayBetweenGrup').val(), 10) || 400;
+        const timeoutCount = parseInt($('#TimeoutCount').val(), 10) || 10000;
         const pnlFilter = parseFloat($('#PNLFilter').val()) || 0;
 
         if (!userName || userName === 'XXX') {
@@ -3459,7 +3459,7 @@ class TokenPriceMonitor {
     }
 
     tryAutoScrollToRow(firstToken) {
-        const isAutoScroll = localStorage.getItem('MULTIALL_autoScroll') === 'true';
+        const isAutoScroll = localStorage.getItem('MULTIALL_SCROLL') === 'true';
         if (!isAutoScroll) return;
 
         const firstCEX = (firstToken).selectedCexs?.[0] || 'binance';
@@ -3550,13 +3550,13 @@ $(document).ready(function() {
     });
 
       // Inisialisasi nilai dari localStorage
-    const saved = localStorage.getItem('MULTIALL_autoScroll');
+    const saved = localStorage.getItem('MULTIALL_SCROLL');
     $('#autoScrollCheckbox').prop('checked', saved === 'true');
 
     // Simpan perubahan ke localStorage saat dicentang/ubah
     $('#autoScrollCheckbox').on('change', function () {
         const isChecked = $(this).is(':checked');
-        localStorage.setItem('MULTIALL_autoScroll', isChecked);
+        localStorage.setItem('MULTIALL_SCROLL', isChecked);
 
         // Tambahkan alert berdasarkan status
         if (isChecked) {
