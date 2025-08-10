@@ -1,11 +1,11 @@
 // Token Price Monitor Application - Updated for Frontend API Calls
 const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI'];
-const CexList = ['Binance', 'MEXC', 'Gate', 'INDODAX'];
+const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
 
 const CexShortMap = {
     Binance: 'BINC',
     MEXC: 'MEXC',
-    Gate: 'GATE',
+    Gateio: 'GATE',
     INDODAX: 'INDX'
 };
 
@@ -19,33 +19,34 @@ class TokenPriceMonitor {
         this.currentEditingToken = null;        
         this.searchKeyword = '';
         this.sortAscending = true;
+        this.selectedChains = JSON.parse(localStorage.getItem('MULTIALL_selectedChains')) || [];
         this.isAutorun = false;
         this.autorunTimer = null;
 
         this.init();
+
     }
 
     // Initialize the application
     init() {
-       
+        this.selectedChains = JSON.parse(localStorage.getItem('MULTIALL_selectedChains')) || [];
+
+        this.loadTokenTable();
+        this.updateStats();
+        this.bindEvents();
+        this.loadSettingsForm();
+        this.fetchGasTokenPrices();
+        this.SearchCTokenMonitoring(); 
+        this.generateEmptyTable();
+        this.fetchUSDTtoIDRRate();
+        this.initializeChainCheckbox();
+        this.initPairSymbolAutocomplete();
+
          // ✅ Set timeout global dari settings ke window
         const timeoutValue = this.settings?.TimeoutCount || 4000;
         window.timeoutApi = timeoutValue;
-        
-        window.addEventListener('storage', (event) => {
-            if (event.key === 'MULTI_SETTING_SCAN') {
-                const config = JSON.parse(event.newValue || '{}');
-                if (config.run === "NO") {
-                    clearInterval(this.autorunTimer);
-                    console.log("🚨 Scan dihentikan dari tab lain!");
-                    alert("⛔ Scan dihentikan dari tab lain!");
-                    // tambahkan efek lainnya jika perlu
-                    location.reload();
-                }
-            }
-        });
 
-        const lastWalletUpdate = localStorage.getItem("MULTI_ACTIONS");
+        const lastWalletUpdate = localStorage.getItem("MULTIALL_ACTIONS");
         $('#infostatus').html(lastWalletUpdate ? lastWalletUpdate : "???");
 
          // 🚫 Jika setting belum valid, nonaktifkan semua tombol
@@ -79,19 +80,6 @@ class TokenPriceMonitor {
         this.dexErrorCount = {}; // untuk menyimpan jumlah error per DEX
         DexList.forEach(dex => this.dexErrorCount[dex] = 0);
 
-        this.selectedChains =  [];
-        this.loadTokenTable();
-        this.updateStats();
-        this.bindEvents();
-        this.loadSettingsForm();
-        this.ShowConfigScan();
-        this.fetchGasTokenPrices();
-        this.SearchCTokenMonitoring(); 
-        this.generateEmptyTable();
-        this.fetchUSDTtoIDRRate();
-        this.initPairSymbolAutocomplete();
-        this.initSettingScan();
-
     }
 
     incrementDexError(dexName) {
@@ -112,342 +100,8 @@ class TokenPriceMonitor {
         }
     }
 
-    initSettingScan() {
-        this.updateSelectedCoins = this.updateSelectedCoins.bind(this);
-
-        // Ambil data simpanan dari localStorage
-        const storedConfig = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-
-        // Reset semua checkbox
-        $('#SettingScan input[name="set_chain"]').prop('checked', false);
-        $('#SettingScan input[name="set_cex"]').prop('checked', false);
-
-        // ✅ Centang CHAIN sesuai simpanan
-        (storedConfig.chains || []).forEach(val => {
-            $(`#SettingScan input[name="set_chain"][value="${val}"]`).prop('checked', true);
-        });
-
-        // ✅ Centang CEX sesuai simpanan
-        const selectedCexNames = (storedConfig.cexs || []).map(c => c.name);
-        selectedCexNames.forEach(name => {
-            $(`#SettingScan input[name="set_cex"][value="${name}"]`).prop('checked', true);
-        });
-
-        // ✅ Jalankan updateSelectedCoins agar checkbox CEX–CHAIN muncul
-        this.updateSelectedCoins();
-
-        // ✅ Centang CEX–CHAIN sesuai data simpanan
-        setTimeout(() => {
-            // Reset semua dulu agar tidak tertinggal dari auto-centang sebelumnya
-            $('#SettingScan input[name="set_cex_chain"]').prop('checked', false);
-
-            (storedConfig.cexs || []).forEach(cex => {
-                (cex.chains || []).forEach(chain => {
-                    const val = `${cex.name}|${chain}`;
-                    $(`#SettingScan input[name="set_cex_chain"][value="${val}"]`).prop('checked', true);
-                });
-            });
-        }, 100); // Pastikan checkbox sudah muncul di DOM
-
-        // Bind ulang event
-        $('#SettingScan input[name="set_chain"]').off('change').on('change', this.updateSelectedCoins);
-        $('#SettingScan input[name="set_cex"]').off('change').on('change', this.updateSelectedCoins);
-    }
-
-    initSettingScanLAMA() {
-        this.updateSelectedCoins = this.updateSelectedCoins.bind(this);
-
-        // Ambil data simpanan dari localStorage
-        const storedConfig = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-
-        // Reset semua checkbox
-        $('#SettingScan input[name="set_chain"]').prop('checked', false);
-        $('#SettingScan input[name="set_cex"]').prop('checked', false);
-
-        // Centang sesuai simpanan
-        (storedConfig.chains || []).forEach(val => {
-            $(`#SettingScan input[name="set_chain"][value="${val}"]`).prop('checked', true);
-        });
-
-        (storedConfig.cexs || []).forEach(val => {
-            $(`#SettingScan input[name="set_cex"][value="${val}"]`).prop('checked', true);
-        });
-
-        // Jalankan update tampilan jumlah token
-        this.updateSelectedCoins();
-
-        // Bind ulang event change
-        $('#SettingScan input[name="set_chain"]').off('change').on('change', this.updateSelectedCoins);
-        $('#SettingScan input[name="set_cex"]').off('change').on('change', this.updateSelectedCoins);
-        
-    }
-
     // Bind event handlers
     bindEvents() {
-        this.updateSelectedCoins = this.updateSelectedCoins.bind(this);
-        // simpan data settingan untuk koin yang discan (cex,chains)
-        $('#saveScanSettingsBtn').on('click', (e) => {
-            e.preventDefault();
-
-            // 1. Ambil pilihan CHAIN
-            const selectedChains = $('#SettingScan input[name="set_chain"]:checked')
-                .map(function () { return this.value; }).get();
-
-            // 2. Ambil pilihan CEX + CHAIN
-            const selectedCexChains = $('#SettingScan input[name="set_cex_chain"]:checked')
-                .map(function () {
-                    const [cex, chain] = this.value.split('|');
-                    return { cex, chain };
-                }).get();
-
-            // 3. Kelompokkan per CEX
-            const cexMap = {}; // { Binance: ['BSC', 'Ethereum'], ... }
-            selectedCexChains.forEach(({ cex, chain }) => {
-                if (!selectedChains.includes(chain)) return; // Hanya jika chain utama dipilih
-                if (!cexMap[cex]) cexMap[cex] = [];
-                if (!cexMap[cex].includes(chain)) cexMap[cex].push(chain);
-            });
-
-            // 4. Siapkan data setting untuk disimpan
-            const settingConfig = {
-                chains: selectedChains,
-                cexs: Object.entries(cexMap).map(([name, chains]) => ({ name, chains }))
-            };
-
-            // ✅ Simpan konfigurasi ke localStorage
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(settingConfig));
-
-            // 5. Ambil semua token master
-            const masterTokens = JSON.parse(localStorage.getItem('MULTI_MASTER_TOKENS') || '[]');
-
-            // 6. Filter token sesuai pilihan CEX dan CHAIN
-            const selectedTokens = masterTokens
-                .filter(token => {
-                    if (!token.isActive) return false;
-                    if (!selectedChains.includes(token.chain)) return false;
-
-                    // Cek apakah ada CEX dari settingConfig yang cocok
-                    const matchedCex = settingConfig.cexs.filter(({ name, chains }) => {
-                        return chains.includes(token.chain) && token.selectedCexs?.includes(name);
-                    });
-
-                    return matchedCex.length > 0;
-                })
-                .map(token => {
-                    // Ambil hanya CEX yang valid sesuai setting
-                    const filteredCexs = settingConfig.cexs
-                        .filter(({ name, chains }) => {
-                            return chains.includes(token.chain) && token.selectedCexs?.includes(name);
-                        })
-                        .map(({ name }) => name);
-
-                    // Return token baru dengan selectedCexs yang disesuaikan
-                    return {
-                        ...token,
-                        selectedCexs: filteredCexs
-                    };
-                })
-                // Buang token jika tidak punya selectedCexs valid
-                .filter(token => token.selectedCexs.length > 0);
-
-
-            // ✅ Simpan hasil token yang terfilter
-            localStorage.setItem('MULTI_SELECT_TOKENS', JSON.stringify(selectedTokens));
-
-            // Logging dan konfirmasi
-            if (typeof this?.logAction === 'function') this.logAction(`SETTING SCANNER`);
-            alert(`✅ SIMPAN SETTING SCANNER BERHASIL!\nTERPILIH ${selectedTokens.length} KOIN`);
-            location.reload();
-        });
-
-        $('#ModalConfigScan').on('show.bs.modal', () => {
-            const config = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-            if (!config) return;
-
-            $('#ConfigScanForm input[type="checkbox"]').prop('checked', false);
-
-            (config.chains || []).forEach(val => {
-                $(`#ConfigScanForm input[name="chain"][value="${val}"]`).prop('checked', true);
-            });
-
-            (config.cexs || []).forEach(val => {
-                $(`#ConfigScanForm input[name="cex"][value="${val}"]`).prop('checked', true);
-            });
-
-            // ✅ Sekarang this benar-benar class instance
-            this.updateCexCountsBySelectedChains();
-
-             // ✅ Tambah listener ke CHAIN dan CEX
-            $('#ConfigScanForm input[name="chain"]').off('change').on('change', this.updateCexCountsBySelectedChains);
-            $('#ConfigScanForm input[name="cex"]').off('change').on('change', this.updateCexCountsBySelectedChains);
-
-        });
-
-        $('#saveSyncKoinBtn').on('click', async (event) => {
-            const selectedChains = $('#SyncKoinForm input[name="sync_chain"]:checked')
-                .map(function () { return this.value.toLowerCase(); }).get();
-
-            if (selectedChains.length === 0) {
-                alert("⚠️ Pilih minimal satu chain.");
-                return;
-            }
-
-            const selectedDexs = $('#SyncKoinForm input[name="sync_dex"]:checked')
-                .map(function () { return this.value; }).get();
-
-            if (selectedDexs.length === 0 || selectedDexs.length > 4) {
-                alert("⚠️ Pilih minimal 1 sampai maksimal 4 DEX.");
-                return;
-            }
-
-            const selectedCexs = $('#SyncKoinForm input[name="sync_cex"]:checked')
-                .map(function () { return this.value.toLowerCase(); }).get();
-
-            if (selectedCexs.length === 0) {
-                alert("⚠️ Pilih minimal 1 CEX.");
-                return;
-            }
-
-            const modalCexToDex = parseFloat($('#sync_modal_cex_dex').val()) || 0;
-            const modalDexToCex = parseFloat($('#sync_modal_dex_cex').val()) || 0;
-
-            if (modalCexToDex <= 0 || modalDexToCex <= 0) {
-                alert('⚠️ Modal harus diisi (lebih dari 0).');
-                return;
-            }
-
-            // ❄️ Tampilkan loading freeze
-            $('body').append(`<div id="freezeOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000000a0;z-index:9999;display:flex;justify-content:center;align-items:center;color:#fff;font-size:1.5em">⏳ Syncing data...</div>`);
-
-            const tokenMap = {}; // key = sc_in + chain
-            let idCounter = 1;
-
-            for (const chain of selectedChains) {
-                const config = CHAIN_CONFIG[chain];
-                if (!config || !config.DATAJSON) continue;
-
-                try {
-                    const res = await fetch(config.DATAJSON);
-                    const json = await res.json();
-                    const tokens = json.token || [];
-
-                    tokens.forEach(t => {
-                        const jsonCex = (t.cex || '').toLowerCase();
-                        const match = selectedCexs.includes(jsonCex);
-
-                        if (!match) return; // ⛔️ skip token jika cex-nya tidak terpilih
-
-                        // Normalisasi nama CEX
-                        const properCex = jsonCex === 'gate' ? 'Gate'
-                                        : jsonCex === 'binance' ? 'Binance'
-                                        : jsonCex === 'mexc' ? 'MEXC'
-                                        : jsonCex === 'indodax' ? 'INDODAX'
-                                        : jsonCex.charAt(0).toUpperCase() + jsonCex.slice(1).toLowerCase();
-
-                        const key = t.sc_in.toLowerCase() + '|' + config.name;
-
-                        if (!tokenMap[key]) {
-                            tokenMap[key] = {
-                                id: idCounter++,
-                                symbol: t.symbol_in,
-                                pairSymbol: t.symbol_out,
-                                contractAddress: t.sc_in,
-                                pairContractAddress: t.sc_out,
-                                decimals: t.des_in,
-                                pairDecimals: t.des_out,
-                                chain: config.name,
-                                modalCexToDex,
-                                modalDexToCex,
-                                isActive: t.status === true || t.status === "TRUE",
-                                selectedCexs: [properCex],
-                                selectedDexs: selectedDexs
-                            };
-                        } else {
-                            if (!tokenMap[key].selectedCexs.includes(properCex)) {
-                                tokenMap[key].selectedCexs.push(properCex);
-                            }
-                        }
-                    });
-                } catch (err) {
-                    console.error(`❌ Gagal fetch ${config.DATAJSON}`, err);
-                }
-            }
-
-            const allTokenData = Object.values(tokenMap);
-
-            // Simpan ke localStorage
-            localStorage.setItem('MULTI_MASTER_TOKENS', JSON.stringify(allTokenData));
-
-            // Hapus freeze
-            $('#freezeOverlay').remove();
-
-            this.logAction(`SIKRONISASI DATA`);
-            // Tampilkan alert sukses
-            alert(`✅ Berhasil SYNC ${allTokenData.length} KOIN. SILAKAN RELOAD HALAMAN`);
-
-            // Tutup modal
-            $('#ModalSyncKoin').modal('hide');
-        });
-
-        // Saat tombol Save Config diklik
-        $('#saveConfigScanBtn').on('click', function () {
-            const selectedChains = [];
-            const selectedCexs = [];
-
-            $('#ConfigScanForm input[name="chain"]').each(function () {
-                if (this.checked) selectedChains.push(this.value.toUpperCase()); // BSC, ERC, ...
-            });
-
-            $('#ConfigScanForm input[name="cex"]').each(function () {
-                if (this.checked) selectedCexs.push(this.value); // Binance, Gate, ...
-            });
-
-            if (selectedChains.length === 0) {
-                alert("⚠️ Pilih minimal satu Chain.");
-                return;
-            }
-
-            if (selectedCexs.length === 0) {
-                alert("⚠️ Pilih minimal satu Exchanger.");
-                return;
-            }
-
-            // Simpan konfigurasi user
-            const config = {
-                chains: selectedChains,
-                cexs: selectedCexs,
-                run: "NO"
-            };
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-
-            // 🔄 Filter data dari MULTI_MASTER_TOKENS
-            const masterRaw = localStorage.getItem('MULTI_MASTER_TOKENS');
-            if (!masterRaw) {
-                alert('❌ Data master belum tersedia. Silakan sync koin terlebih dahulu.');
-                return;
-            }
-
-            let masterTokens;
-            try {
-                masterTokens = JSON.parse(masterRaw);
-            } catch (e) {
-                console.error('❌ Error parsing MULTI_MASTER_TOKENS', e);
-                alert('❌ Data master rusak.');
-                return;
-            }
-
-            const filtered = masterTokens.filter(token =>
-                selectedChains.includes(token.chain.toUpperCase()) &&
-                token.selectedCexs.some(cex => selectedCexs.includes(cex))
-            );
-
-            localStorage.setItem('MULTI_SELECT_TOKENS', JSON.stringify(filtered));
-
-            // ✅ Tutup modal dan reload
-            $('#ModalConfigScan').modal('hide');
-            alert(`✅ Konfigurasi disimpan. Token aktif: ${filtered.length}`);
-            location.reload();
-        });
 
         $('#autorunBtn').on('click', () => {
             this.isAutorun = !this.isAutorun;
@@ -577,19 +231,20 @@ class TokenPriceMonitor {
             }
         });
 
+        $(document).on('change', '.chainFilterCheckbox', () => {
+            const selectedChains = $('.chainFilterCheckbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+
+            localStorage.setItem('MULTIALL_selectedChains', JSON.stringify(selectedChains));
+            this.selectedChains = selectedChains; // <-- Penting!
+
+            this.generateEmptyTable();
+            this.updateStats();
+            location.reload();
+        });
 
         $('#CheckPrice').on('click', async () => {
-            let config = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-
-            // 🔁 Jika sudah sedang berjalan, batalkan
-            if (config.run === "YES") {
-                alert("⚠️ SCAN MASIH JALAN..SILAKAN STOP DAHULU");
-                return;
-            }
-
-            // 🔃 Jika belum jalan, lanjutkan
-            config.run = "YES";
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
             //reset 0 info error tiap DEX
             this.dexErrorCount = {};
             DexList.forEach(d => this.dexErrorCount[d] = 0);
@@ -619,7 +274,7 @@ class TokenPriceMonitor {
             };
 
             disableTab('#tokenManagement');
-            disableTab('#appSettings');
+            disableTab('#apiSettings');
             disableTab('#portfolioTab');
             disableTab('#WalletCEX');
 
@@ -663,7 +318,7 @@ class TokenPriceMonitor {
             } else {
                 // Mode Manual: kembalikan tab & aktifkan tombol-tombol
                 enableTab('#tokenManagement');
-                enableTab('#appSettings');
+                enableTab('#apiSettings');
                 enableTab('#portfolioTab');
                 enableTab('#WalletCEX');
 
@@ -672,7 +327,7 @@ class TokenPriceMonitor {
                 $('#sortByToken').prop('disabled', false);
                 $('#tokenSearch').prop('disabled', false);
                 $('#autorunBtn').prop('disabled', false);
-                
+
                 $('#CheckPrice').prop('disabled', false).html('<i class="bi bi-play-fill"></i>Check Price');
 
                 // Bersihkan countdown jika ada
@@ -680,29 +335,20 @@ class TokenPriceMonitor {
             }
         });
 
-        $('#StopScan').on('click', () => {
+       $('#StopScan,#reload').on('click', () => {
             clearInterval(this.autorunTimer);
             $('#autorunCountdown').remove();
 
-            let config = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-            config.run = "NO";
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-
-            const confirmConfig = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-            if (confirmConfig.run === "NO") {
-                alert("✅ SUKSES STOP SCAN");
-            } else {
-                alert("❌ GAGAL STOP SCAN");
-            }
-
+            // Aktifkan tombol kembali jika reload dibatalkan (optional)
             $('#CheckPrice').prop('disabled', false);
             $('#autorunBtn').prop('disabled', false);
             $('#monitoringSearch').prop('disabled', false);
             $('#sortByToken').prop('disabled', false);
             $('#tokenSearch').prop('disabled', false);
 
-            setTimeout(() => location.reload(), 300); // ✅ Jeda sebelum reload
+            location.reload(); // Reload akan menyapu semuanya
         });
+
 
         $('#WalletCEX').on('click', () => {
             if (confirm("Apakah Anda yakin ingin UPDATE WALLET CEX?")) {
@@ -721,11 +367,12 @@ class TokenPriceMonitor {
             
             disableTab('#priceMonitoring');
             disableTab('#tokenManagement');
-            disableTab('#appSettings');
+            disableTab('#apiSettings');
             disableTab('#portfolioTab');
             disableTab('#WalletCEX');
             }
         });
+
 
       //  Save token button
         $('#saveTokenBtn').on('click', (e) => {
@@ -740,7 +387,7 @@ class TokenPriceMonitor {
 
 
         // Save settings button
-        $('#saveAppSettingsBtn').on('click', (e) => {
+        $('#saveSettingsBtn').on('click', (e) => {
             e.preventDefault();     
             this.saveSettings();
         });
@@ -873,12 +520,10 @@ class TokenPriceMonitor {
                 }
 
                 // ✅ Penempatan yang benar DI SINI
-                localStorage.setItem('MULTI_SELECT_TOKENS', JSON.stringify(tokens));
-                localStorage.setItem('MULTI_MASTER_TOKENS', JSON.stringify(tokens));
+                localStorage.setItem('MULTIALL_TOKENS', JSON.stringify(tokens));
                 app.tokens = tokens;
                 app.loadTokenTable();
                 app.updateStats();
-                autoDetectChainsAndCEX(tokens);
 
                 const msg = errorCount > 0
                     ? `✅ Import selesai, ${tokens.length} token berhasil. ⚠️ ${errorCount} baris dilewati karena tidak valid.`
@@ -890,50 +535,6 @@ class TokenPriceMonitor {
 
             reader.readAsText(file);
         });
-
-        function autoDetectChainsAndCEX(tokens) {
-            const chains = new Set();
-            const cexs = new Set();
-
-            tokens.forEach(token => {
-                if (token.chain) {
-                    chains.add(token.chain);
-                }
-
-                // Ambil dari selectedCexs (karena di CSV tidak ada field token.cex)
-                if (Array.isArray(token.selectedCexs)) {
-                    token.selectedCexs.forEach(cex => {
-                        if (cex) cexs.add(cex);
-                    });
-                }
-            });
-
-            const configScan = {
-                chains: Array.from(chains),
-                cexs: Array.from(cexs),
-                run: "NO"
-            };
-
-            // Simpan ke localStorage
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(configScan));
-
-            // Reset UI checkbox
-            $('#SettingScan input[name="set_chain"]').prop('checked', false);
-            $('#SettingScan input[name="set_cex"]').prop('checked', false);
-
-            // Centang yang sesuai
-            chains.forEach(chain => {
-                $(`#SettingScan input[name="set_chain"][value="${chain}"]`).prop('checked', true);
-            });
-
-            cexs.forEach(cex => {
-                $(`#SettingScan input[name="set_cex"][value="${cex}"]`).prop('checked', true);
-            });
-
-            console.log('✅ Auto-detect selesai. Chains & CEXs:', configScan);
-        }
-
-
 
         $('#sortByToken').on('click', () => {
             this.sortAscending = !this.sortAscending;
@@ -948,6 +549,15 @@ class TokenPriceMonitor {
             this.generateEmptyTable();
         });
 
+    }
+
+    initializeChainCheckbox() {
+        $('.chainFilterCheckbox').each((_, el) => {
+            const chain = $(el).val();
+            if (this.selectedChains.includes(chain)) {
+                $(el).prop('checked', true);
+            }
+        });
     }
 
     startAutorunCountdown(callback) {
@@ -1029,57 +639,110 @@ class TokenPriceMonitor {
         });
     }
 
-    ShowConfigScan() {
-        const config = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-        const selectedTokens = JSON.parse(localStorage.getItem('MULTI_SELECT_TOKENS') || '[]');
+    async fetchGasTokenPrices() {
+    const binanceURL = 'https://api-gcp.binance.com/api/v3/ticker/price?symbols=["BNBUSDT","ETHUSDT","MATICUSDT","BTCUSDT"]';
+    $('#gasTokenPrices').html(`<small class="text-white">Loading Gwei info...</small>`);
 
-        if (!config) return;
+    const response = await $.getJSON(binanceURL).catch(err => {
+        $('#gasTokenPrices').html('<span class="text-danger">Gagal ambil harga.</span>');
+        throw new Error('Gagal ambil harga token dari Binance');
+    });
 
-        // List untuk #infoScanKoin (LIST per CEX)
-        const cexsList = Array.isArray(config.cexs) && config.cexs.length > 0
-            ? config.cexs.map(cex => {
-                let cexName = (cex.name || '').toUpperCase().slice(0, 3) + 'X';
-                let chains = Array.isArray(cex.chains) ? cex.chains.map(c => c.toUpperCase().slice(0, 3)) : [];
-                if (chains.length > 5) chains = chains.slice(0, 4);
-                const chainStr = chains.join(', ');
-                return `<li><strong class="text-warning">${cexName}</strong>: ${chainStr}</li>`;
-            }).join('')
-            : '<li class="text-muted">-</li>';
-
-        const tokenCount = Array.isArray(selectedTokens) ? selectedTokens.length : 0;
-        const tokenInfo = `<span class="badge bg-success text-white ms-2">${tokenCount} KOIN</span>`;
-
-        const listHTML = `
-            <ul class="mb-1 ps-3">${cexsList}</ul>
-            <strong>TOTAL:</strong> ${tokenInfo}
-        `;
-
-        // Untuk tampilan horizontal di #configScanTerpilih (opsional)
-        const cexsInline = Array.isArray(config.cexs) && config.cexs.length > 0
-            ? config.cexs.map(cex => {
-                let cexName = (cex.name || '').toUpperCase().slice(0, 3) + 'X';
-                let chains = Array.isArray(cex.chains) ? cex.chains.map(c => c.toUpperCase().slice(0, 3)) : [];
-                if (chains.length > 5) chains = chains.slice(0, 4);
-                const chainStr = chains.join(', ');
-                return `<span class="me-3 mb-1"><strong class="text-dark">${cexName}</strong> [<span class="text-warning">${chainStr}</span>]</span>`;
-            }).join('')
-            : '<span class="text-muted">-</span>';
-
-        const inlineHTML = `
-            <div class="fs-8">
-                ${cexsInline}
-                <strong>TOTAL:</strong> ${tokenInfo}
-            </div>
-        `;
-
-        // Set ke masing-masing elemen
-        $('#configScanTerpilih').html(inlineHTML);
-        $('#infoScanKoin').html(listHTML);
+    if (!response) {
+        throw new Error("Respon harga token kosong dari Binance");
     }
 
-    async fetchGasTokenPrices() {
-        const configSCAN = localStorage.getItem('MULTI_SETTING_SCAN') || '{}';
+    const tokenPrices = {};
+    response.forEach(item => {
+        const symbol = item.symbol.replace("USDT", "");
+        tokenPrices[symbol] = parseFloat(item.price);
 
+        if (symbol === 'BTC') $('#btcPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+        if (symbol === 'BNB') $('#bnbPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+        if (symbol === 'ETH') $('#ethPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+        if (symbol === 'MATIC') $('#maticPrice').text(`$${tokenPrices[symbol].toFixed(2)}`);
+    });
+
+    const Web3 = window.Web3;
+    const gasTextParts = [];
+    const gasTokenInfo = {};
+
+    // 🔍 Ambil selectedChains dari localStorage
+    let selectedChains = [];
+    try {
+        const stored = localStorage.getItem("MULTIALL_selectedChains");
+        if (stored) {
+            selectedChains = JSON.parse(stored).map(c => c.toLowerCase());
+        }
+    } catch (e) {
+        console.warn("MULTIALL_selectedChains invalid:", e);
+    }
+
+    // 🔗 Filter hanya chain yang terpilih
+    const supportedChains = Object.keys(CHAIN_CONFIG)
+        .filter(key => CHAIN_CONFIG[key].rpc && selectedChains.includes(key.toLowerCase()))
+        .map(key => ({
+            key,
+            label: CHAIN_CONFIG[key].short,
+            symbol: CHAIN_CONFIG[key].symbol,
+            gasLimit: CHAIN_CONFIG[key].gasLimit
+        }));
+
+    let successCount = 0;
+
+    for (const chain of supportedChains) {
+        const key = chain.key || chain.symbol;
+        const symbol = chain.symbol;
+        const rpcUrl = CHAIN_CONFIG[key.toLowerCase()]?.rpc || '';
+        let tokenPrice = tokenPrices[symbol];
+
+        if (!tokenPrice && symbol === 'POL') {
+            tokenPrice = tokenPrices['MATIC'];
+        }
+
+        if (!rpcUrl || !tokenPrice) {
+            gasTextParts.push(`<span class='badge bg-light text-dark fs-8'>${chain.label} [n/a]</span>`);
+            continue;
+        }
+
+        try {
+            const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+            const block = await web3.eth.getBlock("pending");
+            const baseFee = block?.baseFeePerGas ? parseInt(block.baseFeePerGas) : await web3.eth.getGasPrice();
+
+            const gwei = (baseFee / 1e9) * 2;
+            const gasUSDT = (gwei * chain.gasLimit * tokenPrice) / 1e9;
+
+            console.log(`🟢 ${chain.label} | Gwei: ${gwei.toFixed(2)} | Token: ${symbol} | Price: $${tokenPrice} | Fee ≈ $${gasUSDT.toFixed(4)}`);
+            
+            gasTextParts.push(
+                `<span class='badge bg-secondary text-white fs-8 fw-bold'>🔥 ${chain.label} [${gwei.toFixed(2)} | $${gasUSDT.toFixed(4)}]</span>`
+            );
+
+            gasTokenInfo[key] = {
+                symbol,
+                gwei,
+                tokenPrice,
+                gasFeeUSDT: gasUSDT,
+                gasLimit: chain.gasLimit
+            };
+
+            successCount++;
+        } catch (err) {
+            console.error(`❌ Gagal ambil data gas untuk ${chain.label}:`, err);
+            gasTextParts.push(`<span class='badge bg-danger fs-8'>${chain.label} [err]</span>`);
+        }
+    }
+
+    $('#gasTokenPrices').html(gasTextParts.join(" "));
+    localStorage.setItem('MULTIALL_gasTokenInfo', JSON.stringify(gasTokenInfo));
+
+    if (successCount === 0) {
+        throw new Error("Gagal mengambil data gas untuk semua chain.");
+    }
+}
+
+    async fetchGasTokenPricesLAMA() {
         const binanceURL = 'https://api-gcp.binance.com/api/v3/ticker/price?symbols=["BNBUSDT","ETHUSDT","MATICUSDT","BTCUSDT"]';
         $('#gasTokenPrices').html(`<small class="text-white">Loading Gwei info...</small>`);
 
@@ -1107,20 +770,8 @@ class TokenPriceMonitor {
         const gasTextParts = [];
         const gasTokenInfo = {};
 
-        // 🔍 Ambil selectedChains dari config utama
-        let selectedChains = [];
-        try {
-            const config = configSCAN ? JSON.parse(configSCAN) : null;
-            if (config && Array.isArray(config.chains)) {
-                selectedChains = config.chains.map(c => c.toLowerCase());
-            }
-        } catch (e) {
-            console.warn("MULTI_SETTING_SCAN invalid:", e);
-        }
-
-        // 🔗 Filter hanya chain yang didukung dan terpilih
         const supportedChains = Object.keys(CHAIN_CONFIG)
-            .filter(key => CHAIN_CONFIG[key].rpc && selectedChains.includes(key.toLowerCase()))
+            .filter(key => CHAIN_CONFIG[key].rpc)
             .map(key => ({
                 key,
                 label: CHAIN_CONFIG[key].short,
@@ -1133,7 +784,7 @@ class TokenPriceMonitor {
         for (const chain of supportedChains) {
             const key = chain.key || chain.symbol;
             const symbol = chain.symbol;
-            const rpcUrl = CHAIN_CONFIG[key.toLowerCase()]?.rpc || '';
+            const rpcUrl = CHAIN_CONFIG[key.toLowerCase()]?.rpc || CHAIN_CONFIG[symbol.toLowerCase()]?.rpc || '';
             let tokenPrice = tokenPrices[symbol];
 
             if (!tokenPrice && symbol === 'POL') {
@@ -1175,7 +826,7 @@ class TokenPriceMonitor {
         }
 
         $('#gasTokenPrices').html(gasTextParts.join(" "));
-        localStorage.setItem('MULTI_gasTokenInfo', JSON.stringify(gasTokenInfo));
+        localStorage.setItem('MULTIALL_gasTokenInfo', JSON.stringify(gasTokenInfo));
 
         if (successCount === 0) {
             throw new Error("Gagal mengambil data gas untuk semua chain.");
@@ -1203,42 +854,20 @@ class TokenPriceMonitor {
         const tbody = $('#priceTableBody');
         tbody.empty();
 
-        // Ambil config dari localStorage
-        const configSCAN = localStorage.getItem('MULTI_SETTING_SCAN') || '{}';
-        const config = configSCAN ? JSON.parse(configSCAN) : null;
-
-        // Ambil chain dan nama CEX dari config
-        const selectedChains = config?.chains || [];
-        const selectedCexObjects = config?.cexs || [];
-        const selectedCexs = selectedCexObjects.map(c => c.name);
-
-        // Pemetaan CEX -> chains
-        const cexChainMap = {};
-        selectedCexObjects.forEach(item => {
-            cexChainMap[item.name] = item.chains;
-        });
-
         if (typeof this.sortAscending === 'undefined') {
             this.sortAscending = true;
         }
 
-        const keyword = (this.searchKeyword || '').toLowerCase();
-
         const activeTokens = this.tokens
             .filter(t => t.isActive)
-            .filter(t => selectedChains.includes(t.chain)) // filter chain
+            .filter(t => this.selectedChains.includes(t.chain))
             .filter(t => {
-                if (!Array.isArray(t.selectedCexs)) return false;
-                // cek apakah ada CEX yang match dengan selected + chain juga cocok
-                return t.selectedCexs.some(cex =>
-                    selectedCexs.includes(cex) &&
-                    (cexChainMap[cex]?.includes(t.chain))
+                const keyword = (this.searchKeyword || '').toLowerCase();
+                return (
+                    t.symbol.toLowerCase().includes(keyword) ||
+                    t.pairSymbol.toLowerCase().includes(keyword)
                 );
             })
-            .filter(t =>
-                t.symbol.toLowerCase().includes(keyword) ||
-                t.pairSymbol.toLowerCase().includes(keyword)
-            )
             .sort((a, b) => {
                 const symbolA = a.symbol.toLowerCase();
                 const symbolB = b.symbol.toLowerCase();
@@ -1248,43 +877,38 @@ class TokenPriceMonitor {
             });
 
         if (activeTokens.length === 0) {
-            tbody.html(`<tr><td colspan="16" class="text-center text-danger py-7">DATA TIDAK DITEMUKAN / TIDAK ADA DAFTAR TOKEN</td></tr>`);
+            tbody.html(`<tr><td colspan="16" class="text-center text-danger py-7">DATA TIDAK DITEMUAKN / TIDAK ADA DAFTAR TOKEN</td></tr>`);
             return;
         }
 
-        const fragment = document.createDocumentFragment(); // ← gunakan document fragment
         let rowIndex = 0;
 
         for (const token of activeTokens) {
-            const matchedCexs = token.selectedCexs.filter(cex =>
-                selectedCexs.includes(cex) &&
-                (cexChainMap[cex]?.includes(token.chain))
-            );
-
-            if (matchedCexs.length === 0) continue; // skip token jika tak cocok dengan cex
-
-            for (const cex of matchedCexs) {
+            for (const cex of token.selectedCexs) {
                 const selectedDexs = token.selectedDexs || [];
                 const limitedDexList = selectedDexs.slice(0, 4); // maksimal 4
                 const fillerCount = 4 - limitedDexList.length;
 
                 const rowId = `token-row-${token.id}-${cex.replace(/\W+/g, '').toLowerCase()}`;
 
-                // ➡️ CEX ke DEX
+                // 🔒➡️ CEX ke DEX
                 const dexCEXtoDEX = limitedDexList.map(dex => {
-                    const icon = selectedDexs.includes(dex) ? `${dex} 🔒` : `➖`;
+                    const isSelected = selectedDexs.includes(dex);
+                    const icon = isSelected ? ` ${dex} 🔒` : `➖`;
                     const cellId = `cell_${token.symbol}_${token.pairSymbol}_${token.chain}_${cex}_${dex}`.toLowerCase().replace(/\W+/g, '');
                     return `<td id="${cellId}" class="dex-price-cell text-center">${icon}</td>`;
                 }).join('');
 
                 const fillerCEXtoDEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">➖</td>').join('');
 
-                // ⬅️ DEX ke CEX
+                // 🔒⬅️ DEX ke CEX
                 const dexDEXtoCEX = limitedDexList.map(dex => {
-                    const icon = selectedDexs.includes(dex) ? `${dex} 🔒` : `➖`;
+                    const isSelected = selectedDexs.includes(dex);
+                    const icon = isSelected ? ` ${dex} 🔒` : `➖`;
                     const cellId = `cell_${token.pairSymbol}_${token.symbol}_${token.chain}_${dex}_${cex}`.toLowerCase().replace(/\W+/g, '');
                     return `<td id="${cellId}" class="dex-price-cell text-center">${icon}</td>`;
                 }).join('');
+
 
                 const fillerDEXtoCEX = Array(fillerCount).fill('<td class="dex-price-cell text-center">➖</td>').join('');
 
@@ -1294,25 +918,22 @@ class TokenPriceMonitor {
 
                 const stripClass = rowIndex % 2 === 0 ? 'strip-even' : 'strip-odd';
 
-                const row = document.createElement('tr');
-                row.id = rowId;
-                row.className = `token-data-row text-center ${stripClass} fs-8 align-middle`;
-
-                row.innerHTML = `
-                    <td id="${orderbookLeftId.toLowerCase()}">${cex}🔒</td>
-                    ${dexCEXtoDEX}${fillerCEXtoDEX}
-                    <td class="token-detail-cell">${detailHTML}</td>
-                    ${dexDEXtoCEX}${fillerDEXtoCEX}
-                    <td id="${orderbookRightId.toLowerCase()}">${cex}🔒</td>
+                const rowHTML = `
+                    <tr id="${rowId}" class="token-data-row text-center ${stripClass} fs-8 align-middle">
+                        <td id="${orderbookLeftId.toLowerCase()}">${cex}🔒</td>
+                        ${dexCEXtoDEX}${fillerCEXtoDEX}
+                        <td class="token-detail-cell">${detailHTML}</td>
+                        ${dexDEXtoCEX}${fillerDEXtoCEX}
+                        <td id="${orderbookRightId.toLowerCase()}">${cex}🔒</td>
+                    </tr>
                 `;
 
-                fragment.appendChild(row);
+                tbody.append(rowHTML);
                 rowIndex++;
             }
         }
-
-        tbody.append(fragment); // ← satu kali append, lebih efisien
     }
+
 
     generateOrderBook(token, priceData, cexName, direction) {
         const base = token.symbol.toUpperCase();        // e.g. AUCTION
@@ -1401,12 +1022,12 @@ class TokenPriceMonitor {
 
     // LocalStorage operations
     loadTokens() {
-        const tokens = JSON.parse(localStorage.getItem('MULTI_SELECT_TOKENS') || '[]');
+        const tokens = JSON.parse(localStorage.getItem('MULTIALL_TOKENS') || '[]');
         return tokens.map(t => ({ ...t, id: String(t.id) }));
     }
 
     saveTokensToStorage(updateUI = false) {
-        localStorage.setItem('MULTI_SELECT_TOKENS', JSON.stringify(this.tokens));
+        localStorage.setItem('MULTIALL_TOKENS', JSON.stringify(this.tokens));
         this.updateStats();
         if (updateUI) {
             this.loadTokenTable();
@@ -1415,7 +1036,7 @@ class TokenPriceMonitor {
     }
 
     loadSettings() {
-        const settings = localStorage.getItem('MULTI_SETTING_APP');
+        const settings = localStorage.getItem('MULTIALL_SETTING');
         const parsedSettings = settings ? JSON.parse(settings) : {
             tokensPerBatch: 3, // jumlah anggota
             UserName: 'XXX', // jeda antar member
@@ -1439,6 +1060,10 @@ class TokenPriceMonitor {
 
         //console.log("DATA SETTING: ",parsedSettings); // ← log sebelum return
         return parsedSettings;
+    }
+
+    saveSettingsToStorage() {
+        localStorage.setItem('MULTIALL_SETTING', JSON.stringify(this.settings));
     }
 
    // Token management
@@ -1548,19 +1173,14 @@ class TokenPriceMonitor {
         return Object.values(CHAIN_CONFIG).map(c => c.name);
     }
 
-
-     loadTokenTable() {
-        const tbody = $('#tokenTableBody')[0]; // native DOM element
-        tbody.innerHTML = ''; // kosongkan lebih cepat
+    loadTokenTable() {
+        const tbody = $('#tokenTableBody');
+        tbody.empty();
 
         const keyword = $('#tokenSearch').val()?.toLowerCase().trim() || '';
         const selectedChains = $('.filter-chain-checkbox:checked').map(function () {
             return this.value.toLowerCase();
         }).get();
-
-        const cexList = this.getCexList();
-        const dexList = this.getDexList();
-        const chainList = this.getChainList();
 
         const filteredTokens = this.tokens.filter(token => {
             const chainMatch = selectedChains.length === 0 || selectedChains.includes(token.chain.toLowerCase());
@@ -1571,7 +1191,7 @@ class TokenPriceMonitor {
                 token.chain,
                 token.contractAddress,
                 token.pairContractAddress,
-                token.isActive ? 'active' : 'inactive',
+                token.isActive ? 'active' : 'inactive', // ✔️ status ON/OFF ikut dicari
                 ...(token.selectedCexs || []),
                 ...(token.selectedDexs || [])
             ].map(val => (val || '').toLowerCase());
@@ -1582,36 +1202,28 @@ class TokenPriceMonitor {
         });
 
         if (filteredTokens.length === 0) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td colspan="7" class="text-center py-4 text-muted">
-                    Tidak Ada DATA KOIN
-                </td>
-            `;
-            tbody.appendChild(tr);
+            tbody.append(`
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-muted">
+                    Data yang dicari Tidak Ditemukan
+                    </td>
+                </tr>
+            `);
             return;
         }
 
         const sortedTokens = filteredTokens.slice().sort((a, b) => (b.isActive === true) - (a.isActive === true));
 
-        const fragment = document.createDocumentFragment();
-
         sortedTokens.forEach((token, index) => {
-            // 💡 Optimalisasi satu kali sebelum cexList.map
-            const cexInfoMap = {};
-            for (const key in token.cexInfo || {}) {
-                cexInfoMap[key.toUpperCase()] = token.cexInfo[key];
-            }
-
-            const cexTextList = cexList.map(cex => {
+            const cexTextList = this.getCexList().map(cex => {
                 const isChecked = token.selectedCexs.includes(cex);
                 const checkedAttr = isChecked ? 'checked' : '';
                 const tokenSymbol = token.symbol.toUpperCase();
                 const pairSymbol = token.pairSymbol.toUpperCase();
                 const cexUpper = cex.toUpperCase();
 
-                // ✅ akses langsung tanpa .find
-                const info = cexInfoMap[cexUpper] || {};
+                const matchedCEXKey = Object.keys(token.cexInfo || {}).find(k => k.toUpperCase() === cexUpper);
+                const info = token.cexInfo?.[matchedCEXKey] || {};
 
                 const tokenInfo = info[tokenSymbol] || {};
                 const pairInfo = info[pairSymbol] || {};
@@ -1626,7 +1238,7 @@ class TokenPriceMonitor {
                 const dpToken = formatStatus(tokenInfo.depo, 'DP', 'DX');
                 const wdPair = formatStatus(pairInfo.wd, 'WD', 'WX');
                 const dpPair = formatStatus(pairInfo.depo, 'DP', 'DX');
-                
+
                 const textColorClass = this.getTextColorClassFromBadge(this.getBadgeColor(cex, 'cex'));
 
                 return `
@@ -1634,7 +1246,7 @@ class TokenPriceMonitor {
                         <label class="${textColorClass}" style="cursor: pointer;">
                             <input type="checkbox" class="update-cex-checkbox me-1"
                                 data-token-id="${token.id}" data-cex="${cex}" value="${cex}" ${checkedAttr} />
-                            <span class="fw-bold fs-7 ${textColorClass}">${cexUpper}</span>
+                            <span class="fw-bold fs-7 ${textColorClass}">${cexUpper}:</span>
                         </label>
                         ${isChecked ? `
                             <div class="d-inline-flex align-items-center mt-1 fs-7">                                
@@ -1648,9 +1260,10 @@ class TokenPriceMonitor {
                 `;
             }).join('');
 
-
+            const allDexs = this.getDexList();
             let dexCheckboxes = '';
-            dexList.forEach((dex, i) => {
+
+            allDexs.forEach((dex, index) => {
                 const isChecked = token.selectedDexs.includes(dex);
                 const checkedAttr = isChecked ? 'checked' : '';
                 const colorClass = this.getTextColorClassFromBadge(this.getBadgeColor(dex, 'dex'));
@@ -1661,73 +1274,127 @@ class TokenPriceMonitor {
                             data-token-id="${token.id}" data-dex="${dex}" value="${dex}" ${checkedAttr}/> ${dex.toUpperCase()}
                     </label>
                 `;
-                if ((i + 1) % 3 === 0) dexCheckboxes += '<br/>';
+
+                if ((index + 1) % 3 === 0) {
+                    dexCheckboxes += '<br/>';
+                }
             });
 
-            const warnaChain = this.getTextColorClassFromBadge(this.getBadgeColor(token.chain, 'chain'));
+            const chainOptions = this.getChainList().map(chain => {
+                const selected = chain === token.chain ? 'selected' : '';
+                return `<option value="${chain}" ${selected}>${chain}</option>`;
+            }).join('');
 
-            const statusText = token.isActive ? 'ACTIVE' : 'INACTIVE';
+            const chainSelect = `
+                <div class="d-flex align-items-center gap-1">
+                    <select class="form-select form-select-sm inline-edit"
+                        data-token-id="${token.id}"
+                        data-field="chain"
+                        style="width: 120px; height: 32px;">
+                        ${chainOptions}
+                    </select>
+                    <button class="btn btn-outline-dark btn-save-inline btn-sm"
+                            data-token-id="${token.id}" data-field="chain" title="Simpan Chain"
+                            style="height: 32px;">
+                        <i class="bi bi-check-lg small"></i>
+                    </button>
+                </div>
+            `;
+
+            const isActive = token.isActive;
+            const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
             const statusBtnClass = token.isActive ? 'btn-success' : 'btn-outline-secondary';
 
-            const tr = document.createElement('tr');
-                tr.className = 'align-middle token-data-row';
-                tr.innerHTML = `
+            tbody.append(`
+                <tr class="align-middle token-data-row">
                     <td>${index + 1}</td>
                     <td>
-                        <div class="d-flex flex-column small text-muted fs-6" >
+                        <div class="d-flex flex-column small text-muted" style="line-height: 1.2;">
                             <div class="d-flex flex-column gap-1">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span><strong>${token.symbol} </strong> | ${token.contractAddress} [ ${token.decimals} ]</span>
+                                <div class="d-flex align-items-center">
+                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
+                                    data-token-id="${token.id}" data-field="symbol" value="${token.symbol}" style="width:100px;" />
+                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
+                                        data-token-id="${token.id}" data-field="contractAddress" value="${token.contractAddress}" style="width:360px;" />
+                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
+                                        data-token-id="${token.id}" data-field="decimals" value="${token.decimals}" style="width:60px;" />
+                                    <button class="btn btn-outline-dark btn-save-inline btn-sm"
+                                            data-token-id="${token.id}" data-field="contractAddress" title="Simpan SC">
+                                        <i class="bi bi-check-lg small"></i>
+                                    </button>
                                 </div>
-                                <div class="d-flex align-items-center gap-2 mt-1">
-                                    <span><strong>${token.pairSymbol} </strong> | ${token.pairContractAddress} [ ${token.pairDecimals} ]</span>
+                                <div class="d-flex align-items-center">
+                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
+                                    data-token-id="${token.id}" data-field="pairSymbol" value="${token.pairSymbol}" style="width:100px;" />
+                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
+                                        data-token-id="${token.id}" data-field="pairContractAddress" value="${token.pairContractAddress}" style="width:360px;" />
+                                    <input type="text" class="form-control form-control-sm inline-edit me-1"
+                                        data-token-id="${token.id}" data-field="pairDecimals" value="${token.pairDecimals}" style="width:60px;" />
+                                    <button class="btn btn-outline-dark btn-save-inline btn-sm"
+                                            data-token-id="${token.id}" data-field="pairContractAddress" title="Simpan Pair SC">
+                                        <i class="bi bi-check-lg small"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </td>
+
                     <td>
-                        <div class="d-flex flex-column gap-1 justify-content-center">
-                            <div class="d-flex align-items-center gap-2 mt-2">
-                                <span class="badge ${warnaChain} fs-6"><strong>Chain:</strong> ${token.chain}</span>
-                            </div>
-                            <div class="btn-group btn-group-sm" role="group">
-                                
+                        <div class="d-flex flex-column gap-1">                        
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Control group">
+                                <span class="badge fw-bold small ${isActive ? 'text-success' : 'text-danger'}">
+                                    ${statusText}
+                                </span>
                                 <button class="btn ${statusBtnClass} btn-sm px-2 py-0"
-                                        onclick="app.toggleTokenStatus('${token.id}')" title="Change Status">
+                                        onclick="app.toggleTokenStatus('${token.id}')" title="Toggle Status">
                                     <i class="bi bi-power small"></i>
                                 </button>
-                                <button class="btn btn-outline-primary btn-sm px-2 py-0"
-                                        onclick="app.editToken('${token.id}')" title="Edit">
-                                    <i class="bi bi-pencil small"></i>
-                                </button>
-
                                 <button class="btn btn-outline-danger btn-sm px-2 py-0"
                                         onclick="app.deleteToken('${token.id}')" title="Delete">
                                     <i class="bi bi-trash small"></i>
                                 </button>
                             </div>
+                            ${chainSelect}
+                        </div>
+                    </td>
 
-                        </div>
-                    </td>
                     <td>
-                        <div class="d-flex flex-column gap-1">
-                            <div class="d-flex align-items-center gap-2">
-                                <span><strong>Modal CEX:</strong> ${token.modalCexToDex}</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span><strong>Modal DEX:</strong> ${token.modalDexToCex}</span>
-                            </div>
+                        <div class="input-group input-group-sm mb-1 d-flex align-items-center" style="width: 180px;">
+                            <span class="me-2 fs-7 fw-bold">CEX:</span>
+                            <input type="text"
+                                class="form-control form-control-sm inline-edit"
+                                data-token-id="${token.id}"
+                                data-field="modalCexToDex"
+                                value="${token.modalCexToDex}" />
+                            <button class="btn btn-outline-dark btn-save-inline btn-sm"
+                                    data-token-id="${token.id}"
+                                    data-field="modalCexToDex"
+                                    title="Simpan">
+                                <i class="bi bi-check-lg small"></i>
+                            </button>
+                        </div>
+
+                        <div class="input-group input-group-sm d-flex align-items-center" style="width: 180px;">
+                            <span class="me-2 fs-7 fw-bold">DEX:</span>
+                            <input type="text"
+                                class="form-control form-control-sm inline-edit"
+                                data-token-id="${token.id}"
+                                data-field="modalDexToCex"
+                                value="${token.modalDexToCex}" />
+                            <button class="btn btn-outline-dark btn-save-inline btn-sm"
+                                    data-token-id="${token.id}"
+                                    data-field="modalDexToCex"
+                                    title="Simpan">
+                                <i class="bi bi-check-lg small"></i>
+                            </button>
                         </div>
                     </td>
+
                     <td>${cexTextList}</td>
                     <td>${dexCheckboxes}</td>
-                `;
-            
-            fragment.appendChild(tr);
-
+                </tr>
+            `);
         });
-
-        tbody.appendChild(fragment);
     }
 
     shortenAddress(address, start = 6, end = 6) {
@@ -1740,7 +1407,7 @@ class TokenPriceMonitor {
             const colors = {
                 Binance: 'bg-binance',
                 MEXC: 'bg-mexc',
-                Gate: 'bg-gate',
+                Gateio: 'bg-gateio',
                 INDODAX: 'bg-indodax',
             };
             return colors[name] || 'bg-secondary text-light';
@@ -1790,7 +1457,7 @@ class TokenPriceMonitor {
             // Custom brand (CEX & DEX)
             'bg-binance': 'text-binance',
             'bg-mexc': 'text-mexc',
-            'bg-gate': 'text-gate',
+            'bg-gateio': 'text-gateio',
             'bg-indodax': 'text-indodax',
 
             'bg-1inch': 'text-1inch',
@@ -1827,7 +1494,20 @@ class TokenPriceMonitor {
             // Total, aktif, tidak aktif
             $(`#totalTokens${target}`).text(totalTokens);
             $(`#activeTokens${target}`).text(activeTokens.length);
-            $(`#inactiveTokens${target}`).text(inactiveTokens.length);       
+            $(`#inactiveTokens${target}`).text(inactiveTokens.length);
+/*
+            for (const chainKey in CHAIN_CONFIG) {
+                const chain = CHAIN_CONFIG[chainKey];
+                const chainName = chain.name; // Misal: "Polygon", "Ethereum"
+                const htmlId = chain.short?.toLowerCase(); // "poly", "eth", dsb
+
+                // Jika elemen HTML tidak tersedia, skip
+                if (!htmlId || !$(`#${htmlId}Count${target}`).length) continue;
+
+                const count = this.tokens.filter(t => t.chain === chainName).length;
+                $(`#${htmlId}Count${target}`).text(count);
+            }
+*/            
 
             for (const chainKey in CHAIN_CONFIG) {
                 // Total, aktif, tidak aktif
@@ -1847,6 +1527,8 @@ class TokenPriceMonitor {
                 $(`#${htmlId}Count${target}`).text(`${activePerChain}/${totalPerChain}`).attr("title", `Aktif ${activePerChain} dari TOTAL ${totalPerChain} Koin`);
             }
         }
+
+       
 
         // Total baris monitoring = jumlah token aktif × banyaknya selectedCEX
         let totalBaris = 0;
@@ -1998,10 +1680,9 @@ class TokenPriceMonitor {
 
         const userName = $userEl.val()?.trim() || '';
         const wallet = $walletEl.val()?.trim() || '';
-        const tokensPerBatch = parseInt($('#tokensPerBatch').val(), 10) || 3;
-        const delayBetweenGrup = parseInt($('#delayBetweenGrup').val(), 10) || 400;
-        const timeoutCount = parseInt($('#TimeoutCount').val(), 10) || 10000;
-
+        const tokensPerBatch = parseInt($('#tokensPerBatch').val(), 3) || 3;
+        const delayBetweenGrup = parseInt($('#delayBetweenGrup').val(), 400) || 400;
+        const timeoutCount = parseInt($('#TimeoutCount').val(), 4000) || 10000;
         const pnlFilter = parseFloat($('#PNLFilter').val()) || 0;
 
         if (!userName || userName === 'XXX') {
@@ -2024,8 +1705,8 @@ class TokenPriceMonitor {
             return false;
         }
 
-        if (!timeoutCount || timeoutCount < 2000 || timeoutCount > 100000) {
-            this.showAlert('Timeout harus antara 2000–100000 ms', 'danger');
+        if (!timeoutCount || timeoutCount < 2000 || timeoutCount > 10000) {
+            this.showAlert('Timeout harus antara 2000–15000 ms', 'danger');
             return false;
         }
 
@@ -2037,20 +1718,18 @@ class TokenPriceMonitor {
             TimeoutCount: timeoutCount,
             PNLFilter: pnlFilter
         };
-        
-        localStorage.setItem('MULTI_SETTING_APP', JSON.stringify(this.settings));
 
+        this.saveSettingsToStorage();
+        
         this.logAction(`SETTING APLIKASI`);
-        alert('✅ SIMPAN KONFIGURASI APLIKASI BERHASIL!');
+        alert('✅ SIMPAN SETTING BERHASIL!');
 
         location.reload();
     }
 
-    async CheckPrices() {
+    async CheckPrices() { 
         this.errorStats = {};
-        $('#statERROR').html('');
-    
-        let config = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
+        $('#statERROR').html(''); // opsional: bersihkan tampilan lama
 
         try {
             $('#scanProgressPercent').html(`Cek Harga Gas Gwei..`);
@@ -2058,48 +1737,28 @@ class TokenPriceMonitor {
         } catch (err) {
             console.error('Gagal fetchGasTokenPrices:', err);
             this.showAlert('Gagal mengambil harga Gas Token, scan dibatalkan', 'danger');
-
-            // Reset config.run jika gagal
-            config.run = "NO";
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-            $('#CheckPrice').prop('disabled', false);
             return;
         }
 
+        $('.chainFilterCheckbox').prop('disabled', true);
         $('#scanProgressPercent').html(``);
 
         const settings = this.loadSettings();
         if (!settings || settings.WalletAddress === '-' || settings.UserName === 'XXX') {
             this.showAlert('SILAKAN SETTING APLIKASI', 'danger');
-
-            config.run = "NO";
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-            $('#CheckPrice').prop('disabled', false);
             return;
         }
-
-        const selectedChains = config?.chains || [];
-
-        const selectedCexsRaw = config?.cexs || [];
-        const selectedCexs = selectedCexsRaw.map(c => c.name);
-
-        const cexChainMap = {};
-        selectedCexsRaw.forEach(item => {
-            cexChainMap[item.name] = item.chains;
-        });
 
         const tokensPerBatch = settings.tokensPerBatch;
         const delayBetweenGrup = settings.delayBetweenGrup;
         const delayPerDexDirection = 200;
+        const delayPerToken = 200;
 
         const allTokenUnits = [];
 
         for (const token of this.tokens) {
-            if (!token.isActive) continue;
-            if (!selectedChains.includes(token.chain)) continue;
-
-            const matchedCexs = token.selectedCexs?.filter(cex => selectedCexs.includes(cex)) || [];
-            for (const cexName of matchedCexs) {
+            if (!token.isActive || !this.selectedChains.includes(token.chain)) continue;
+            for (const cexName of token.selectedCexs) {
                 allTokenUnits.push({ ...token, cexName });
             }
         }
@@ -2111,13 +1770,10 @@ class TokenPriceMonitor {
         });
 
         if (allTokenUnits.length === 0) {
-            this.showAlert('Tidak Ada Token Aktif untuk Config Saat Ini', 'info');
+            this.showAlert('Tidak Ada Daftar Token, Silakan Pilih Chain', 'info');
             $('#priceTableBody').html(`<tr><td colspan="13" class="text-center text-muted py-5">
                 <i class="bi bi-info-circle me-2"></i> Tidak ada DATA KOIN, Silakan ke Management TOKEN
             </td></tr>`);
-            config.run = "NO";
-            localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-            $('#CheckPrice').prop('disabled', false);
             return;
         }
 
@@ -2132,7 +1788,7 @@ class TokenPriceMonitor {
         const unitBatches = chunkArray(allTokenUnits, tokensPerBatch);
         const totalUnits = allTokenUnits.length;
         let currentIndex = 0;
-        const skipDelayDEX = ['LIFI', 'ODOS'];
+        const skipDelayDEX = ['LIFI','ODOS'];
 
         const startTime = new Date();
         const startStr = startTime.toLocaleTimeString();
@@ -2156,50 +1812,59 @@ class TokenPriceMonitor {
                 const shortChain = (CHAIN_CONFIG[tokenUnit.chain?.toLowerCase()]?.short || tokenUnit.chain || '').toUpperCase();
 
                 const firstToken = batch[0];
-                if (firstToken) this.tryAutoScrollToRow(firstToken);
+                if (firstToken) {
+                    this.tryAutoScrollToRow(firstToken);
+                }
 
                 await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
                 this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
 
                 const skippedDexPromises = tokenUnit.selectedDexs
-                    .filter(dex => skipDelayDEX.includes(dex))
-                    .map(async dexName => {
-                        this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex')
-                            .then(() => this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex'))
-                            .then(() => this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex'))
-                            .catch(err => console.warn(`[SKIP_DELAY][${dexName}] Error:`, err));
-                    });
+                .filter(dex => skipDelayDEX.includes(dex))
+                .map(async dexName => {
+                    this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex')
+                    .then(() => this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex'))
+                    .then(() => this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex'))
+                    .catch(err => console.warn(`[SKIP_DELAY][${dexName}] Error:`, err));
+                });
 
                 const normalDexPromises = tokenUnit.selectedDexs
-                    .filter(dex => !skipDelayDEX.includes(dex))
-                    .map(async dexName => {
-                        $('#scanProgressText').html(`🔄 ${shortCex} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${dexName} [${percent}%]`);
-                        try {
-                            await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex');
-                            await new Promise(r => setTimeout(r, delayPerDexDirection));
+                .filter(dex => !skipDelayDEX.includes(dex))
+                .map(async dexName => {
+                    $('#scanProgressText').html(`🔄 ${shortCex} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${dexName} [${percent}%]`);
+                    try {
+                    await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex');
+                    await new Promise(r => setTimeout(r, delayPerDexDirection));
 
-                            await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
-                            this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+                    await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+                    this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
 
-                            await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex');
-                            await new Promise(r => setTimeout(r, delayPerDexDirection));
+                    await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex');
 
-                            $('#scanProgressText').html(`🔄 ${dexName} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${shortCex} [${percent}%]`);
-                        } catch (err) {
-                            console.warn(`[NORMAL_DELAY][${dexName}] Error:`, err);
-                        }
+                    await new Promise(r => setTimeout(r, delayPerDexDirection));
 
-                        if (this.errorStats) {
-                            const errorSummary = Object.entries(this.errorStats)
-                                .map(([dex, stat]) =>
-                                    `<span class="badge text-dark bg-warning fs-8">❌ ${dex.toUpperCase()} [ 🕒: ${stat.timeout || 0} | ⚠️: ${stat.dexError || 0} ]</span><br/>`
-                                ).join('');
-                            $('#statERROR').html(`<span class="fw-bold text-white fs-7">STATS ERROR: </span><br/>${errorSummary}`);
-                        }
-                    });
+                    $('#scanProgressText').html(`🔄 ${dexName} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${shortCex} [${percent}%]`);
+                    } catch (err) {
+                    console.warn(`[NORMAL_DELAY][${dexName}] Error:`, err);
+                    }
 
+                    // Error stats
+                    if (this.errorStats) {
+                    const errorSummary = Object.entries(this.errorStats)
+                        .map(([dex, stat]) =>
+                        `<span class="badge text-dark bg-warning fs-8">❌ ${dex.toUpperCase()} [ <span class="text-white "> 🕒: ${stat.timeout || 0} </span>|<span class="text-danger">  ⚠️: ${stat.dexError || 0}</span> ]</span> <br/>`
+                        ).join('');
+                    $('#statERROR').html(`<span class="fw-bold text-white fs-7">STATS ERROR: </span><br/>${errorSummary}`);
+                    }
+                });
+
+                // Jalankan yang tidak delay secara non-blocking (tidak di-await)
                 skippedDexPromises.forEach(p => p);
+
+                // Tunggu hanya yang normal
                 await Promise.allSettled(normalDexPromises);
+
+
             }));
 
             await new Promise(resolve => setTimeout(resolve, delayBetweenGrup));
@@ -2213,11 +1878,152 @@ class TokenPriceMonitor {
         $('#scanProgressText').html(``);
         $('#scanProgressPercent').html(`<span class="text-white fs-7">&nbsp;&nbsp;✅ Durasi Scan: ${minutes}:${seconds}</span>&nbsp;`);
         this.showAlertWithAudio();
+        $('.chainFilterCheckbox').prop('disabled', false);
 
-        // 🔚 Akhiri: tandai config.run = false + enable tombol
-        config.run = "NO";
-        localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-        $('#CheckPrice').prop('disabled', false);
+    }
+
+    async CheckPricesLAMA() { 
+        this.errorStats = {};
+        $('#statERROR').html(''); // opsional: bersihkan tampilan lama
+
+        try {
+            $('#scanProgressPercent').html(`Cek Harga Gas Gwei..`);
+            await this.fetchGasTokenPrices();
+        } catch (err) {
+            console.error('Gagal fetchGasTokenPrices:', err);
+            this.showAlert('Gagal mengambil harga Gas Token, scan dibatalkan', 'danger');
+            return;
+        }
+
+        $('.chainFilterCheckbox').prop('disabled', true);
+        $('#scanProgressPercent').html(``);
+
+        const settings = this.loadSettings();
+        if (!settings || settings.WalletAddress === '-' || settings.UserName === 'XXX') {
+            this.showAlert('SILAKAN SETTING APLIKASI', 'danger');
+            return;
+        }
+
+        const tokensPerBatch = settings.tokensPerBatch;
+        const delayBetweenGrup = settings.delayBetweenGrup;
+        const delayPerDexDirection = 200;
+        const delayPerToken = 200;
+
+        const allTokenUnits = [];
+
+        for (const token of this.tokens) {
+            if (!token.isActive || !this.selectedChains.includes(token.chain)) continue;
+            for (const cexName of token.selectedCexs) {
+                allTokenUnits.push({ ...token, cexName });
+            }
+        }
+
+        allTokenUnits.sort((a, b) => {
+            const symbolA = a.symbol.toLowerCase();
+            const symbolB = b.symbol.toLowerCase();
+            return this.sortAscending ? symbolA.localeCompare(symbolB) : symbolB.localeCompare(symbolA);
+        });
+
+        if (allTokenUnits.length === 0) {
+            this.showAlert('Tidak Ada Daftar Token, Silakan Pilih Chain', 'info');
+            $('#priceTableBody').html(`<tr><td colspan="13" class="text-center text-muted py-5">
+                <i class="bi bi-info-circle me-2"></i> Tidak ada DATA KOIN, Silakan ke Management TOKEN
+            </td></tr>`);
+            return;
+        }
+
+        const chunkArray = (arr, size) => {
+            const result = [];
+            for (let i = 0; i < arr.length; i += size) {
+                result.push(arr.slice(i, i + size));
+            }
+            return result;
+        };
+
+        const unitBatches = chunkArray(allTokenUnits, tokensPerBatch);
+        const totalUnits = allTokenUnits.length;
+        let currentIndex = 0;
+        const skipDelayDEX = ['LIFI','ODOS','OKXDEX'];
+
+        const startTime = new Date();
+        const startStr = startTime.toLocaleTimeString();
+        $('#scanTimeInfo').html(`<span class="text-dark">&nbsp;🔍 ${startStr}</span>&nbsp;`);
+
+        for (const batch of unitBatches) {
+            await Promise.allSettled(batch.map(async tokenUnit => {
+                currentIndex++;
+                const percent = Math.round((currentIndex / totalUnits) * 100);
+                $('#scanProgressBar').css('width', `${percent}%`);
+
+                const priceData = {
+                    token: tokenUnit,
+                    analisis_data: {
+                        cex_to_dex: {},
+                        dex_to_cex: {}
+                    }
+                };
+
+                const shortCex = (CexShortMap[tokenUnit.cexName] || tokenUnit.cexName || '').toUpperCase();
+                const shortChain = (CHAIN_CONFIG[tokenUnit.chain?.toLowerCase()]?.short || tokenUnit.chain || '').toUpperCase();
+
+                const firstToken = batch[0];
+                if (firstToken) {
+                    this.tryAutoScrollToRow(firstToken);
+                }
+
+                await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
+                this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'cex_to_dex');
+
+                await Promise.allSettled(tokenUnit.selectedDexs.map(async dexName => {
+                    $('#scanProgressText').html(`🔄 ${shortCex} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${dexName} [${percent}%]`);
+                    try {
+                        await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'cex_to_dex');
+                        await new Promise(r => setTimeout(r, delayPerDexDirection));
+
+                        await this.fetchCEXPrices(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+                        this.generateOrderBook(tokenUnit, priceData, tokenUnit.cexName, 'dex_to_cex');
+
+                        await this.fetchDEXPrices(tokenUnit, priceData, dexName, tokenUnit.cexName, 'dex_to_cex');
+
+                        $('#scanProgressText').html(`🔄 ${dexName} → <b>[${tokenUnit.symbol} on ${shortChain}]</b> → ${shortCex} [${percent}%]`);
+
+                    } catch (err) {
+                        console.warn(`[TIMEOUT] ${dexName} for DATA:`, tokenUnit, `Error: ${err.message}`);
+                    }
+
+                        // 🟨 Tampilkan errorStats SETIAP selesai 1 DEX
+                    if (this.errorStats) {
+                        const errorSummary = Object.entries(this.errorStats)
+                            .map(([dex, stat]) =>
+                                `<span class="badge text-dark bg-warning fs-8">❌ ${dex.toUpperCase()} [ <span class="text-white "> 🕒: ${stat.timeout || 0} </span>|<span class="text-danger">  ⚠️: ${stat.dexError || 0}</span> ]</span> <br/>`
+                            ).join('');
+                        $('#statERROR').html(`<span class="fw-bold text-white fs-7">STATS ERROR: </span><br/>${errorSummary}`);
+                    }
+
+                    if (!skipDelayDEX.includes(dexName)) {
+                        await new Promise(r => setTimeout(r, delayPerDexDirection));
+                    } else {
+                        console.log(`⏭️ Skip delay untuk DEX: ${dexName}`);
+                    }
+
+                }));
+                
+
+            }));
+
+            await new Promise(resolve => setTimeout(resolve, delayBetweenGrup));
+        }
+
+        const endTime = new Date();
+        const durationSec = Math.floor((endTime - startTime) / 1000);
+        const minutes = Math.floor(durationSec / 60).toString().padStart(2, '0');
+        const seconds = (durationSec % 60).toString().padStart(2, '0');
+
+        $('#scanProgressText').html(``);
+        $('#scanProgressPercent').html(`<span class="text-white fs-7">&nbsp;&nbsp;✅ Durasi Scan: ${minutes}:${seconds}</span>&nbsp;`);
+        this.showAlertWithAudio();
+        $('.chainFilterCheckbox').prop('disabled', false);
+
     }
 
     async showAlertWithAudio() {
@@ -2298,10 +2104,10 @@ class TokenPriceMonitor {
                         )
                     );
                     break;
-                case 'Gate':
+                case 'Gateio':
                     promises.push(
                         CEXAPIs.getGateOrderBook(pair).then(assignData).catch(err =>
-                            console.warn(`Gate ${symbol}/USDT error: ${err.message}`)
+                            console.warn(`Gateio ${symbol}/USDT error: ${err.message}`)
                         )
                     );
                     break;
@@ -3332,7 +3138,7 @@ class TokenPriceMonitor {
                 depositUrl = `https://www.binance.com/en/my/wallet/account/main/deposit/crypto/${symbolDP}`;
                 break;
 
-            case 'GATE':
+            case 'GATEIO':
                 tradeLink = `https://www.gate.io/trade/${symbolForTrade}_USDT`;
                 withdrawUrl = `https://www.gate.io/myaccount/withdraw/${symbolWD}`;
                 depositUrl = `https://www.gate.io/myaccount/deposit/${symbolDP}`;
@@ -3429,17 +3235,17 @@ class TokenPriceMonitor {
                 : `<span class="text-warning">⚠️</span>`;
       return `
           <div class="bg-white py-1">
-                
                 <div class="d-block mb-1">   
-                    <button class="btn btn-xs badge bg-success" onclick="app.confirmToggleToken('${token.id}')" title="Ganti Status">
-                        ⏻
+                    <button class="btn bg-success btn-xs text-light"  onclick="app.confirmToggleToken('${token.id}')" title="Ganti Status">
+                        <i class="bi bi-power"></i>
                     </button>
-                    <strong class="fs-7 align-middle">${token.modalCexToDex}$ ⇔ ${token.modalDexToCex}$</strong>
-                    <button class="btn btn-xs badge bg-light" onclick="app.editToken('${token.id}')" title="Ubah">
-                        ✏️
+
+                     <strong class="fs-7 align-middle">${token.modalCexToDex}$ ⇔ ${token.modalDexToCex}$</strong>
+                    <button class="btn bg-primary btn-xs text-light" onclick="app.editToken('${token.id}')" title="Ubah">
+                        <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn btn-xs badge bg-danger" onclick="app.deleteToken('${token.id}')" title="Hapus">
-                        🗑️
+                     <button class="btn bg-danger btn-xs text-light" onclick="app.deleteToken('${token.id}')" title="Hapus">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </div>
 
@@ -3465,7 +3271,7 @@ class TokenPriceMonitor {
 
                 <!-- Link-link DEX -->
                 <div class="d-block mb-1 fw-bold fs-8">
-                    ${link1INCH} ${linkOKDEX} ${linkDEFIL} ${linkUNIDEX} 
+                    ${link1INCH} ${linkOKDEX} ${linkDEFIL} ${linkUNIDEX} ${linkSQUID} 
                 </div>
             </div>
             `;
@@ -3528,7 +3334,7 @@ class TokenPriceMonitor {
         const fullMessage = `${timestamp} </br> [${message}]`;
 
         // Simpan ke localStorage
-        localStorage.setItem("MULTI_ACTIONS", fullMessage);
+        localStorage.setItem("MULTIALL_ACTIONS", fullMessage);
 
         // Update tampilan
         $('#infostatus').html(fullMessage);
@@ -3653,7 +3459,7 @@ class TokenPriceMonitor {
     }
 
     tryAutoScrollToRow(firstToken) {
-        const isAutoScroll = localStorage.getItem('MULTI_autoScroll') === 'true';
+        const isAutoScroll = localStorage.getItem('MULTIALL_autoScroll') === 'true';
         if (!isAutoScroll) return;
 
         const firstCEX = (firstToken).selectedCexs?.[0] || 'binance';
@@ -3672,7 +3478,7 @@ class TokenPriceMonitor {
         }
     }
 
-    isSettingInvalidLAMA() {
+    isSettingInvalid() {
         const parsed = this.settings;
         return (
             !parsed ||
@@ -3681,221 +3487,18 @@ class TokenPriceMonitor {
         );
     }
 
-    isSettingInvalid() {
-        const settingApp = localStorage.getItem('MULTI_SETTING_APP');
-        const settingScan = localStorage.getItem('MULTI_SETTING_SCAN');
-        const selectedTokens = localStorage.getItem('MULTI_SELECT_TOKENS');
-
-        // Cek setting aplikasi
-        const app = settingApp ? JSON.parse(settingApp) : null;
-        const isAppInvalid = !app ||
-            app.UserName === 'XXX' || !app.UserName || app.UserName.trim() === '' ||
-            app.WalletAddress === '-' || !app.WalletAddress || app.WalletAddress.trim() === '';
-
-        // Cek setting scan
-        const scan = settingScan ? JSON.parse(settingScan) : null;
-        const isScanInvalid = !scan || !Array.isArray(scan.cexs) || scan.cexs.length === 0;
-
-        // Cek token terpilih
-        const tokens = selectedTokens ? JSON.parse(selectedTokens) : [];
-        const isTokenInvalid = !Array.isArray(tokens) || tokens.length === 0;
-
-        // Return jika salah satu invalid
-        return isAppInvalid || isScanInvalid || isTokenInvalid;
-    }
-
-    // PILIH TOKEN BERDASARKAN CEX & CHAINNYA
-    updateSelectedCoins() {
-        const selectedChains = $('#SettingScan input[name="set_chain"]:checked')
-            .map(function () { return this.value; }).get();
-
-        const tokens = JSON.parse(localStorage.getItem('MULTI_MASTER_TOKENS') || '[]');
-        const activeTokens = tokens.filter(t => t.isActive && selectedChains.includes(t.chain));
-
-        // Hitung jumlah token per CEX dan per chain
-        const cexChainCounts = {};  // { Binance: {BSC: 3, Ethereum: 2, ...}, ... }
-        const chainCounts = {};     // { BSC: 3, Ethereum: 5, ... }
-
-        activeTokens.forEach(t => {
-            (t.selectedCexs || []).forEach(cex => {
-                if (!cexChainCounts[cex]) cexChainCounts[cex] = {};
-                if (!cexChainCounts[cex][t.chain]) cexChainCounts[cex][t.chain] = 0;
-                cexChainCounts[cex][t.chain]++;
-            });
-
-            chainCounts[t.chain] = (chainCounts[t.chain] || 0) + 1;
-        });
-
-        // ✅ Tampilkan jumlah token di samping setiap checkbox CHAIN
-        $('#SettingScan input[name="set_chain"]').each(function () {
-            const val = $(this).val();
-            const label = $(`label[for="${$(this).attr('id')}"]`);
-            const count = chainCounts[val] || 0;
-            label.html(`${val.toUpperCase()} <span class="badge bg-primary">${count}</span>`);
-        });
-
-
-        // ✅ Tampilkan jumlah token per CEX dan per chain di label CEX
-        $('#SettingScan input[name="set_cex"]').each(function () {
-            const cex = $(this).val();
-            const label = $(`label[for="${$(this).attr('id')}"]`);
-            const chainInfo = cexChainCounts[cex] || {};
-
-            // Periksa apakah CEX dipilih
-            const isChecked = $(this).is(':checked');
-            let chainSummary = '';
-
-            if (isChecked) {
-                const chainBoxes = Object.entries(chainInfo).map(([chain, count]) => {
-                    const short = CHAIN_CONFIG[chain.toLowerCase()]?.short || chain.toUpperCase();
-                    const checkboxId = `cex_chain_${cex}_${chain}`;
-                    return `
-                        <div class="form-check me-3">
-                            <input type="checkbox" class="form-check-input" name="set_cex_chain" id="${checkboxId}" value="${cex}|${chain}">
-                            <label class="form-check-label small" for="${checkboxId}">
-                                <strong>${short}</strong> [ ${count} ]
-                            </label>
-                        </div>
-                    `;
-                }).join('');
-
-                // Tampilkan horizontal scroll jika perlu
-                chainSummary = `
-                    <div class="d-flex flex-row flex-wrap ms-4 mt-1" style="gap: 8px; overflow-x: auto;">
-                        ${chainBoxes}
-                    </div>
-                `;
-            }
-
-
-            label.html(`
-                <div class="mb-1">
-                    <strong>${cex}</strong>
-                    ${chainSummary || '<div class="ms-4 text-muted"></div>'}
-                </div>
-            `);
-        });
-
-        // ✅ Otomatis centang semua cex_chain yang muncul (agar ringkasan muncul)
-        $('#SettingScan input[name="set_cex_chain"]').prop('checked', true);
-
-        const selectedCexChains = $('#SettingScan input[name="set_cex_chain"]:checked')
-            .map(function () {
-                const [cex, chain] = this.value.split('|');
-                return { cex, chain };
-            }).get();
-
-        const selectedCexChainMap = {}; // { Binance: ['BSC', 'ETH'], Gate: ['BSC'] }
-        selectedCexChains.forEach(({ cex, chain }) => {
-            if (!selectedCexChainMap[cex]) selectedCexChainMap[cex] = [];
-            selectedCexChainMap[cex].push(chain);
-        });
-    }
-
-    updateCexCountsBySelectedChains() {
-        const selectedChains = $('#ConfigScanForm input[name="chain"]:checked')
-            .map(function () { return this.value; }).get();
-
-        const tokens = JSON.parse(localStorage.getItem('MULTI_MASTER_TOKENS') || '[]');
-        const activeTokens = tokens.filter(t => t.isActive && selectedChains.includes(t.chain));
-
-        // Hitung jumlah token per CEX dan per chain
-        const cexChainCounts = {};  // { Binance: {BSC: 3, Ethereum: 2, ...}, ... }
-        const chainCounts = {};     // { BSC: 3, Ethereum: 5, ... }
-
-        activeTokens.forEach(t => {
-            (t.selectedCexs || []).forEach(cex => {
-                if (!cexChainCounts[cex]) cexChainCounts[cex] = {};
-                if (!cexChainCounts[cex][t.chain]) cexChainCounts[cex][t.chain] = 0;
-                cexChainCounts[cex][t.chain]++;
-            });
-
-            chainCounts[t.chain] = (chainCounts[t.chain] || 0) + 1;
-        });
-
-        // ✅ Tampilkan jumlah token di samping setiap checkbox CHAIN
-        $('#ConfigScanForm input[name="chain"]').each(function () {
-            const val = $(this).val();
-            const label = $(`label[for="${$(this).attr('id')}"]`);
-            const count = chainCounts[val] || 0;
-            label.html(`${val.toUpperCase()} <span class="badge bg-primary">${count}</span>`);
-        });
-
-       // ✅ Tampilkan jumlah token per CEX dan per chain di label CEX
-        $('#ConfigScanForm input[name="cex"]').each(function () {
-            const cex = $(this).val();
-            const label = $(`label[for="${$(this).attr('id')}"]`);
-            const chainInfo = cexChainCounts[cex] || {};
-
-            const chainSummary = Object.entries(chainInfo).map(([chain, count]) => {
-                const short = CHAIN_CONFIG[chain.toLowerCase()]?.short || chain.toUpperCase();
-                return `<strong>${short}</strong>: ${count}`;
-            }).join(', ');
-
-            label.html(`${cex} <small class="text-muted">[ ${chainSummary || '0'} ]</small>`);
-        });
-
-
-        // 🔄 Ringkasan detail per CEX dan CHAIN
-        const selectedCexs = $('#ConfigScanForm input[name="cex"]:checked')
-            .map(function () { return this.value; }).get();
-
-        const detailMap = {}; // { CEX: { chain: jumlahToken } }
-
-        activeTokens.forEach(token => {
-            (token.selectedCexs || []).forEach(cex => {
-                if (!selectedCexs.includes(cex)) return;
-
-                const chain = token.chain;
-
-                if (!detailMap[cex]) detailMap[cex] = { _total: 0 };
-                if (!detailMap[cex][chain]) detailMap[cex][chain] = 0;
-
-                detailMap[cex][chain]++;
-                detailMap[cex]._total++;
-            });
-        });
-
-        // Buat HTML ringkasan
-        let html = '';
-        for (const cex in detailMap) {
-            const total = detailMap[cex]._total;
-            html += `<div><strong>💱 ${cex.toUpperCase()}: <span class="badge bg-success">${total} Koin</span></strong><br/>`;
-            for (const chain in detailMap[cex]) {
-                if (chain === '_total') continue;
-                const count = detailMap[cex][chain];
-                html += `&nbsp;&nbsp;&nbsp;&nbsp;🔗 ${chain}: <span class="badge bg-primary">${count} Koin</span><br/>`;
-            }
-            html += `</div><br/>`;
-        }
-
-
-        $('#DetailedConfigSummary').html(html);
-    }
-
 }
-
- 
 
 // Initialize the application when DOM is ready
 $(document).ready(function() {
-    const config = JSON.parse(localStorage.getItem('MULTI_SETTING_SCAN') || '{}');
-
-    // Jika run = "YES" tapi tidak ada proses autorun berjalan (misalnya karena refresh)
-    if (config.run === "YES") {
-        config.run = "NO"; // set ke NO
-        localStorage.setItem('MULTI_SETTING_SCAN', JSON.stringify(config));
-        console.warn("🔁 Halaman direfresh saat scan aktif.");
-    }
-    
     window.app = new TokenPriceMonitor();
-   
+    
     $('#scrollTopBtn').show();
     
    // Fungsi untuk menerapkan tema dan tandai kotak aktif
     function applyTheme(theme) {
         $('body').attr('data-theme', theme);
-        localStorage.setItem('MULTI_theme', theme);
+        localStorage.setItem('MULTIALL_theme', theme);
 
         // Highlight kotak aktif
         $('.theme-box').removeClass('active');
@@ -3909,13 +3512,13 @@ $(document).ready(function() {
     }
 
     // === Saat awal page dimuat ===
-    const savedTheme = localStorage.getItem('MULTI_theme');
+    const savedTheme = localStorage.getItem('MULTIALL_theme');
 
     if (!savedTheme || !isValidTheme(savedTheme)) {
         const defaultTheme = 'biru';
         alert("🎨 SILAKAN PILIH TEMA LAIN [POJOK KANAN ATAS]!");
         applyTheme(defaultTheme);
-        localStorage.removeItem('MULTI_theme'); // bersihkan jika tidak valid
+        localStorage.removeItem('MULTIALL_theme'); // bersihkan jika tidak valid
     } else {
         applyTheme(savedTheme);
     }
@@ -3947,13 +3550,13 @@ $(document).ready(function() {
     });
 
       // Inisialisasi nilai dari localStorage
-    const saved = localStorage.getItem('MULTI_autoScroll');
+    const saved = localStorage.getItem('MULTIALL_autoScroll');
     $('#autoScrollCheckbox').prop('checked', saved === 'true');
 
     // Simpan perubahan ke localStorage saat dicentang/ubah
     $('#autoScrollCheckbox').on('change', function () {
         const isChecked = $(this).is(':checked');
-        localStorage.setItem('MULTI_autoScroll', isChecked);
+        localStorage.setItem('MULTIALL_autoScroll', isChecked);
 
         // Tambahkan alert berdasarkan status
         if (isChecked) {

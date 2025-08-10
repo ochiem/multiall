@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>MULTIALL SCANNER</title>
+    <title>Multi Scanner</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/16770/16770026.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -156,29 +156,29 @@
     .text-light       { color: var(--light-color) !important; }
 
     /* BACKGROUND COLORS */
-    .bg-primary       { background-color: var(--primary-color);  }
-    .bg-secondary     { background-color: var(--secondary-color) ; }
-    .bg-success       { background-color: var(--success-color) ; }
-    .bg-danger        { background-color: var(--danger-color) ; }
-    .bg-warning       { background-color: var(--warning-color) ;}
-    .bg-dark          { background-color: var(--dark-color) ;  }
-    .bg-light         { background-color: var(--light-color) ;  }
-    .bg-utama         { background-color: var(--utama) ; }
+    .bg-primary       { background-color: var(--primary-color) !important;  }
+    .bg-secondary     { background-color: var(--secondary-color) !important;  }
+    .bg-success       { background-color: var(--success-color) !important; }
+    .bg-danger        { background-color: var(--danger-color) !important; }
+    .bg-warning       { background-color: var(--warning-color) !important;}
+    .bg-dark          { background-color: var(--dark-color) !important;  }
+    .bg-light         { background-color: var(--light-color) !important;  }
+    .bg-utama         { background-color: var(--utama) !important; }
 
      /* BUTTON COLORS */
-    .btn-primary       { background-color: var(--primary-color) ;  }
-    .btn-secondary     { background-color: var(--secondary-color);  }
-    .btn-success       { background-color: var(--success-color) ; }
-    .btn-danger        { background-color: var(--danger-color) ; }
-    .btn-warning       { background-color: var(--warning-color) ;}
-    .btn-dark          { background-color: var(--dark-color) ;  }
-    .btn-light         { background-color: var(--light-color) ;  }
+    .btn-primary       { background-color: var(--primary-color) !important;  }
+    .btn-secondary     { background-color: var(--secondary-color) !important;  }
+    .btn-success       { background-color: var(--success-color) !important; }
+    .btn-danger        { background-color: var(--danger-color) !important; }
+    .btn-warning       { background-color: var(--warning-color) !important;}
+    .btn-dark          { background-color: var(--dark-color) !important;  }
+    .btn-light         { background-color: var(--light-color) !important;  }
 
 
    /* CEX Background */
     .bg-binance  { background-color: #f3ba2f !important; color: #000 !important; }
     .bg-mexc     { background-color: #00e38e !important; color: #000 !important; }
-    .bg-gate   { background-color: #b50028 !important; color: #fff !important; }
+    .bg-gateio   { background-color: #b50028 !important; color: #fff !important; }
     .bg-indodax  { background-color: #0066cc !important; color: #fff !important; }
 
     /* DEX Background */
@@ -192,10 +192,10 @@
     .bg-magpie    { background-color: #00b8d9 !important; color: #000 !important; }
 
     /* Text-only (tanpa background) */
-    .text-binance  { color: #f3ba2f ; }
-    .text-mexc     { color: #00e38e ; }
-    .text-gate   { color: #b50028 ; }
-    .text-indodax  { color: #0066cc ; }
+    .text-binance  { color: #f3ba2f !important; }
+    .text-mexc     { color: #00e38e !important; }
+    .text-gateio   { color: #b50028 !important; }
+    .text-indodax  { color: #0066cc !important; }
 
     .text-1inch     { color: #b70f60 !important; }
     .text-kyberswap { color: #29ab87 !important; }
@@ -259,6 +259,7 @@
     .btn {
         border-radius: 8px;
         font-weight: 500;
+        transition: all 0.3s ease;
     }
     .btn:hover {
         transform: translateY(-1px);
@@ -422,10 +423,10 @@
     .highlight-row { background-color: #ffe8a1 !important; transition: background-color 0.5s ease; }
     .pnl-highlight { background-color: #cbfdd9 !important; }
     
-    /* @keyframes flashCell {
+    @keyframes flashCell {
         0% { background-color: #fffae6; }
         100% { background-color: transparent; }
-    } */
+    }
 
     .pink { background-color: #fccbce !important; }
     .abu { background-color: #d8dbdf !important; }
@@ -605,10 +606,10 @@
 </head>
 <body style="font-family: 10px;">
 
-    <nav class="navbar bg-utama py-2 modal-header">
+    <nav class="navbar bg-utama py-2">
         <div class="container-fluid d-flex align-items-center justify-content-between py-1 px-2 bg-dark">
             <!-- Brand -->
-            <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#">[ MULTIALL SCANNER ]</a>
+            <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#">[ MultiALL Scanner ]</a>
 
             
               <!-- Overlay Loading -->
@@ -660,8 +661,8 @@
                 <!-- Tab: API Settings -->
                 <li class="nav-item" role="presentation">
                     <button class="nav-link nav-icon-button text-white" id="setting-tab"
-                        data-bs-toggle="tab" data-bs-target="#appSettings" type="button" role="tab"
-                        aria-controls="appSettings" aria-selected="false" title="Setting Aplikasi">
+                        data-bs-toggle="tab" data-bs-target="#apiSettings" type="button" role="tab"
+                        aria-controls="apiSettings" aria-selected="false" title="Setting Aplikasi">
                         <i class="bi bi-gear"></i>
                     </button>
                 </li>
@@ -673,6 +674,15 @@
                         data-bs-toggle="tab" data-bs-target="#portfolioTab" type="button" role="tab"
                         aria-controls="portfolioTab" aria-selected="false" title="Portfolio Asset">
                         <i class="bi bi-wallet"></i>
+                    </button>
+                </li>
+
+                 <!-- Tab: Memory -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="memory-tab"
+                        data-bs-toggle="tab" data-bs-target="#memoryTab" type="button" role="tab"
+                        aria-controls="memoryTab" aria-selected="false" title="Memory Usage">
+                        <i class="bi bi-sd-card"></i>
                     </button>
                 </li>
 
@@ -717,25 +727,15 @@
                     <span class="fw-bold text-dark badge bg-white ">ACTION:</span><br/>
                     <span id="infostatus" class="text-white fw-bold fs-8">---</span>
                 </div>
-                
+
                 <hr class="my-1 bg-light"/>
 
                 <!-- config setting -->
 
                 <div>
-                    <span class="fw-bold text-dark badge bg-white ">CONFIG APP:</span><br/>
+                    <span class="fw-bold text-dark badge bg-white ">CONFIG:</span><br/>
                     <span id="infoConfig" class="text-white fw-bold fs-8"></span>
                 </div>
-
-                <hr class="my-1 bg-light"/>
-
-                <!--  setting data token-->
-
-                <div>
-                    <span class="fw-bold text-dark badge bg-white">CONFIG SCANNER:</span>
-                    <div id="infoScanKoin" class="text-white fw-bold fs-7 mt-1"></div>
-                </div>
-
 
                 <hr class="my-1 bg-light"/>
 
@@ -820,7 +820,6 @@
                                 <button id="autorunBtn" class="btn btn-sm text-primary bg-white">
                                     <i class="bi bi-repeat"></i>
                                 </button>
-
                                 <button class="btn btn-sm text-white bg-secondary" id="sortByToken">
                                      <i id="sortIcon" class="bi bi-sort-alpha-down"></i>
                                 </button>
@@ -844,14 +843,39 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
                   
                     <div class="d-flex gap-2 flex-wrap align-items-center small text-nowrap">
-                        
+                        <!-- <div class="fw-bold text-secondary">📊 Data Coins ~ <span id="totalBarisMonitoring" class="fw-bold text-danger">0</span> Baris</div>:  -->
+                        <div class="text-success">📊 Total: <span id="totalTokensMonitoring" class="fw-bold">0</span> Coins</div> [
+
+                        <label class="text-warning mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="BSC">
+                            BSC: <span id="bscCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-primary mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Ethereum">
+                            ERC: <span id="ercCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-info mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Polygon">
+                            POLY: <span id="polyCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-secondary mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Arbitrum">
+                            ARB: <span id="arbCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-danger mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Base">
+                            BASE: <span id="baseCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        ]
+                            
                     </div>
                      <!-- Tombol Sort dan Search berdampingan -->
                         <div class="d-flex align-items-center gap-2 btn-sm">
-                            <div class="form-check mb-0 d-flex align-items-center">
-                                <span id="configScanTerpilih"></span>
-                            </div>
-                            
                             <!-- Tombol Sort dan Search berdampingan -->
                             <div class="form-check mb-0 d-flex align-items-center">
                                 <input class="form-check-input me-1" type="checkbox" id="autoScrollCheckbox">
@@ -885,7 +909,6 @@
                                 <tbody id="priceTableBody">
                                     <!-- Dynamic Content -->
                                 </tbody>
-                                
                             </table>
 
                         </div>
@@ -905,7 +928,6 @@
                         </h5>
                         <!-- Tombol Aksi -->
                         <div class="d-flex align-items-center flex-wrap gap-2">
-
                             <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tokenModal">
                                 <i class="bi bi-plus-lg"></i> Add Tokens
                             </button>
@@ -928,7 +950,7 @@
                         </div>
                     </div>
 
-                      <!-- Statistik dan Filter -->
+                    <!-- Statistik dan Filter -->
                     <div class="px-3 py-2 border-bottom bg-light">
                         <div class="d-flex align-items-center flex-wrap gap-3 small text-nowrap">
                             <div class="fw-bold text-secondary">📊 Statistik Tokens</div>
@@ -940,7 +962,7 @@
                             </label>
                             <label class="text-primary">
                                 <input type="checkbox" class="filter-chain-checkbox me-1" value="Ethereum" checked>
-                                ETH: <span id="ercCountManagement" class="fw-bold">0</span>
+                                ERC: <span id="ethCountManagement" class="fw-bold">0</span>
                             </label>
                             <label class="text-danger">
                                 <input type="checkbox" class="filter-chain-checkbox me-1" value="Base" checked>
@@ -967,128 +989,88 @@
 
                     <!-- Tabel Token -->
                     <div class="card-body p-0">
-                        <table class="table table-hover custom-striped mb-0 sticky-table" id="tokenTable">
-                            <thead class="table-light sticky-top">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Symbol & Pair [ Nama, Smart Contact & Decimal ]</th>
-                                    <th>Chain & Status</th>
-                                    <th>Modal {CEX & DEX}</th>
-                                    <th>Exchanger (CEX)</th>
-                                    <th>DEX</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tokenTableBody"></tbody>
-                        </table>
+                        <div class="table-responsive sticky-table-container" style="max-height: 800px; overflow-y: auto;">
+                            <table class="table table-hover custom-striped mb-0 sticky-table" id="tokenTable">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Symbol Token / Pair</th>
+                                        <th>Chain & Status</th>
+                                        <th>Modal {CEX & DEX}</th>
+                                        <th>Exchanger (CEX)</th>
+                                        <th>DEX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tokenTableBody"></tbody>
+                            </table>
                         </div>
                     </div>
-                    
+                </div>
             </div>
             
             <!-- Portfolio Tab -->
             <div class="tab-pane fade" id="portfolioTab">
-                <iframe src="modal.html" style="width: 100%; height: 900px; border: none;"></iframe>
+                <iframe src="aset.html" style="width: 100%; height: 900px; border: none;"></iframe>
+            </div>
+
+            <!-- Memory Tab -->
+            <div class="tab-pane fade" id="memoryTab">
+                <iframe src="memory.html" style="width: 100%; height: 900px; border: none;"></iframe>
             </div>
            
             <!-- API Settings Tab -->
-            <div class="tab-pane fade" id="appSettings">
-                <div class="row justify-content-center mt-4">
-                    <!-- Settings Aplikasi -->
-                    <div class="col-md-4">
-                        <div class="card shadow-sm rounded-3">
+            <div class="tab-pane fade" id="apiSettings">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card mt-4 shadow-sm rounded-3">
                             <div class="card-body">
                                 <div class="modal-header mb-2">
-                                    <h5 class="align-middle text-white ps-3 mx-2 my-2 py-2">
-                                        <i class="bi bi-gear"></i>Konfigurasi Aplikasi
-                                    </h5>
+                                     <h5 class="align-middle text-white ps-3 mx-2 my-2 py-2">
+                                    <i class="bi bi-gear"></i> Settings Aplikasi
+                                </h5>
+
                                 </div>
+                               
                                 <form id="settingsForm">
                                     <div class="mb-3">
                                         <label for="UserName" class="form-label">User Name</label>
                                         <input type="text" class="form-control" id="UserName" required>
                                         <small class="form-text text-muted">Masukkan nama pengguna Anda.</small>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="tokensPerBatch" class="form-label">Jumlah Anggota Grup [3-7]</label>
                                         <input type="number" class="form-control" id="tokensPerBatch" min="3" max="7" required>
                                         <small class="form-text text-muted">Jumlah anggota per batch grup.</small>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="delayBetweenGrup" class="form-label">Jeda Antar Grup (ms) [300-5000]</label>
                                         <input type="number" class="form-control" id="delayBetweenGrup" min="300" max="5000" required>
                                         <small class="form-text text-muted">Jeda waktu antar batch (dalam milidetik).</small>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="TimeoutCount" class="form-label">Waktu Tunggu (ms) [2000-100000]</label>
                                         <input type="number" class="form-control" id="TimeoutCount" min="2000" max="100000" required>
                                         <small class="form-text text-muted">Waktu maksimal menunggu proses (ms).</small>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="PNLFilter" class="form-label">PNL Filter</label>
                                         <input type="number" class="form-control" id="PNLFilter" min="0" step="0.01" value="0" required>
                                         <small class="form-text text-muted">Minimal PNL 0 agar ditampilkan.</small>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="WalletAddress" class="form-label">Wallet Address</label>
                                         <input type="text" class="form-control" id="WalletAddress" required>
                                         <small class="form-text text-muted">Alamat wallet Anda untuk filter & identifikasi.</small>
                                     </div>
+
                                     <div class="text-end">
-                                        <button type="button" class="btn btn-primary" id="saveAppSettingsBtn">
-                                            <i class="bi bi-check-lg"></i> Simpan Konfig
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Scan Data Koin -->
-                    <div class="col-md-8">
-                        <div class="card shadow-sm rounded-3">
-                            <div class="card-body">
-                                <div class="modal-header mb-2">
-                                    <h5 class="align-middle text-white ps-3 mx-2 my-2 py-2">
-                                        <i class="bi bi-upc-scan"></i> Setting data Koin SCANNER
-                                    </h5>
-                                <button class="btn btn-sm btn-outline-danger bg-white me-3" data-bs-toggle="modal" data-bs-target="#ModalSyncKoin">
-                                    <i class="bi bi-database-fill-gear"></i> Sync Coins
-                                </button>
-
-                                </div>
-                                <form id="SettingScan">
-                                    <div class="row">
-                                        <!-- Chain -->
-                                        <div class="col-md-4">
-                                            <div class="mb-3">
-                                                <label class="form-label fw-bold">PILIH CHAIN</label>
-                                                <div class="border rounded p-3">
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="BSC" id="ScanBSC"><label class="form-check-label" for="ScanBSC">BSC</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="Ethereum" id="ScanETH"><label class="form-check-label" for="ScanETH">ERC</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="Polygon" id="ScanPOLY"><label class="form-check-label" for="ScanPOLY">POLYGON</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="Arbitrum" id="ScanARB"><label class="form-check-label" for="ScanARB">ARBITRUM</label></div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_chain" value="Base" id="ScanBASE"><label class="form-check-label" for="ScanBASE">BASE</label></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Market -->
-                                        <div class="col-md-8">
-                                            <div class="mb-3">
-                                                <label class="form-label fw-bold">PILIH MARKET</label>
-                                                <div class="border rounded p-3">
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="Binance" id="ScanBinance"><label class="form-check-label" for="ScanBinance">Binance</label> </div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="Gate" id="ScanGate"><label class="form-check-label" for="ScanGate">Gate</label> </div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="MEXC" id="ScanMEXC"><label class="form-check-label" for="ScanMEXC">MEXC</label> </div>
-                                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="set_cex" value="INDODAX" id="ScanINDODAX"><label class="form-check-label" for="ScanINDODAX">INDODAX</label> </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <div class="text-end">
-                                        <button type="submit" class="btn btn-primary" id="saveScanSettingsBtn">
-                                            <i class="bi bi-check-lg"></i> Simpan Data Koin  
+                                        <button type="submit" class="btn btn-primary" id="saveSettingsBtn">
+                                            <i class="bi bi-check-lg"></i> Save Settings
                                         </button>
                                     </div>
                                 </form>
@@ -1097,7 +1079,7 @@
                     </div>
                 </div>
             </div>
-
+       
         </div>
 
     </div>
@@ -1181,7 +1163,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Chain</label>
                                     <select class="form-select" id="tokenChain" required>
-                                        <option value="">PILIH Chain</option>
+                                        <option value="">Select Chain</option>
                                         <option value="BSC">BSC</option>
                                         <option value="Ethereum">ERC</option>
                                         <option value="Polygon">Polygon</option>
@@ -1196,15 +1178,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">PILIH CEX</label>
+                                    <label class="form-label">Select CEX</label>
                                     <div class="border rounded p-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="Binance" id="cexBinance">
                                             <label class="form-check-label" for="cexBinance">Binance</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Gate" id="cexGate">
-                                            <label class="form-check-label" for="cexGate">Gate</label>
+                                            <input class="form-check-input" type="checkbox" value="Gateio" id="cexGate">
+                                            <label class="form-check-label" for="cexGate">Gateio</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="MEXC" id="cexMexc">
@@ -1220,7 +1202,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">PILIH DEX (MAX 4)</label>
+                                    <label class="form-label">Select DEX (MAX 4)</label>
                                     <div class="border rounded p-3">
                                         <div class="row">
                                             <!-- Kolom Kiri -->
@@ -1250,6 +1232,14 @@
                                                     <input class="form-check-input" type="checkbox" value="ODOS" id="dexOdos">
                                                     <label class="form-check-label" for="dexOdos">ODOS</label>
                                                 </div>
+                                                <!-- <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="ParaSwap" id="dexParaSwap">
+                                                    <label class="form-check-label" for="dexParaSwap">ParaSwap</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="Magpie" id="dexMagpie">
+                                                    <label class="form-check-label" for="dexMagpie">Magpie</label>
+                                                </div> -->
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="LIFI" id="dexLIFI">
                                                     <label class="form-check-label" for="dexLIFI">LIFI (Auto DEX)</label>
@@ -1275,140 +1265,6 @@
         </div>
     </div>
 
-<!-- ✅ MODAL SYNC KOIN -->
-<div class="modal fade" id="ModalSyncKoin" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <!-- HEADER -->
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <i class="bi bi-database-fill-gear me-2"></i>
-          <span>Sinkronisasi Data Koin</span>
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- BODY -->
-      <div class="modal-body">
-        <form id="SyncKoinForm">
-          <div class="row">
-            <!-- CHAIN -->
-            <div class="col-md-12 mb-3">
-              <label class="form-label fw-bold">Pilih Chain</label>
-              <div class="border rounded p-3 d-flex flex-wrap gap-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="sync_chain" value="bsc" id="sync_chain_bsc">
-                  <label class="form-check-label" for="sync_chain_bsc">BSC</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="sync_chain" value="ethereum" id="sync_chain_ethereum">
-                  <label class="form-check-label" for="sync_chain_ethereum">ERC</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="sync_chain" value="polygon" id="sync_chain_polygon">
-                  <label class="form-check-label" for="sync_chain_polygon">POLYGON</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="sync_chain" value="arbitrum" id="sync_chain_arbitrum">
-                  <label class="form-check-label" for="sync_chain_arbitrum">ARBITRUM</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="sync_chain" value="base" id="sync_chain_base">
-                  <label class="form-check-label" for="sync_chain_base">BASE</label>
-                </div>
-              </div>
-            </div>
-
-              <!-- MODAL INPUT -->
-            <div class="col-md-12 mb-3">
-              <div class="row">
-                <div class="col-md-6">
-                  <label class="form-label fw-bold">Modal CEX → DEX ($)</label>
-                  <input type="number" class="form-control" id="sync_modal_cex_dex" value="100" min="1" step="0.01">
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-bold">Modal DEX → CEX ($)</label>
-                  <input type="number" class="form-control" id="sync_modal_dex_cex" value="100" min="1" step="0.01">
-                </div>
-              </div>
-            </div>
-
-            <!-- CEX & DEX -->
-            <div class="col-md-12 mb-3">
-              <div class="row">
-                <!-- CEX -->
-                <div class="col-md-6">
-                  <label class="form-label fw-bold">Pilih Market (CEX)</label>
-                  <div class="border rounded p-3">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_cex" value="Binance" id="sync_cex_binance">
-                      <label class="form-check-label" for="sync_cex_binance">Binance</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_cex" value="Gate" id="sync_cex_gate">
-                      <label class="form-check-label" for="sync_cex_gate">Gate</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_cex" value="MEXC" id="sync_cex_mexc">
-                      <label class="form-check-label" for="sync_cex_mexc">MEXC</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_cex" value="INDODAX" id="sync_cex_indodax">
-                      <label class="form-check-label" for="sync_cex_indodax">INDODAX</label>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- DEX -->
-                <div class="col-md-6">
-                  <label class="form-label fw-bold">Pilih DEX (max 4)</label>
-                  <div class="border rounded p-3">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_dex" value="1inch" id="sync_dex_1inch">
-                      <label class="form-check-label" for="sync_dex_1inch">1INCH</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_dex" value="KyberSwap" id="sync_dex_kyber">
-                      <label class="form-check-label" for="sync_dex_kyber">KyberSwap</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_dex" value="Matcha" id="sync_dex_matcha">
-                      <label class="form-check-label" for="sync_dex_matcha">Matcha</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_dex" value="OKXDEX" id="sync_dex_okx">
-                      <label class="form-check-label" for="sync_dex_okx">OKX DEX</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_dex" value="ODOS" id="sync_dex_odos">
-                      <label class="form-check-label" for="sync_dex_odos">ODOS</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="sync_dex" value="LIFI" id="sync_dex_lifi">
-                      <label class="form-check-label" for="sync_dex_lifi">LIFI (Auto DEX)</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </form>
-      </div>
-
-      <!-- FOOTER -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="saveSyncKoinBtn">
-          <i class="bi bi-check-lg"></i> Sync Koin
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Web3 JS -->
@@ -1417,8 +1273,6 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-    <script src="https://unpkg.com/clusterize.js/clusterize.min.js"></script>
-
     <!-- Price APIs -->
     <script src="price-apis.js"></script>
     <!-- Custom JS -->
