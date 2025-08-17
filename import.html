@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import DATA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.3/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.3/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.3/dist/js/uikit-icons.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/6378/6378038.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script src="config.js"></script>
+    <style>
+        .uk-container { width: 96%; max-width: none; }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .uk-container {
+            margin-top: 35px;
+        }
+       
+        .uk-grid-small {
+            margin-bottom: 15px;
+        }
+        .uk-table th, .uk-table td {
+            text-align: center;
+        }
+        #pair-checkboxes {
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-container .uk-card {
+            flex: 1;
+            min-width: 300px;
+        }
+       
+        img:hover {
+                transform: scale(1.6); /* You can adjust the scale factor as needed */
+            }
+        .img-large {
+            width: 50px !important; /* Atur ukuran sesuai kebutuhan */
+            transition: transform 0.3s; /* Menambahkan efek animasi */
+            display: inline-flex;          /* Menjadikan elemen inline fleksibel */
+            justify-content: center;       /* Pusatkan gambar secara horizontal */
+            align-items: center;      
+            background-color: #f97aa8;     /* Warna latar belakang */
+            border-radius: 40%;            /* Membuat bentuk lingkaran */
+            cursor: pointer;               /* Ubah kursor menjadi tangan saat diklik */
+            transition: background-color 0.3s ease; /* Animasi untuk efek hover */
+        }
+        .uk-table th{
+            color: white;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>    
+    <div class="uk-container">
+        <div class="uk-text-center" uk-grid>
+            <div class="uk-width-auto@m">
+                <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                    <h3 id="judul">
+                        MONITORING V1 <label id="namachain"></label> :: IMPORT </h3>
+                        &nbsp;
+                        <a href="import.html">
+                            <img class="icon" id="ImportDataBtn" title="IMPORT TOKEN PAIR" width="35px" src="https://icons.veryicon.com/png/o/internet--web/2022-alibaba-cloud-product-icon-cloud/cbs-database-backup.png" />
+                        </a>&nbsp;
+                        <a href="multipair.html">
+                            <img class="icon" id="MasterDataBtn" title="SETTING TOKEN PAIR" width="35px" src="https://cdn-icons-png.flaticon.com/512/324/324125.png" />
+                        </a>&nbsp;
+                        <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
+                            <img title="BUKA AKSES" src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="35px" />
+                        </a>&nbsp;
+                        <img class="icon" id="UpdateWalletCEX" title="UPDATE WALLET CEX" width="35px" src="https://cdn-icons-png.flaticon.com/512/3687/3687106.png" /> &nbsp;
+                        <img class="icon" id="reload" title="REFRESH PAGE" width="35px" src="https://cdn-icons-png.flaticon.com/512/2546/2546705.png" /> &nbsp;
+                        <a href="memory.html" target="_blank">
+                            <img title="MANAJEMEN MEMORY" src="https://cdn-icons-png.flaticon.com/512/9776/9776871.png" width="35px" />
+                        </a>&nbsp;
+                        <a href="index.html" target="_blank">
+                            <img class="icon" id="Scanner" title="SCANNER PRICE" width="35px" src="https://cdn.iconscout.com/icon/premium/png-256-thumb/copy-cat-5381934-4568586.png" />
+                        </a> 
+                        <br/> <br/>
+                        <span id="chain-links-container" ></span>  
+                </div>
+            </div>
+            <div class="uk-width-expand@m">
+                <div >
+                    <h4 class="uk-heading-divider" id="judulcex">Pilihan Exchanger (CEX) & TOKEN PAIR</h4>
+                    <span id="cex-options" class="uk-grid-small uk-child-width-auto uk-grid uk-margin-remove uk-text-primary uk-text-bolder"></span>
+                   <span id="pair-checkboxes" class="uk-grid-small uk-child-width-auto uk-grid uk-margin-remove uk-text-secondary  uk-text-bolder"></span>                
+
+                
+                    <button id="filter-btn" class="uk-button uk-button-primary uk-width-auto" disabled>Tampilkan</button>
+                    <button id="stop-btn" class="uk-button uk-button-danger uk-width-auto">BATALKAN</button>
+                    <button id="load-data-btn" class="uk-button uk-button-secondary uk-width-auto" style="display: none;">SIMPAN </button>
+                </div>
+                <div class="uk-align-center uk-background-muted uk-text-small">
+                    <b><span class="uk-text-secondary uk-text-medium">INFO: &nbsp;</span></b>
+                    <b><span class="uk-text-success uk-text-medium" id="infoAPP">???</span></b>&nbsp; &nbsp; &nbsp;
+                </div> 
+            </div>
+        </div>
+       
+
+        <!-- Tabel Hasil -->
+        <h3 class="uk-heading-line uk-margin-top" id="daftar"><span>Daftar Token Pair <span id="namachain2"></span> Hasil Pilihan  </span></h3>
+       
+        <table class="uk-table uk-table-striped uk-table-hover" id="result-table" >
+            <thead class="table-header">
+                <tr>
+                    <th>CEX</th>
+                    <th>Symbol In</th>
+                    <th>SC In</th>
+                    <th>Symbol Out</th>
+                    <th>SC Out</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="6" class="uk-text-center"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+         toastr.options = {
+            "timeOut": "2000",            // Durasi munculnya toastr dalam milidetik
+            "extendedTimeOut": "2000",    // Waktu tambahan saat toastr di-hover
+            "closeButton": true,          // Tampilkan tombol close (opsional)
+            "progressBar": true,          // Tampilkan progress bar (opsional)
+            "positionClass": "toast-top-right" // Posisi toastr (ubah sesuai kebutuhan)
+        };
+        $(document).ready(function () {
+            // Mendapatkan parameter dari URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const chainParam = urlParams.get('chain') || "bsc"; // Default ke 'bsc' jika tidak ada parameter 'chain' di URL
+
+            // Memilih chain yang sesuai berdasarkan parameter URL
+            const selectedChain = CONFIG_CHAINS[chainParam] || CONFIG_CHAINS['bsc']; 
+
+            // Mengatur konfigurasi global chain berdasarkan input dari URL
+            const { Kode_Chain, Nama_Chain, URL_Chain, pairs } = selectedChain; 
+
+            const storagePrefix = "MONITORING_V1_" + Nama_Chain.toUpperCase() + "_";
+            let sortOrder = {};
+
+            // Fungsi umum untuk mendapatkan data dari localStorage
+            function getFromLocalStorage(key, defaultValue) {
+                return JSON.parse(localStorage.getItem(storagePrefix + key)) || defaultValue;
+            // console.log("Data from localStorage:", data); // Debug log
+            }
+            // Fungsi umum untuk menyimpan data ke localStorage
+            function saveToLocalStorage(key, value) {
+                    try {
+                        localStorage.setItem(storagePrefix + key, JSON.stringify(value));
+                    // console.log("Data saved successfully:", key);
+                    } catch (error) {
+                        // Tambahkan log untuk memverifikasi jenis error
+                        console.error("Error saat menyimpan data:", error);
+
+                        if (error.name === "QuotaExceededError") {
+                            // Tambahkan pengecekan ruang yang tersedia sebelum menyimpan
+                            let usedSpace = new Blob(Object.values(localStorage)).size;
+                            let totalSpace = 5 * 1024 * 1024; // Biasanya 5MB
+                            console.error(`Used space: ${usedSpace} bytes / Total allowed: ${totalSpace} bytes`);
+
+                            toastr.error("MEMORY BROWSER PENUH!!! Sisa ruang tidak mencukupi.");
+                        } else {
+                            toastr.error("Terjadi kesalahan tak terduga saat menyimpan data.");
+                        }
+                    }
+                }
+
+            // Fungsi untuk menghapus item dari localStorage
+            function removeFromLocalStorage(key) {
+                localStorage.removeItem(storagePrefix + key);
+            // console.log("Remove from localStorage:", key); // Debug log
+            }
+            // Fungsi untuk mendapatkan data chain berdasarkan nama chain
+            function getChainData(chainName) {
+                const chainData = CONFIG_CHAINS[chainName]; // base
+                
+                if (!chainData) {
+                    console.log(`Chain dengan nama ${chainName} tidak ditemukan.`);
+                    return null;
+                }
+                return {
+                    Kode_Chain: chainData.Kode_Chain,
+                    Nama_Chain: chainData.Nama_Chain,
+                    DEXS: chainData.DEXS,
+                    PAIRDEXS: chainData.PAIRDEXS,
+                    URL_Chain: chainData.URL_Chain, 
+                    DATAJSON: chainData.DATAJSON, 
+                    BaseFEEDEX: chainData.BaseFEEDEX, 
+                    CEXCHAIN: chainData.WALLET_CEX,
+                    ICON_CHAIN: chainData.ICON,
+                    COLOR_CHAIN: chainData.WARNA,
+                };
+            }
+
+            const chainName = urlParams.get('chain') || 'bsc'; // Jika tidak ada parameter 'chain', default ke 'polygon'
+            // Mendapatkan data untuk chain yang dipilih
+            const DTChain = getChainData(chainName);
+            const cexOptions = Object.keys(DTChain.CEXCHAIN);
+            const pairOptions = Object.keys(DTChain.PAIRDEXS);
+            let jsonData = [];
+            const validTokens = pairOptions.filter(token => token !== "NON");
+
+            var savedSettingData = getFromLocalStorage('DATA_SETTING', []);
+            var DataTokens = getFromLocalStorage('TOKEN',[]);
+            var serverCORSList = getFromLocalStorage("SERVERCORS", []);
+            var WalletCEX = getFromLocalStorage("LASTUPDATE_FEEWD", []);
+            var DATAWalletCEX = getFromLocalStorage("WALLET_CEX", []);
+            var dataACTION = getFromLocalStorage('HISTORY');
+            var dataTokenPilih = getFromLocalStorage('TOKEN_PILIH');
+
+            function cekDataAwal() {
+                // Update href untuk index.html
+                var scannerLink = $('a[href="index.html"]');
+                var scannerHref = scannerLink.attr('href');
+                scannerLink.attr('href', scannerHref + "?chain=" + encodeURIComponent(chainName));
+
+                // Update href untuk import.html
+                var importLink = $('a[href="import.html"]');
+                var importHref = importLink.attr('href');
+                importLink.attr('href', importHref + "?chain=" + encodeURIComponent(chainName));
+
+                // Variabel info untuk status akhir
+                var info = true;
+                
+                $('#UpdateWalletCEX, #Scanner').css({
+                    'pointer-events': 'none',
+                    'opacity': '0.4',
+                });
+
+                    if (!dataTokenPilih || !Array.isArray(dataTokenPilih) || dataTokenPilih.length === 0) {
+                        // Jika data token dan data token pilih tidak ada
+                        if (!DataTokens || !Array.isArray(DataTokens) || DataTokens.length === 0) {
+                            $("#infoAPP").show().html("SILAKAN PILIH DATA TOKEN & PAIR DAHULU, KEMUDIAN TAMPILKAN & SIMPAN !!").addClass('uk-text-danger');
+                            toastr.error('<b>SILAKAN PILIH DATA TOKEN DAN PAIR!!</b><br/>');
+                            form_off();
+                            $("#ImportDataBtn").addClass("img-large");
+                            $('#MasterDataBtn').css({
+                                'pointer-events': 'none',
+                                'opacity': '0.4',
+                            });
+                            info = false;
+                        } else {
+                            if (!WalletCEX || !WalletCEX.length || !DATAWalletCEX || !DATAWalletCEX.length) {
+                                // Jika data wallet CEX kosong
+                                $("#infoAPP").show().html("SILAKAN UPDATE WALLET CEX PADA MENU SETTING!!!").addClass('uk-text-danger');
+                                toastr.warning('<b>SILAKAN UPDATE WALLET CEX PADA MENU SETTING</b>');
+                                $("#UpdateWalletCEX,#MasterDataBtn").addClass("img-large");
+                                $('#MasterDataBtn').css({
+                                    'pointer-events': 'auto',
+                                    'opacity': '1',
+                                });
+                                info = false;
+                            }else{
+                                $('#UpdateWalletCEX').css({
+                                        'pointer-events': 'auto',
+                                        'opacity': '1'
+                                    });
+                                $('#MasterDataBtn').css({
+                                    'pointer-events': 'auto',
+                                    'opacity': '1'
+                                });
+                            }
+                    }    
+                } 
+
+                if (info && dataACTION && dataACTION.time) {
+                    // Menampilkan aksi terakhir jika semua kondisi terpenuhi
+                    $("#infoAPP").show().text(`${dataACTION.action} at ${dataACTION.time}`);
+                }
+            }
+
+            function form_off() {
+                $('input, select, textarea').prop('disabled', true); 
+            }
+
+            if (typeof CONFIG_CEX !== 'undefined' && typeof CONFIG_CHAINS !== 'undefined') {
+                const currentPage = window.location.pathname.split('/').pop(); // Mengambil bagian terakhir dari path URL
+                var link = $('a[href="multipair.html"]'); // Pilih elemen link
+                var href = link.attr('href'); // Ambil URL href
+                link.attr('href', href + "?chain=" + encodeURIComponent(chainName)); // Update href dengan parameter baru
+    
+                    // Ambil data chain yang dipilih berdasarkan Nama_Chain
+                    const selectedChain = CONFIG_CHAINS[Nama_Chain.toLowerCase()];
+
+                    // Pastikan data chain ditemukan
+                    if (selectedChain) {
+                        // Generate Pilihan CEX
+                        // Update tampilan dengan nama chain dan warna
+                        $('title').text("IMPORT TOKEN " + Nama_Chain.toUpperCase());
+                        $('#namachain').text(Nama_Chain.toUpperCase());
+                        $('#namachain2').text(Nama_Chain.toUpperCase());
+                        $('h4#judulcex, h4#judulpair, #daftar').css('color', selectedChain.WARNA);
+                        $('h3#judul').css({
+                            'text-align':"center",
+                            'color': selectedChain.WARNA, // Fallback warna dasar
+                        });
+                        $('.table-header').css({
+                            'text-align':"center",
+                            'background-color': selectedChain.WARNA,
+                        });
+                        cekDataAwal();
+                        var url = DTChain.DATAJSON; // Ganti dengan URL JSON Anda
+                        
+                        // Untuk setiap chain yang ada di CONFIG_CHAINS dibuatkan ICON LINK CHAIN
+                        Object.keys(CONFIG_CHAINS).forEach(chainKey => {
+                            const chain = CONFIG_CHAINS[chainKey];
+
+                            // Periksa apakah chain saat ini cocok dengan chainName
+                            const isActive = chain.Nama_Chain === Nama_Chain;
+
+                            // Buat elemen link dan icon dengan pengaturan khusus jika cocok dengan chainName
+                            const linkHTML = `<span class="chain-link ${isActive ? 'active-chain' : ''}" style="${!isActive ? 'opacity: 0.3;' : ''}">
+                                    <a href="${currentPage}?chain=${chain.Nama_Chain}" ><img src="${chain.ICON}" alt="${chain.Nama_Chain} icon" width="${isActive ? '35' : '35'}"></a></span>`;
+                            
+                            // Masukkan ke dalam container
+                            $('#chain-links-container').append(linkHTML);
+                        });
+                        
+                    } else {
+                        alert(`Chain dengan nama ${Nama_Chain} tidak ditemukan.`);
+                    }
+                } else {
+                    console.warn("CONFIG tidak tersedia.");
+                }
+
+            // Ambil data dari JSON
+            $.getJSON(url, function (data) {
+                jsonData = data.token;
+
+                // Hitung jumlah token berdasarkan CEX
+                const cexCounts = {};
+                cexOptions.forEach(cex => cexCounts[cex] = 0);
+
+                data.token.forEach(item => {
+                    if (cexOptions.includes(item.cex)) {
+                        cexCounts[item.cex]++;
+                    }
+                });
+
+                // Tambahkan checkbox CEX dengan jumlah token
+                cexOptions.forEach(cex => {
+                    $("#cex-options").append(`
+                        <label><input class="uk-checkbox cex-filter" type="checkbox" value="${cex}"> ${cex} (${cexCounts[cex]})</label>
+                    `);
+                });
+
+                // Fungsi untuk menampilkan Pair berdasarkan CEX yang dipilih
+                function updatePairCheckboxes() {
+                    const selectedCEX = $(".cex-filter:checked").map(function () { return $(this).val(); }).get();
+
+                    let pairCountsForCEX = {}; 
+
+                    const filteredData = jsonData.filter(item => selectedCEX.includes(item.cex));
+
+                    filteredData.forEach(item => {
+                        const pairIn = validTokens.includes(item.symbol_in) ? item.symbol_in : null;
+                        const pairOut = validTokens.includes(item.symbol_out) ? item.symbol_out : null;
+                        const pair = (pairIn || pairOut) ? (pairIn || pairOut) : "NON"; 
+
+                        pairCountsForCEX[pair] = pairCountsForCEX[pair] ? pairCountsForCEX[pair] + 1 : 1;
+                    });
+
+                    // Menyimpan status checkbox pair yang dipilih
+                    const selectedPair = $(".pair-filter:checked").map(function () { return $(this).val(); }).get();
+
+                    $("#pair-checkboxes").empty();
+                    pairOptions.forEach(pair => {
+                        const isRelevantPair = pairCountsForCEX[pair] > 0;
+                        const isChecked = selectedPair.includes(pair) ? "checked" : ""; // Menandai pair yang sudah dipilih sebelumnya
+                        $("#pair-checkboxes").append(`
+                            <label><input class="uk-checkbox pair-filter" type="checkbox" value="${pair}" ${isRelevantPair ? '' : 'disabled'} ${isChecked}> ${pair} (${pairCountsForCEX[pair] || 0})</label>
+                        `);
+                    });
+
+                    
+                    // Enable tombol hanya jika ada pair yang dipilih
+                    if ($(".cex-filter:checked").length > 0 && $(".pair-filter:checked").length > 0) {
+                        $("#filter-btn").prop("disabled", false);
+                    } else {
+                        $("#filter-btn").prop("disabled", true);
+                    }
+                }
+
+                // Event listener untuk filter CEX
+                $(document).on("change", ".cex-filter", function () {
+                    const selectedCEX = $(".cex-filter:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+                    updatePairCheckboxes();
+                    $("#load-data-btn").data("selectedCEX", selectedCEX); 
+                });
+
+                // Event listener untuk filter Pair
+                $(document).on("change", ".pair-filter", function () {
+                    if ($(".cex-filter:checked").length > 0 && $(".pair-filter:checked").length > 0) {
+                        $("#filter-btn").prop("disabled", false);
+                    } else {
+                        $("#filter-btn").prop("disabled", true);
+                    }
+                    const selectedPair = $(".pair-filter:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+                    $("#load-data-btn").data("selectedPair", selectedPair);
+                });
+
+                // Event listener untuk menampilkan data setelah tombol diklik
+                $("#filter-btn").click(function () {
+                    const selectedCEX = $(".cex-filter:checked").map(function () { return $(this).val(); }).get();
+                    const selectedPair = $(".pair-filter:checked").map(function () { return $(this).val(); }).get();
+
+                    // Filter data berdasarkan CEX dan Pair yang dipilih
+                    const filteredData = jsonData.filter(item => {
+                        const pairIn = validTokens.includes(item.symbol_in) ? item.symbol_in : null;
+                        const pairOut = validTokens.includes(item.symbol_out) ? item.symbol_out : null;
+                        const pair = (pairIn || pairOut) ? (pairIn || pairOut) : "NON"; 
+                        return selectedCEX.includes(item.cex) && selectedPair.includes(pair);
+                    });
+
+                    // Menonaktifkan semua input setelah tombol diklik
+                    $(".cex-filter, .pair-filter").prop("disabled", true);
+                    $("#filter-btn").prop("disabled", true);
+
+                    // Tampilkan data yang sudah difilter
+                    displayData(filteredData);
+
+                    // Tampilkan tombol Load Data setelah filter
+                    $("#load-data-btn").show();
+                    // Simpan data sementara untuk digunakan tombol Load Data
+                    $("#load-data-btn").data("filteredData", filteredData);
+                });
+
+                // Event listener untuk tombol Load Data
+                $("#load-data-btn").click(function () {
+                    // Ambil data sementara yang disimpan di tombol
+                    const selectedCEX = $(this).data("selectedCEX") || [];
+                    const selectedPair = $(this).data("selectedPair") || [];
+
+                    // Simpan ke localStorage saat tombol diklik
+                    saveToLocalStorage("selectedCEX", selectedCEX);
+                    saveToLocalStorage("selectedPair", selectedPair);
+                    // Ambil data sementara yang disimpan di tombol
+                    const filteredData = $(this).data("filteredData");
+
+                    if (filteredData) {
+                        // Simpan data ke localStorage
+                        saveToLocalStorage("TOKEN_PILIH",filteredData)
+                        // Tampilkan data yang sudah disimpan
+                        displayData(filteredData);
+
+                        removeFromLocalStorage("LASTUPDATE_FEEWD");
+                        removeFromLocalStorage("WALLET_CEX");
+                        removeFromLocalStorage("TOKEN_SCANNER");
+
+                        $.ajax({
+                            url: DTChain.DATAJSON,
+                            success: function(response) {
+                                // Memastikan data yang diambil sesuai dengan format yang diharapkan
+                                if (response && response.serverCORS && response.token && response.telegram) {
+                                    const serverCORS = response.serverCORS;
+                                // const rawTokenData = response.token; // Token asli dari server
+                                    const rawTokenData = getFromLocalStorage("TOKEN_PILIH");
+                                    const tele_token = response.telegram.token;
+                                    const id_grup = response.telegram.id_grup;
+                    
+                                    // Menambahkan ID auto-increment pada setiap token
+                                    const tokenWithID = rawTokenData.map((tokenData, index) => {
+                                        return {
+                                            no: index + 1, // Auto-increment ID dimulai dari 1
+                                            ...tokenData // Copy data token asli
+                                        };
+                                    });
+                    
+                                    // Struktur data untuk DATA_SETTING
+                                    const DataJSON = {
+                                        TOKEN: tele_token,
+                                        ID_GRUP: id_grup,
+                                        jedaKoin: 300,
+                                        jedaTimeGroup: 1500,
+                                        scanPerKoin: 5,
+                                        filterPNL: 0,
+                                        walletMeta: "-",
+                                        nickname:"",
+                                        speedScan:2
+                                    };
+                    
+                                    // Menggunakan konfirmasi dengan tombol OK untuk refresh
+                                    if (confirm('SIMPAN PILIHAN TOKEN PAIR ?')) {
+                                        removeFromLocalStorage("TOKEN_PILIH");
+
+                                        saveToLocalStorage('SERVERCORS', serverCORS);
+                                        saveToLocalStorage('TOKEN', tokenWithID); // Menyimpan token dengan ID
+                                        saveToLocalStorage('DATA_SETTING', DataJSON);
+
+                                        toastr.success('✅ BERHASIL IMPORT TOKEN PAIR, SILAKAN LANJUT KE MENU SETTINGAN.')
+                                        setLastAction("IMPORT TOKEN & PAIR");
+                                        location.reload(); // Refresh halaman jika pengguna klik OK
+                                    }else{
+                                        removeFromLocalStorage("TOKEN_PILIH")
+                                    }
+                                } else {
+                                    // Jika struktur data dari server tidak sesuai
+                                    alert('SYNC DATA GAGAL: Data yang diterima tidak sesuai format.');
+                                }
+                            },
+                    
+                            error: function(xhr, status, error) {
+                                // Menampilkan pesan kesalahan secara lebih lengkap
+                                const errorMessage = `
+                                    SYNC DATA GAGAL
+                                    Status: ${status}
+                                    Error: ${error}
+                                    Response Text: ${xhr.responseText || 'Tidak ada respon dari server'}
+                                `;
+                                alert(errorMessage);
+                            }
+                        });
+                       
+                    } else {
+                        toastr.error("GAGAL PILIH TOKEN PAIR, SILAKAN ULANGI LAGI!!");
+                    }
+                });
+
+                // Fungsi untuk menampilkan data ke tabel
+                function displayData(data) {
+                    const $tableBody = $("#result-table tbody");
+                    $tableBody.empty();
+
+                    if (data.length === 0) {
+                        $tableBody.append('<tr><td colspan="6" class="uk-text-center">Data tidak ditemukan.</td></tr>');
+                    } else {
+                        data.forEach(item => {
+                            $tableBody.append(`
+                                <tr>
+                                    <td>${item.cex}</td>
+                                    <td>${item.symbol_in}</td>
+                                    <td>${item.sc_in} (${item.des_in})</td>
+                                    <td>${item.symbol_out}</td>
+                                    <td>${item.sc_out}(${item.des_out})</td>
+                                </tr>
+                            `);
+                        });
+                    }
+                }
+
+                // Update Pair berdasarkan checkbox yang dipilih
+                updatePairCheckboxes();
+
+                // Event listener untuk tombol Stop (refresh halaman)
+                $("#stop-btn,#reload").click(function () {
+                    location.reload();  // Refresh halaman
+                });
+                //fungsi catat history action
+                function setLastAction(action) {
+                        const now = new Date();
+                        const hours = now.getHours().toString().padStart(2, '0');
+                        const minutes = now.getMinutes().toString().padStart(2, '0');
+                        const seconds = now.getSeconds().toString().padStart(2, '0');
+                        const day = now.getDate().toString().padStart(2, '0');
+                        const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Bulan dimulai dari 0
+                        const year = now.getFullYear();
+
+                        const formattedTime = `${hours}:${minutes}:${seconds} | ${day}/${month}/${year}`;
+
+                        const lastAction = {
+                            time: formattedTime,
+                            action: action
+                        };
+
+                        saveToLocalStorage("HISTORY", lastAction);
+                        $("#infoAPP").html(`${lastAction.action} at ${lastAction.time}`);
+                    }
+                
+            });
+        });
+    </script>
+</body>
+</html>

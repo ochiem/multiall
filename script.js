@@ -1,5 +1,5 @@
 // Token Price Monitor Application - Updated for Frontend API Calls
-const DexList = [ '1inch','KyberSwap','Matcha','ODOS','OKXDEX','LIFI'];
+const DexList = [ 'Matcha','KyberSwap','1inch','ODOS','OKXDEX','LIFI'];
 const CexList = ['Binance', 'MEXC', 'Gateio', 'INDODAX'];
 
 const CexShortMap = {
@@ -2362,7 +2362,7 @@ class TokenPriceMonitor {
 
            switch (dexName) {
                 case '1inch':
-                    if (direction === 'cex_to_dex') {
+                  //  if (direction === 'cex_to_dex') {
                         const dzapData = await fetchWithCountdown(
                             safeCellId, dexName,
                             () => DEXAPIs.getDZAPPrice({
@@ -2386,58 +2386,58 @@ class TokenPriceMonitor {
                         }
 
                         handleResult('1inch', dzapData);
-                    }else{
-                         if (parseInt(chainId) === 1) {
-                            // 🔁 Gunakan ZERO untuk chain ETH
-                            const zeroData = await fetchWithCountdown(
-                                safeCellId, dexName,
-                                () => DEXAPIs.getZero1inchPrice(
-                                    inputContract,
-                                    outputContract,
-                                    rawAmountIn,
-                                    inputDecimals,
-                                    outputDecimals,
-                                    chainId,
-                                    direction,
-                                    network
-                                ),
-                                timeoutLimit
-                            );
+                    // }else{
+                    //      if (parseInt(chainId) === 1) {
+                    //         // 🔁 Gunakan ZERO untuk chain ETH
+                    //         const zeroData = await fetchWithCountdown(
+                    //             safeCellId, dexName,
+                    //             () => DEXAPIs.getZero1inchPrice(
+                    //                 inputContract,
+                    //                 outputContract,
+                    //                 rawAmountIn,
+                    //                 inputDecimals,
+                    //                 outputDecimals,
+                    //                 chainId,
+                    //                 direction,
+                    //                 network
+                    //             ),
+                    //             timeoutLimit
+                    //         );
 
-                            if (zeroData?.status === 'timeout' || zeroData?.error) {
-                                throw new Error(`ZERO (ETH) error: ${zeroData.error || zeroData.status}`);
-                            }
+                    //         if (zeroData?.status === 'timeout' || zeroData?.error) {
+                    //             throw new Error(`ZERO (ETH) error: ${zeroData.error || zeroData.status}`);
+                    //         }
 
-                            handleResult('1inch', { ...zeroData });
+                    //         handleResult('1inch', { ...zeroData });
 
-                        } else {
-                            // 🔁 Gunakan HINKAL untuk chain non-ETH
-                            const inchIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
-                            const inchOut = [{ tokenAddress: outputContract, proportion: 1 }];
+                    //     } else {
+                    //         // 🔁 Gunakan HINKAL untuk chain non-ETH
+                    //         const inchIn = [{ tokenAddress: inputContract, amount: rawAmountIn.toString() }];
+                    //         const inchOut = [{ tokenAddress: outputContract, proportion: 1 }];
 
-                            const inchData = await fetchWithCountdown(
-                                safeCellId, dexName,
-                                () => DEXAPIs.getHinkal1InchPrice(inchIn, inchOut, wallet, rawAmountIn.toString(), chainId,network),
-                                timeoutLimit
-                            );
+                    //         const inchData = await fetchWithCountdown(
+                    //             safeCellId, dexName,
+                    //             () => DEXAPIs.getHinkal1InchPrice(inchIn, inchOut, wallet, rawAmountIn.toString(), chainId,network),
+                    //             timeoutLimit
+                    //         );
 
-                            if (inchData?.status === 'timeout' || inchData?.error) {
-                                throw new Error(`1INCH (via Hinkal) error: ${inchData.error || inchData.status}`);
-                            }
+                    //         if (inchData?.status === 'timeout' || inchData?.error) {
+                    //             throw new Error(`1INCH (via Hinkal) error: ${inchData.error || inchData.status}`);
+                    //         }
 
-                            handleResult('1inch', {
-                                ...inchData,
-                                amountOut: inchData.outAmounts?.[0] || '0',
-                                exchange: '1inch'
-                            });
-                        }
+                    //         handleResult('1inch', {
+                    //             ...inchData,
+                    //             amountOut: inchData.outAmounts?.[0] || '0',
+                    //             exchange: '1inch'
+                    //         });
+                    //     }
 
-                    }
+                    // }
                         
                     break;
 
                 case 'KyberSwap': 
-                        if (direction === 'cex_to_dex') {
+                       // if (direction === 'cex_to_dex') {
                             const kyberData = await fetchWithCountdown(
                                     safeCellId, dexName,
                                     () => DEXAPIs.getKyberSwapPrice(inputContract, outputContract, rawAmountIn, network),
@@ -2449,28 +2449,28 @@ class TokenPriceMonitor {
                                     }
 
                                     handleResult('KyberSwap', kyberData);
-                        }else{
-                                const zeroData = await fetchWithCountdown(
-                                    safeCellId, dexName,
-                                    () => DEXAPIs.getZeroKyberPrice(
-                                        inputContract,
-                                        outputContract,
-                                        rawAmountIn,
-                                        inputDecimals,
-                                        outputDecimals,
-                                        chainId,
-                                        direction,
-                                        network
-                                    ),
-                                    timeoutLimit
-                                );
+                        // }else{
+                        //         const zeroData = await fetchWithCountdown(
+                        //             safeCellId, dexName,
+                        //             () => DEXAPIs.getZeroKyberPrice(
+                        //                 inputContract,
+                        //                 outputContract,
+                        //                 rawAmountIn,
+                        //                 inputDecimals,
+                        //                 outputDecimals,
+                        //                 chainId,
+                        //                 direction,
+                        //                 network
+                        //             ),
+                        //             timeoutLimit
+                        //         );
 
-                                if (zeroData?.status === 'timeout' || zeroData?.error) {
-                                    throw new Error(`ZERO (KYBER) error: ${zeroData.error || zeroData.status}`);
-                                }
+                        //         if (zeroData?.status === 'timeout' || zeroData?.error) {
+                        //             throw new Error(`ZERO (KYBER) error: ${zeroData.error || zeroData.status}`);
+                        //         }
 
-                                handleResult('KyberSwap', { ...zeroData });
-                        }
+                        //         handleResult('KyberSwap', { ...zeroData });
+                        // }
                     break;
 
                 case 'Matcha': {
@@ -2628,7 +2628,7 @@ class TokenPriceMonitor {
 
          } catch (err) {
             const fallbackSlugMap = {
-//                'KyberSwap': 'kyberswap',
+                'KyberSwap': 'kyberswap',
                 'Matcha': '0x',
                 'OKXDEX': 'okx',
                 'ODOS': 'odos',

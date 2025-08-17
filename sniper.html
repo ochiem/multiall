@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>MULTIALL [SNIPER]</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/30/30279.png" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+<style>
+    /* ======================= THEME: BIRU ======================= */
+    body[data-theme="biru"] {
+        background-color: #eef6fc;
+    --primary-color: #0517bb;
+    --secondary-color: #5c9ee6;
+    --success-color: #1e8e3e;
+    --danger-color: #d32f2f;
+    --warning-color: #ff9400;
+    --dark-color: #2f3e46;
+    --light-color: #e3f0fc;           /* lighten dari #1976d2 */
+    --card-color: #e3f0fa;
+    --utama: #1976d2;
+    --muted: #f5f9fc;
+    --strip-even: #bbdaf9;
+    --strip-odd: rgba(187, 218, 249, 0.1);
+    --not-scanned: #8cb9e6;
+    --sinyal-info: #cbfbb0;
+    }
+
+    /* ======================= THEME: IJO ======================= */
+    body[data-theme="ijo"] {
+        background-color: #e6f7f0;
+    --primary-color: #0d6efd;
+    --secondary-color: #06660c;
+    --success-color: #075f0c;
+    --danger-color: #de0505;
+    --warning-color: #ff9400;
+    --dark-color: #2e423b;
+    --light-color: #d3f0e6;           /* lighten dari #06643f */
+    --card-color: #d2ede1;
+    --utama: #06643f;
+    --muted: #f0f5f2;
+    --strip-odd: #def7ec;
+    --strip-even: #fafefc;
+    --not-scanned: #cdf2e1;
+    --sinyal-info: #cbfbb0;
+    }
+
+    /* ======================= THEME: COKLAT ======================= */
+    body[data-theme="coklat"] {
+        background-color: #f3ede7;
+    --primary-color: #417ff1;
+    --secondary-color: #684d44;
+    --success-color: #4e7932;
+    --danger-color: #b31907;
+    --warning-color: #ff9400;
+    --dark-color: #3e2723;
+    --light-color: #e6d9d2;           /* lighten dari #5d4037 */
+    --card-color: #d7c4b4;
+    --utama: #5d4037;
+    --muted: #f0e5dd;
+    --strip-odd: #ede8e3;
+    --strip-even: #d7d1ca;
+    --not-scanned: #dbcac5;
+    --sinyal-info: #cbfbb0;
+    }
+
+    /* ======================= THEME: ABU ======================= */
+    body[data-theme="abu"] {
+        background-color: #e3e7eb;
+    --primary-color: #0640a1;
+    --secondary-color: #313a3e;
+    --success-color: #067e44;
+    --danger-color: #cc0808;
+    --warning-color: #ffb300;
+    --dark-color: #2b303b;
+    --light-color: #d7dee4;           /* lighten dari #566369 */
+    --utama: #566369;
+    --card-color: #b2babe;
+    --muted: #2f353d;
+    --strip-odd: #e8ebee;
+    --strip-even: #cfd2d7;
+    --not-scanned: #e8ebee;
+    --sinyal-info: #cbfbb0;
+    }
+
+    /* ======================= THEME: PINK ======================= */
+    body[data-theme="pink"] {
+        background-color: #fdeef2;
+    --primary-color: #6c72df;
+    --secondary-color: #dd7d8c;
+    --success-color: #6fa36f;
+    --danger-color: #bf0909;
+    --warning-color: #ff9400;
+    --dark-color: #5a3e4d;
+    --light-color: #fbd9e0;           /* lighten dari #ef647a */
+    --card-color: #f8d7e0;
+    --utama: #ef647a;
+    --muted: #f5d5df;
+    --strip-even: #f3b8d0;
+    --strip-odd: rgba(243, 184, 208, 0.1);
+    --not-scanned: #fce8f1;
+    --sinyal-info: #cbfbb0;
+    }
+
+    /* ======================= THEME: ORANGE ======================= */
+    body[data-theme="orange"] {
+        background-color: #fff3e0;
+    --primary-color: #574cf1;
+    --secondary-color: #d78a72;
+    --success-color: #05880c;
+    --danger-color: #f11d1d;
+    --warning-color: #ff8a65;
+    --dark-color: #6d4c41;
+    --light-color: #ffe8cc;           /* lighten dari #ffa500 */
+    --card-color: #ffe0b2;
+    --utama: #ffa500;
+    --muted: #fae0ce;
+    --strip-odd: #fff2e0;
+    --strip-even: #fbdfb8;
+    --not-scanned: #fff2e0;
+    --sinyal-info: #cbfbb0;
+    }
+
+    /* ======================= THEME: UNGU ======================= */
+    body[data-theme="ungu"] {
+        background-color: #f4effc;
+    --primary-color: #1818ed;
+    --secondary-color: #9171cc;
+    --success-color: #08530b;
+    --danger-color: #e70c7d;
+    --warning-color: #ff9400;
+    --dark-color: #4e3c5b;
+    --light-color: #e7dbf4;           /* lighten dari #7e57c2 */
+    --card-color: #e9d7f5;
+    --utama: #7e57c2;
+    --muted: #f5e8fa;
+    --strip-even: #d4acf6;
+    --strip-odd: rgba(212, 172, 246, 0.1);
+    --not-scanned: #f3e6fc;
+    --sinyal-info: #cbfbb0;
+    }
+
+     /* TEXT COLORS */
+    .text-primary     { color: var(--primary-color) !important; }
+    .text-secondary   { color: var(--secondary-color) !important; }
+    .text-success     { color: var(--success-color) !important; }
+    .text-danger      { color: var(--danger-color) !important; }
+    .text-warning     { color: var(--warning-color) !important; }
+    .text-dark        { color: var(--dark-color) !important; }
+    .text-light       { color: var(--light-color) !important; }
+
+    /* BACKGROUND COLORS */
+    .bg-primary       { background-color: var(--primary-color) !important;  }
+    .bg-secondary     { background-color: var(--secondary-color) !important;  }
+    .bg-success       { background-color: var(--success-color) !important; }
+    .bg-danger        { background-color: var(--danger-color) !important; }
+    .bg-warning       { background-color: var(--warning-color) !important;}
+    .bg-dark          { background-color: var(--dark-color) !important;  }
+    .bg-light         { background-color: var(--light-color) !important;  }
+    .bg-utama         { background-color: var(--utama) !important; }
+
+     /* BUTTON COLORS */
+    .btn-primary       { background-color: var(--primary-color) !important;  }
+    .btn-secondary     { background-color: var(--secondary-color) !important;  }
+    .btn-success       { background-color: var(--success-color) !important; }
+    .btn-danger        { background-color: var(--danger-color) !important; }
+    .btn-warning       { background-color: var(--warning-color) !important;}
+    .btn-dark          { background-color: var(--dark-color) !important;  }
+    .btn-light         { background-color: var(--light-color) !important;  }
+
+
+   /* CEX Background */
+    .bg-binance  { background-color: #f3ba2f !important; color: #000 !important; }
+    .bg-mexc     { background-color: #00e38e !important; color: #000 !important; }
+    .bg-gateio   { background-color: #b50028 !important; color: #fff !important; }
+    .bg-indodax  { background-color: #0066cc !important; color: #fff !important; }
+
+    /* DEX Background */
+    .bg-1inch     { background-color: #b70f60 !important; color: #fff !important; }
+    .bg-kyberswap { background-color: #29ab87 !important; color: #fff !important; }
+    .bg-matcha    { background-color: #66cc99 !important; color: #000 !important; }
+    .bg-odos      { background-color: #f40606 !important; color: #fff !important; }
+    .bg-paraswap  { background-color: #1c51ff !important; color: #fff !important; }
+    .bg-okxdex    { background-color: #000000 !important; color: #fff !important; }
+    .bg-lifi     { background-color: #6405a8 !important; color: #000 !important; }
+    .bg-magpie    { background-color: #00b8d9 !important; color: #000 !important; }
+
+    /* Text-only (tanpa background) */
+    .text-binance  { color: #f3ba2f !important; }
+    .text-mexc     { color: #00e38e !important; }
+    .text-gateio   { color: #b50028 !important; }
+    .text-indodax  { color: #0066cc !important; }
+
+    .text-1inch     { color: #b70f60 !important; }
+    .text-kyberswap { color: #29ab87 !important; }
+    .text-matcha    { color: #66cc99 !important; }
+    .text-odos      { color: #f40606 !important; }
+    .text-paraswap  { color: #1c51ff !important; }
+    .text-okxdex    { color: #000000 !important; }
+    .text-lifi     { color: #6a13e3 !important; }
+    .text-magpie    { color: #00b8d9 !important; }
+
+
+    /* Indikator tema aktif */
+    .theme-option.active {
+        transform: scale(1.2);
+        font-weight: bold;
+    }
+
+    .theme-box {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.2s;
+        border: 1px solid transparent;
+    }
+
+    .theme-box:hover {
+    box-shadow: 0 0 0 2px #fff;
+    }
+
+    .theme-box.active {
+        transform: scale(1.5);
+        border-color: black;
+    }
+
+    .konten {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+
+    .navbar {
+        background: var(--utama);
+        /* box-shadow: 0 2px 10px rgba(0,0,0,0.1); */
+    }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+        background-color: var(--card-color);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    .btn-primary:hover {
+        background-color: #2c5ed3;
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+    .btn-danger:hover {
+        background-color: #b94444;
+    }
+
+    .table thead th {
+        background-color: var(--utama);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+    }
+
+    .price-positive { color: var(--success-color); font-weight: 600; }
+    .price-negative { color: var(--danger-color); font-weight: 600; }
+    .price-neutral { color: var(--secondary-color); font-weight: 600; }
+
+    .status-indicator {
+        width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px;
+    }
+    .status-active {
+        background-color: var(--success-color); animation: pulse 2s infinite;
+    }
+    .status-inactive { background-color: var(--secondary-color); }
+
+    @keyframes pulse {
+        0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; }
+    }
+
+    .countdown {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .exchange-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        margin: 0.125rem;
+    }
+
+    .loading-spinner { display: none; }
+    .loading .loading-spinner { display: inline-block; }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--utama));
+        color: white;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+    }
+
+    .token-detail-cell {
+        padding-top:2px; padding-bottom:2px;
+        margin: 2px 0px;
+        padding: 2px 0px;        
+    }
+
+    .token-detail-cell,
+    .dex-price-cell,
+    .cex-price-cell {
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 4px 6px;
+        min-width: 80px;
+    }
+
+    .price-comparison-table thead th {
+        background: var(--utama);
+        color: #fff;
+    }
+
+    .nav-tabs .nav-link {
+        border: 1px solid black;
+        background-color: var(--card-color);
+        color: var(--utama);
+    }
+    .nav-tabs .nav-link.active {
+        background-color: var(--utama);
+        color: white;
+        font-weight: bold;
+    }
+    body.dark-mode .nav-tabs .nav-link {
+        color: var(--light-color);
+    }
+    body.dark-mode .nav-tabs .nav-link.active {
+        background-color: var(--utama);
+        color: white;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: var(--card-color);
+        background-color: var(--utama);
+    }
+
+    .card-body .d-flex .text-uppercase { border-bottom: none !important; }
+    .card-body ul { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+    .card-body { padding-bottom: 0.25rem !important; }
+    .card.h-100 { margin-bottom: 0 !important; }
+    .card .collapse { min-height: 0 !important; }
+    .collapse { padding-bottom: 0 !important; margin-bottom: 0 !important; }
+
+    .fee-info { color: #73091a; }
+    .pnl-info { font-size: 0.8rem; font-weight: bolder; }
+    .pnl-positive { color: var(--success-color); }
+    .pnl-negative { color: var(--danger-color); }
+
+    .token-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .token-links a {
+        background-color: var(--muted);
+        color: var(--dark-color);
+        text-decoration: none;
+    }
+    .token-links a:hover {
+        background-color: var(--utama);
+        color: var(--light-color);
+    }
+
+    a { text-decoration: none; }
+    .opit { color: #198754; }
+    .lost { color: #dc3545; }
+
+    .scrollable-price-table {
+        overflow-x: auto;
+        overflow-y: auto;
+        max-height: 800px;
+        width: 100%;
+    }
+
+    .price-comparison-table th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 5;
+        white-space: nowrap;
+    }
+
+    .highlight-row { background-color: #ffe8a1 !important; transition: background-color 0.5s ease; }
+    .pnl-highlight { background-color: #cbfdd9 !important; }
+    
+    @keyframes flashCell {
+        0% { background-color: #fffae6; }
+        100% { background-color: transparent; }
+    }
+
+    .pink { background-color: #fccbce !important; }
+    .abu { background-color: #d8dbdf !important; }
+
+    .token-data-row.strip-even > td { background-color: var(--strip-even) !important }
+    .token-data-row.strip-odd > td { background-color: var(--strip-odd) !important }
+
+    .card.no-rounded-bottom {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+
+    .btn-xs {
+        padding: 0.25rem 0.25rem;
+        font-size: 0.5rem;
+        line-height: 1;
+        border-radius: 0.3rem;
+    }
+
+    .fs-7 { font-size: 0.85rem; }
+    .fs-8 { font-size: 0.77rem; }
+    .fs-9 { font-size: 0.7rem; }
+
+
+    .section-header {
+        background: var(--utama);
+        color: white;
+    }
+
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 10%;
+        left: 0; right: 0; bottom: 0;
+        z-index: 9999;
+        background: rgba(255,255,255,0.8);
+        text-align: center;
+    }
+    .section-control-panel{
+        background-color: var(--strip-odd) !important;
+    }
+    .custom-alert {
+        display: none;
+        position: fixed;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #eaf4f2;
+        border: 2px solid rgba(50, 100, 200, 0.3);
+        color: #010000;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        font-family: sans-serif;
+        font-size: 16px;
+        z-index: 9999;
+        text-align: center;
+    }
+
+    /* Sticky header untuk tokenTable */
+    .sticky-table-container {
+        position: relative;
+    }
+
+    .sticky-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: var(--utama); /* warna dari :root Anda */
+        color: white;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Override bootstrap .table-striped striping dengan warna custom */
+    .custom-striped tbody tr:nth-of-type(odd) > td {
+        background-color: var(--strip-odd) !important;
+    }
+
+    .custom-striped tbody tr:nth-of-type(even) > td {
+        background-color: var(--strip-even) !important;
+    }
+
+    .signal-box {
+        display: inline-block;
+        white-space: normal !important;
+        max-width: 100%;
+        word-break: break-word;
+    }
+
+    .NameSinyalDEX{
+        background-color: var(--utama) !important;
+        color: #fff !important;
+    }
+
+    .InfoSinyalDEX{
+        background-color: var(--strip-odd) !important;
+         /* background-color: var(--strip-even) !important; */
+    }
+
+    .biasa { 
+        background-color: #f8f8f8!important;
+    }
+     .highlight { 
+        background-color: #dbfcc9;
+        border-right: 1px black solid;
+    }
+
+    .progres{
+        background-color: var(--utama) !important;
+    }
+   
+   .scrollable-price-table {
+        overflow-x: auto;
+        overflow-y: auto;
+        width: 100%;
+        max-height: 800px;
+    }
+
+    .price-comparison-table {
+        table-layout: auto;
+        min-width: 1600px; /* nilai ini tergantung jumlah kolom DEX */
+    }
+
+    .price-comparison-table th,
+    .price-comparison-table td {
+        white-space: nowrap;
+    }
+
+    .offcanvas.offcanvas-narrow {
+        width: 300px !important; /* Atur sesuai selera, misalnya 220px, 240px, dsb */
+        max-width: 80vw;          /* Agar tetap responsif di layar kecil */
+    }
+
+    .nav-icon-button {
+        font-size: 1.3rem;
+        padding: 0.5rem 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: 0.375rem;
+        border: none;                 /* Hapus border */
+        outline: none;                /* Hapus outline saat fokus */
+        background: transparent;      /* Transparan default */
+        color: var(--bs-body-color);  /* Warna default teks/icon */
+        box-shadow: none;             /* Hilangkan shadow */
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-icon-button:hover,
+    .nav-icon-button.active {
+        background-color: var(--bs-primary);
+        color: #fff;
+    }
+
+    .nav-icon-button i {
+        font-size: 1.3rem;
+    }
+
+    /* Khusus untuk .navbar-toggler (burger menu) */
+    .navbar-toggler {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+    .petunjuk {
+        background-color: var(--danger-color) !important; /* kuning warning */
+        font-size: 1.5rem; /* perbesar icon */
+        border-radius: 5px;
+    }
+
+
+</style>
+
+</head>
+<body style="font-family: 10px;">
+
+    <nav class="navbar bg-utama py-2">
+        <div class="container-fluid d-flex align-items-center justify-content-between py-1 px-2 bg-dark">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-white mx-2 my-0" href="#"> MULTIALL [ SNIPER ] </a>
+
+            
+              <!-- Overlay Loading -->
+                <div id="loadingOverlay" class="loading-overlay">
+                    <span id="infoupdateWALLET" class="text-danger fs-6 ms-4"></span><br/>
+
+                    <div class="spinner-border text-primary mt-5" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 fw-bold text-primary text-center px-3">                        
+                        Mohon Menunggu [Layar Freeze], Sedang Proses update wallet CEX...<br>
+                    </p>
+                </div>
+            <!-- Tab Icons Controller -->
+            <ul class="nav nav-pills mb-0 d-flex gap-1" id="tabIconController" role="tablist">
+
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link nav-icon-button text-white" id="reloadLink" href="index.html" target="_blank" title="MUlTIALL GLOBAL">
+                        <i class="bi bi-houses-fill"></i>
+                    </a>
+                    </li>
+
+                <!-- Button: Reload Page -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="reloadButton" type="button" title="Refresh" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </li>
+
+                <!-- Tab: Price Monitoring -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white active" id="price-tab"
+                        data-bs-toggle="tab" data-bs-target="#priceMonitoring" type="button" role="tab"
+                        aria-controls="priceMonitoring" aria-selected="true" title="Price Monitoring">
+                        <i class="bi bi-crosshair"></i>
+                    </button>
+                </li>
+
+                <!-- Tab: Token Management -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="token-tab"
+                        data-bs-toggle="tab" data-bs-target="#tokenManagement" type="button" role="tab"
+                        aria-controls="tokenManagement" aria-selected="false" title="Manajemen Koin">
+                        <i class="bi bi-coin"></i>
+                    </button>
+                </li>
+
+                 <!-- Button: check status wallet CEX -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="WalletCEX"  data-bs-target="#WalletCEX" type="button" title="Cek Wallet Exchanger">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </button>
+                </li>
+
+                <!-- Tab: API Settings -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="setting-tab"
+                        data-bs-toggle="tab" data-bs-target="#apiSettings" type="button" role="tab"
+                        aria-controls="apiSettings" aria-selected="false" title="Setting Aplikasi">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                </li>
+
+
+                <!-- Tab: Portfolio -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="portfolio-tab"
+                        data-bs-toggle="tab" data-bs-target="#portfolioTab" type="button" role="tab"
+                        aria-controls="portfolioTab" aria-selected="false" title="Portfolio Asset">
+                        <i class="bi bi-wallet"></i>
+                    </button>
+                </li>
+
+                 <!-- Tab: Memory -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" id="memory-tab"
+                        data-bs-toggle="tab" data-bs-target="#memoryTab" type="button" role="tab"
+                        aria-controls="memoryTab" aria-selected="false" title="Memory Usage">
+                        <i class="bi bi-sd-card"></i>
+                    </button>
+                </li>
+
+                <!-- Button: Offcanvas Menu -->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link nav-icon-button text-white" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#menuBurgerOffcanvas"
+                        aria-controls="menuBurgerOffcanvas" title="Info Aplikasi">
+                        <i class="bi bi-info-circle"></i>
+                    </button>
+                </li>
+
+
+            </ul>
+        </div>
+
+        <div class="offcanvas offcanvas-end offcanvas-narrow text-light bg-secondary" tabindex="-1" id="menuBurgerOffcanvas" aria-labelledby="menuBurgerLabel">
+
+            <div class="offcanvas-header">
+                <h6 class="offcanvas-title text-white" id="menuBurgerLabel">Info Aplikasi</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+                
+            <div class="offcanvas-body d-flex flex-column gap-1">
+               
+                <!-- Tema -->
+                <div class="d-flex flex-wrap gap-2">
+                    <strong class="fw-bold text-light d-block mb-1"> TEMA :</strong><br/>
+                    <div class="theme-box" data-theme="biru" style="background-color: #289ed3;" title="Biru"></div>
+                    <div class="theme-box" data-theme="ijo" style="background-color: #529772;" title="Hijau"></div>
+                    <div class="theme-box" data-theme="coklat" style="background-color: #8d6e63;" title="Coklat"></div>
+                    <div class="theme-box" data-theme="abu" style="background-color: #7d8085;" title="Abu"></div>
+                    <div class="theme-box" data-theme="pink" style="background-color: pink;" title="Pink"></div>
+                    <div class="theme-box" data-theme="orange" style="background-color: orange;" title="Orange"></div>
+                    <div class="theme-box" data-theme="ungu" style="background-color: #9c6cd1;" title="Ungu"></div>
+                </div>
+
+                <hr class="my-1 bg-light"/>
+
+                 <!-- action -->
+                <div>
+                    <span class="fw-bold text-dark badge bg-white ">ACTION:</span><br/>
+                    <span id="infostatus" class="text-white fw-bold fs-8">---</span>
+                </div>
+
+                <hr class="my-1 bg-light"/>
+
+                <!-- config setting -->
+
+                <div>
+                    <span class="fw-bold text-dark badge bg-white ">CONFIG:</span><br/>
+                    <span id="infoConfig" class="text-white fw-bold fs-8"></span>
+                </div>
+
+                <hr class="my-1 bg-light"/>
+
+                <!-- Gas Token Prices -->
+                 <div>
+                    <span class="fw-bold text-dark badge bg-white ">GAS INFO:</span><br/>
+                        <div id="gasTokenPrices" class="small text-light">
+                            <!-- Akan diisi otomatis: ERC[6.2gwei | $0.15] | BSC[...] | ... -->
+                        </div>                
+                    </div>
+                        
+                <hr class="my-1 bg-light"/>
+
+                <!-- Token Prices -->
+                <div id="TokenPrices">
+                    <small class="badge bg-white fw-bold text-danger">BTC: <span id="btcPrice">--</span> </small><br/>
+                    <small class="badge bg-white fw-bold text-warning">BNB: <span id="bnbPrice">--</span> </small><br/>
+                    <small class="badge bg-white fw-bold text-primary">ETH: <span id="ethPrice">--</span></small><br/>
+                    <small class="badge bg-white fw-bold text-info">MATIC: <span id="maticPrice">--</span></small><br/>
+                    <small class="badge bg-white fw-bold text-success">USDT/IDR: <span id="usdtIdrPrice">--</span></small>
+                </div>
+
+                <hr class="my-1 bg-light"/>
+                <!-- Status Info -->
+                <div id="errorLOG">
+                    <small id="statERROR" class="text-danger"></small>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-0">
+        <!-- Control Panel -->
+        <div class="row mb-1">
+            <div class="col-md-12">
+
+                <!-- Custom Alert -->
+                <div id="customAlert" class="custom-alert">
+                    ✅ <strong>SCAN SELESAI!</strong><br/>
+                    💰 DATA Siap di ANALISA<br/>
+                    🚀 Saatnya cari CUAN 🤩 !!
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Price Monitoring Tab -->
+            <div class="tab-pane fade show active" id="priceMonitoring">
+                 <!-- Wrapper Kontainer -->
+                <div id="mainBarSection"  class=" overflow-hidden ps-1 pe-1">
+                    <!-- Bar + Tombol: satu baris di desktop, kolom di mobile -->
+                    <div class="row g-2 align-items-center mt-1">
+                       
+
+                        <!-- Progress Bar -->
+                        <div class="col-12 col-md">
+                            <div class="position-relative bg-white" style="height: 28px;">
+                                <!-- Progress bar -->
+                                <div class="progress h-100">
+                                    <div class="progress-bar progress-bar-striped progres" id="scanProgressBar" role="progressbar" style="width: 100%;">
+                                        <!-- Ini tetap untuk label persen -->
+                                        <small class="text-white fw-bold " id="scanProgressPercent"></small>
+                                    </div>
+                                </div>
+                                <!-- scanProgressText di tengah-tengah -->
+                                <div class="position-absolute top-50 start-50 translate-middle text-black fw-bold fs-9 text-center" style="white-space: nowrap;">
+                                    <small id="scanProgressText"></small>
+                                </div>
+
+                            </div>
+                        </div>
+
+                         <!-- Tombol -->
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
+                             
+                                <small id="scanTimeInfo" class="text-primary fw-bold"></small>
+                                <span id="autorunCountdown" class="ms-2 badge bg-danger text-light fs-9"></span>
+
+                                <button id="autorunBtn" class="btn btn-sm text-primary bg-white">
+                                    <i class="bi bi-repeat"></i>
+                                </button>
+                                <button class="btn btn-sm text-white bg-secondary" id="sortByToken">
+                                     <i id="sortIcon" class="bi bi-sort-alpha-down"></i>
+                                </button>
+                                <button class="btn btn-success btn-sm" id="CheckPrice">
+                                    <i class="bi bi-play-fill"></i> Start
+                                </button>
+                                <button class="btn btn-danger btn-sm d-none" id="StopScan">
+                                    <i class="bi bi-stop-circle"></i> STOP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- DEX Signals -->
+                    <div id="sinyal" class="my-2">
+                        <div id="dexSignals"></div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
+                  
+                    <div class="d-flex gap-2 flex-wrap align-items-center small text-nowrap">
+                        <!-- <div class="fw-bold text-secondary">📊 Data Coins ~ <span id="totalBarisMonitoring" class="fw-bold text-danger">0</span> Baris</div>:  -->
+                        <div class="text-success">📊 Total: <span id="totalTokensMonitoring" class="fw-bold">0</span> Coins</div> [
+
+                        <label class="text-warning mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="BSC">
+                            BSC: <span id="bscCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-primary mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Ethereum">
+                            ERC: <span id="ercCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-info mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Polygon">
+                            POLY: <span id="polyCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-secondary mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Arbitrum">
+                            ARB: <span id="arbCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        <label class="text-danger mb-0">
+                            <input type="checkbox" class="me-1 chainFilterCheckbox" value="Base">
+                            BASE: <span id="baseCountMonitoring" class="fw-bold">0</span>
+                        </label>
+
+                        ]
+                            
+                    </div>
+                     <!-- Tombol Sort dan Search berdampingan -->
+                        <div class="d-flex align-items-center gap-2 btn-sm">
+                            <!-- Tombol Sort dan Search berdampingan -->
+                            <div class="form-check mb-0 d-flex align-items-center">
+                                <input class="form-check-input me-1" type="checkbox" id="autoScrollCheckbox">
+                                <label class="form-check-label text-danger fs-6" for="autoScrollCheckbox">Auto Scroll</label>
+                            </div>
+                            <input type="text" id="monitoringSearch" class="form-control form-control-sm" placeholder="🔍 Cari Token..." style="width: 200px;">
+                        </div>                    
+                    
+                </div>
+                
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="scrollable-price-table" style="max-height: 800px; overflow-y: auto; overflow-x: auto; font-size: small;">
+
+                            <table class="table table-bordered table-hover price-comparison-table" id="priceTable">
+                                <thead class="table-secondary">
+                                    <tr>
+                                        <th  class="text-center align-middle">CEX</th>
+                                        <th colspan="4" class="text-center align-middle">CEX → DEX</th>
+                                        <th  class="text-center align-middle token-detail-header" style="width: 12%;">DETAIL TOKEN  
+                                        
+                                        </th>
+                                        <th colspan="4" class="text-center align-middle">DEX → CEX</th>
+                                        <th  class="text-center align-middle">CEX</th>
+                                    </tr>
+                                    <tr id="dexHeaderRow">                                        
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody id="priceTableBody">
+                                    <!-- Dynamic Content -->
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Token Management Tab -->
+            <div class="tab-pane fade" id="tokenManagement">
+
+                <div class="card mt-3">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <h5 class="mb-0 text-primary d-flex align-items-center gap-2">
+                            <i class="bi bi-coin"></i> Token Management
+                            
+                        </h5>
+                        <!-- Tombol Aksi -->
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tokenModal">
+                                <i class="bi bi-plus-lg"></i> Add Tokens
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-success" id="exportTokensBtn">
+                                <i class="bi bi-download"></i> Export
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-danger" id="importTokensBtn">
+                                <i class="bi bi-upload"></i> Import
+                            </button>
+
+                            <input type="file" id="importTokensInput" accept=".csv" hidden>
+
+                            <!-- Search -->
+                            <div class="input-group input-group-sm" style="width: 200px;">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" id="tokenSearch" class="form-control form-control-sm" placeholder="🔍 Cari Koin...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistik dan Filter -->
+                    <div class="px-3 py-2 border-bottom bg-light">
+                        <div class="d-flex align-items-center flex-wrap gap-3 small text-nowrap">
+                            <div class="fw-bold text-secondary">📊 Statistik Tokens</div>
+
+                            <!-- Checkbox Chain Filter -->
+                            <label class="text-warning">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="BSC" checked>
+                                BSC: <span id="bscCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-primary">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Ethereum" checked>
+                                ERC: <span id="ercCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-danger">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Base" checked>
+                                BASE: <span id="baseCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-info">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Polygon" checked>
+                                POLY: <span id="polyCountManagement" class="fw-bold">0</span>
+                            </label>
+                            <label class="text-secondary">
+                                <input type="checkbox" class="filter-chain-checkbox me-1" value="Arbitrum" checked>
+                                ARB: <span id="arbCountManagement" class="fw-bold">0</span>
+                            </label>
+
+                            <!-- Total -->
+                            <div class="text-dark fw-bold">
+                                TOTAL: <span id="totalTokensManagement">0</span> [
+                                <span class="text-success">ACTIVE:</span> <span id="activeTokensManagement">0</span>
+                                <span class="text-danger">INACTIVE:</span> <span id="inactiveTokensManagement">0</span>
+                                ]
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Token -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive sticky-table-container" style="max-height: 800px; overflow-y: auto;">
+                            <table class="table table-hover custom-striped mb-0 sticky-table" id="tokenTable">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Symbol Token / Pair</th>
+                                        <th>Chain & Status</th>
+                                        <th>Modal {CEX & DEX}</th>
+                                        <th>Exchanger (CEX)</th>
+                                        <th>DEX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tokenTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Portfolio Tab -->
+            <div class="tab-pane fade" id="portfolioTab">
+                <iframe src="aset.html" style="width: 100%; height: 900px; border: none;"></iframe>
+            </div>
+
+            <!-- Memory Tab -->
+            <div class="tab-pane fade" id="memoryTab">
+                <iframe src="memory.html" style="width: 100%; height: 900px; border: none;"></iframe>
+            </div>
+           
+            <!-- API Settings Tab -->
+            <div class="tab-pane fade" id="apiSettings">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card mt-4 shadow-sm rounded-3">
+                            <div class="card-body">
+                                <div class="modal-header mb-2">
+                                     <h5 class="align-middle text-white ps-3 mx-2 my-2 py-2">
+                                    <i class="bi bi-gear"></i> Settings Aplikasi
+                                </h5>
+
+                                </div>
+                               
+                                <form id="settingsForm">
+                                    <div class="mb-3">
+                                        <label for="UserName" class="form-label">User Name</label>
+                                        <input type="text" class="form-control" id="UserName" required>
+                                        <small class="form-text text-muted">Masukkan nama pengguna Anda.</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="tokensPerBatch" class="form-label">Jumlah Anggota Grup [3-7]</label>
+                                        <input type="number" class="form-control" id="tokensPerBatch" min="3" max="7" required>
+                                        <small class="form-text text-muted">Jumlah anggota per batch grup.</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="delayBetweenGrup" class="form-label">Jeda Antar Grup (ms) [300-5000]</label>
+                                        <input type="number" class="form-control" id="delayBetweenGrup" min="300" max="5000" required>
+                                        <small class="form-text text-muted">Jeda waktu antar batch (dalam milidetik).</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="TimeoutCount" class="form-label">Waktu Tunggu (ms) [2000-100000]</label>
+                                        <input type="number" class="form-control" id="TimeoutCount" min="2000" max="100000" required>
+                                        <small class="form-text text-muted">Waktu maksimal menunggu proses (ms).</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="PNLFilter" class="form-label">PNL Filter</label>
+                                        <input type="number" class="form-control" id="PNLFilter" min="0" step="0.01" value="0" required>
+                                        <small class="form-text text-muted">Minimal PNL 0 agar ditampilkan.</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="WalletAddress" class="form-label">Wallet Address</label>
+                                        <input type="text" class="form-control" id="WalletAddress" required>
+                                        <small class="form-text text-muted">Alamat wallet Anda untuk filter & identifikasi.</small>
+                                    </div>
+
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary" id="saveSettingsBtn">
+                                            <i class="bi bi-check-lg"></i> Save Settings
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+        </div>
+
+    </div>
+<!-- ✅ MODAL TOKEN FORM -->
+    <div class="modal fade" id="tokenModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            
+                <!-- HEADER -->
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-coin me-2"></i>
+                        <span id="modalTitle">Add New Token</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- BODY -->
+                <div class="modal-body">
+                    <form id="tokenForm">
+                        <!-- TOKEN INFO -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Token Symbol</label>
+                                    <input type="text" class="form-control" id="tokenSymbol" placeholder="e.g., ZRO" required>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Token Contract Address</label>
+                                    <input type="text" class="form-control" id="tokenContract" placeholder="0x..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Token Dec</label>
+                                    <input type="number" class="form-control" id="tokenDecimals" value="18" min="0" max="18">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- PAIR INFO -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Pair Symbol</label>
+                                    <input type="text" class="form-control" id="pairSymbol" placeholder="e.g., USDT" required>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Pair Contract Address</label>
+                                    <input type="text" class="form-control" id="pairContract" placeholder="0x..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Pair Dec</label>
+                                    <input type="number" class="form-control" id="pairDecimals" value="18" min="0" max="18">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CHAIN & MODAL -->
+                        <div class="row">                        
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Modal CEX → DEX ($)</label>
+                                    <input type="number" class="form-control" id="modalCexToDex" value="100" min="1" step="0.01">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Modal DEX → CEX ($)</label>
+                                    <input type="number" class="form-control" id="modalDexToCex" value="100" min="1" step="0.01">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Chain</label>
+                                    <select class="form-select" id="tokenChain" required>
+                                        <option value="">Select Chain</option>
+                                        <option value="BSC">BSC</option>
+                                        <option value="Ethereum">ERC</option>
+                                        <option value="Polygon">Polygon</option>
+                                        <option value="Base">Base</option>
+                                        <option value="Arbitrum">Arbitrum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CEX & DEX SELECTOR -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Select CEX</label>
+                                    <div class="border rounded p-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Binance" id="cexBinance">
+                                            <label class="form-check-label" for="cexBinance">Binance</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Gateio" id="cexGate">
+                                            <label class="form-check-label" for="cexGate">Gateio</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="MEXC" id="cexMexc">
+                                            <label class="form-check-label" for="cexMexc">MEXC</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="INDODAX" id="cexINDODAX">
+                                            <label class="form-check-label" for="cexINDODAX">INDODAX</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Select DEX (MAX 4)</label>
+                                    <div class="border rounded p-3">
+                                        <div class="row">
+                                            <!-- Kolom Kiri -->
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="1inch" id="dex1inch">
+                                                    <label class="form-check-label" for="dex1inch">1INCH</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="KyberSwap" id="dexKyber">
+                                                    <label class="form-check-label" for="dexKyber">KyberSwap</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="Matcha" id="dexMatcha">
+                                                    <label class="form-check-label" for="dexMatcha">Matcha</label>
+                                                </div>
+                                               
+                                            </div>
+
+                                            <!-- Kolom Kanan -->
+                                            <div class="col-6">
+                                                 <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="OKXDEX" id="dexOkx">
+                                                    <label class="form-check-label" for="dexOkx">OKX DEX</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="ODOS" id="dexOdos">
+                                                    <label class="form-check-label" for="dexOdos">ODOS</label>
+                                                </div>
+                                                <!-- <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="ParaSwap" id="dexParaSwap">
+                                                    <label class="form-check-label" for="dexParaSwap">ParaSwap</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="Magpie" id="dexMagpie">
+                                                    <label class="form-check-label" for="dexMagpie">Magpie</label>
+                                                </div> -->
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="LIFI" id="dexLIFI">
+                                                    <label class="form-check-label" for="dexLIFI">LIFI (Auto DEX)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveTokenBtn">
+                        <i class="bi bi-check-lg"></i> Save Token
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Web3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <!-- Price APIs -->
+    <script src="price-apis.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+
+    <!-- Tombol Scroll ke Atas -->
+    <button id="scrollTopBtn" title="Kembali ke Atas" class="btn btn-success rounded-circle shadow" style="
+        position: fixed;
+        bottom: 10px;
+        right: 50%;
+        width: 45px;
+        height: 45px;
+        z-index: 9999;
+        display: none;">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+</body>
+</html>
+
