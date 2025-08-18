@@ -1629,7 +1629,11 @@ $(document).ready(function() {
         $("#stopSCAN").show().prop('disabled', false);
 
         $('#LoadDataBtn, #SettingModal, #MasterData,#UpdateWalletCEX, #chain-links-container,.sort-toggle').css('pointer-events', 'none').css('opacity', '0.4');
-
+      // ✅ aktifkan kembali input & checkbox
+        $('#modalCEX, #modalDEX, #cex-checkbox-group input[type=checkbox], #dex-checkbox-group input[type=checkbox]')
+        .prop('disabled', false)
+        .css({ opacity: 1, 'pointer-events': 'auto' });
+        
         // Pastikan checkbox tetap aktif dan bisa diubah statusnya
         $('.statusCheckbox').css({ 'pointer-events': 'auto', 'opacity': '1' }).prop('disabled', false);
         
