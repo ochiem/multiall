@@ -15,32 +15,82 @@
     
     <link rel="icon" href="https://www.iconpacks.net/icons/1/free-settings-icon-778-thumb.png" type="image/x-icon">
     <script src="config.js"></script>
-    <style>
-         body{
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 1px;
-            color: #0f0f0f;
-            /* background-color: #dbfac7; */
+   <style>
+        body {
+            font-family: Arial, sans-serif;
         }
-        .uk-container { width: 96%; max-width: none; }
-        .table-header th { color: rgb(251, 250, 250); font-size: medium; font-weight: bolder; cursor: pointer; position: relative; }
-        .status-active { color: green; }
-        .status-inactive { color: red; }
-        .token-cell { vertical-align: top; }
-        .sort-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
-        /* Memaksa warna link untuk CEX */
-        .uk-link {
-            color: inherit !important;  /* Memastikan warna link mengikuti warna induk */
+        .uk-container {
+            max-width: 100% !important;
+            padding-left: 8px;
+            padding-right: 8px;
         }
-        /* Memaksa warna status aktif */
-        .status-active {
-            color: inherit !important;  /* Warna aktif mengikuti warna yang ditentukan */
+         .uk-icon {
+            /* width: 24px;
+            height: 24px; */
+            vertical-align: middle;
+            stroke-width: 1.2;    
+            stroke: black;
         }
+
+        .icon:hover {
+            transform: scale(1.6); /* membesarkan 30% */
+        }
+
+        .uk-card,
+        .uk-card-default {
+            border-radius: 5px; /* bisa diganti 8px/16px sesuai selera */
+            overflow: hidden;    /* biar konten ikut rounded */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* optional, biar soft */
+        }
+        .header-card {
+            padding: 6px 12px !important; /* lebih kecil agar rapat */
+            border: 1px solid black;
+        }
+
+        .header-card h3 {
+            font-size: 18px;
+            line-height: 1.2;
+            margin: 0;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .uk-card img,
+        .uk-card-default img {
+            border-radius: 5px 5px 0 0; /* gambar di atas ikut rounded */
+        }
+       
+        .uk-grid-small {
+            margin-bottom: 15px;
+        }
+        .uk-table th, .uk-table td {
+            text-align: center;
+        }
+
+        #cex-options{
+            color: rgb(46, 36, 250);
+            font-weight: bolder;
+        }
+        #pair-checkboxes {
+            color: green;
+            font-weight: bolder;
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-container .uk-card {
+            flex: 1;
+            min-width: 300px;
+        }
+       
         img:hover {
                 transform: scale(1.6); /* You can adjust the scale factor as needed */
             }
         .img-large {
-            width: 50px !important; /* Atur ukuran sesuai kebutuhan */
+            width: 24px !important; /* Atur ukuran sesuai kebutuhan */
             transition: transform 0.3s; /* Menambahkan efek animasi */
             display: inline-flex;          /* Menjadikan elemen inline fleksibel */
             justify-content: center;       /* Pusatkan gambar secara horizontal */
@@ -50,101 +100,125 @@
             cursor: pointer;               /* Ubah kursor menjadi tangan saat diklik */
             transition: background-color 0.3s ease; /* Animasi untuk efek hover */
         }
-       
+        .uk-table th{
+            color: white;
+            font-weight: bolder;
+        }
     </style>
      <!-- <base href="/V1/"> -->
 </head>
 <body>
-<div class="uk-container uk-margin-top">
-    <div class="uk-text-center" uk-grid>
-        <div class="uk-width-auto@m">
-            <div class="uk-card uk-card-default uk-card-small uk-card-body">
-                <h3 id="judul">
-                    MONITORING V1 <label id="namachain"></label> :: SETTING </h3>
-                    &nbsp;
-                    <a href="import.html">
-                        <img class="icon" id="ImportDataBtn" title="IMPORT TOKEN PAIR" width="30px" src="https://icons.veryicon.com/png/o/internet--web/2022-alibaba-cloud-product-icon-cloud/cbs-database-backup.png" />
-                    </a>&nbsp;
-                    <a href="multipair.html">
-                        <img class="icon" id="MasterDataBtn" title="SETTING TOKEN PAIR" width="30px" src="https://cdn-icons-png.flaticon.com/512/324/324125.png" />
-                    </a>&nbsp;
-                    <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
-                        <img title="BUKA AKSES" src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="30px" />
-                    </a> &nbsp;
-                    <img class="icon" id="UpdateWalletCEX" title="UPDATE WALLET CEX" width="30px" src="https://cdn-icons-png.flaticon.com/512/3687/3687106.png" /> &nbsp;
-                    <img class="icon" id="reload" title="REFRESH PAGE" width="30px" src="https://cdn-icons-png.flaticon.com/512/2546/2546705.png" /> &nbsp;
-                    <a href="memory.html" target="_blank">
-                        <img title="MANAJEMEN MEMORY" src="https://cdn-icons-png.flaticon.com/512/9776/9776871.png" width="30px" />
-                    </a> &nbsp;
-                   
-                    <a href="index.html" target="_blank">
-                        <img class="icon" id="Scanner" title="SCANNER PRICE" width="30px" src="https://cdn.iconscout.com/icon/premium/png-256-thumb/copy-cat-5381934-4568586.png" />
-                    </a> &nbsp;
-                    <br/>  <br/>
-                    <span id="chain-links-container"></span>  
-            </div>
-        </div>
-        <div class="uk-width-expand@m">
-            <div >
-                <form id="cryptoForm" class="uk-form-stacked">
-                    <h3 id="judulform" style="text-align:center;">FORMULIR DATA TOKEN & PAIR</h3>
+<div class="uk-container uk-margin-small-top uk-background-a">
+       <!-- Card Bagian Header -->
+        <div class="uk-card uk-card-default uk-margin-small header-card">
+            <div class="uk-flex-middle" uk-grid>
 
-                    <div class="uk-margin" style="display: flex; align-items: center; gap: 10px;">
-                        <b><span class="uk-text-primary uk-text-medium">TOKEN : </span></b>
-                        <input class="uk-input" type="text" id="ID" hidden>
-                        <div class="uk-form-controls" style="flex: 1;">
-                            <input class="uk-input" type="text" id="token_in" placeholder="NAME TOKEN" required>
-                        </div>
-                        <div class="uk-form-controls" style="flex: 3;">
-                            <input class="uk-input" type="text" id="sc_in" placeholder="SC TOKEN CEX" required>
-                        </div>
-                        <div class="uk-form-controls" style="flex: 1;">
-                            <input class="uk-input" type="number" id="des_in" placeholder="DES TOKEN" required min="0">
-                        </div>
-                        <div class="uk-form-controls" style="flex: 1;">
-                            <input class="uk-input" type="text" id="token_out" placeholder="NAME PAIR" required>
-                        </div>
-                        <div class="uk-form-controls" style="flex: 3;">
-                            <input class="uk-input" type="text" id="sc_out" placeholder="SC PAIR DEX" required>
-                        </div>
-                        <div class="uk-form-controls" style="flex: 1;">
-                            <input class="uk-input" type="number" id="des_out" placeholder="DES PAIR" required min="0">
-                        </div>
-                        
-                    </div>
-    
-                    <div class="uk-margin-top dex-group uk-grid-small uk-flex uk-flex-between" uk-grid style="flex-wrap: wrap;">
-                        <!-- Kolom untuk CEX -->
-                        <div class="uk-width-auto uk-flex uk-flex-middle" style="gap: 10px;">
-                            <b><span class="uk-text-danger uk-text-medium">CEX:</span></b>
-                            <div id="cex-options" class="uk-form-controls" style="display: flex; align-items: center; gap: 10px;">
-                                <!-- Radio button CEX akan di-generate di sini -->
-                            </div>
-                        </div>
-    
-                        <!-- Kolom untuk STATUS -->
-                        <div class="uk-width-auto uk-flex uk-flex-middle" style="gap: 10px;">
-                            <b><span class="uk-text-danger uk-text-medium">STATUS:</span></b>
-                            <div class="uk-form-controls" style="display: flex; align-items: center; gap: 10px;">
-                                <label><input class="uk-checkbox uk-text-warning" type="checkbox" id="status" checked> AKTIF</label>
-                            </div>
-                        </div>
-    
-                        <!-- Kolom untuk Tombol -->
-                        <div class="uk-width-auto uk-flex uk-flex-middle" style="gap: 10px;">
-                            <button type="button" id="addButton" class="uk-button uk-button-secondary">TAMBAH</button>
-                            <button type="button" id="cancelButton" class="uk-button uk-button-danger" style="display: none;">CANCEL</button>
-                            <button type="submit" id="SaveButton" class="uk-button uk-button-primary">SIMPAN</button>
-                        </div>
-                        <div class="uk-align-center uk-background-muted uk-text-small">
-                            <b><span class="uk-text-secondary uk-text-medium">INFO: &nbsp;</span></b>
-                            <b><span class="uk-text-success uk-text-medium" id="infoAPP">???</span></b>&nbsp; &nbsp; &nbsp;
-                        </div>   
-                    </div>
-            </form>
+                <!-- Kiri: Judul -->
+                <div class="uk-width-expand@s uk-width-1-1">
+                <div class="uk-flex uk-flex-middle uk-flex-wrap">
+                    <h3 id="judul" class="uk-margin-remove" style="font-size:18px; line-height:1.2; color:#000; font-weight:bold;">
+                    MULTIALL [SETTING] :: <label id="namachain"></label>
+                    </h3>
+                </div>
+                <span >[ <b>
+                    <span class="uk-text-danger uk-text-small" id="infoAPP">???</span>
+                </b> ]</span>
+                </div>
+
+                <!-- Kanan: Toolbar icon -->
+                <div class="uk-width-auto@s uk-width-1-1">
+                <a href="import.html">
+                    <img class="icon" id="ImportDataBtn" title="IMPORT TOKEN PAIR" width="24px" src="https://icons.veryicon.com/png/o/internet--web/2022-alibaba-cloud-product-icon-cloud/cbs-database-backup.png" />
+                </a>&nbsp;
+                <a href="multipair.html">
+                    <img class="icon" id="MasterDataBtn" title="SETTING TOKEN PAIR" width="24px" src="https://cdn-icons-png.flaticon.com/512/324/324125.png" />
+                </a>&nbsp;
+                <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
+                    <img title="BUKA AKSES" src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="24px" />
+                </a> &nbsp;
+                <img class="icon" id="UpdateWalletCEX" title="UPDATE WALLET CEX" width="24px" src="https://cdn-icons-png.flaticon.com/512/3687/3687106.png" /> &nbsp;
+                <img class="icon" id="reload" title="REFRESH PAGE" width="24px" src="https://cdn-icons-png.flaticon.com/512/2546/2546705.png" /> &nbsp;
+                <a href="memory.html" target="_blank">
+                    <img title="MANAJEMEN MEMORY" src="https://cdn-icons-png.flaticon.com/512/9776/9776871.png" width="24px" />
+                </a> &nbsp;
+                <a href="index.html" target="_blank">
+                    <img class="icon" id="Scanner" title="SCANNER PRICE" width="24px" src="https://cdn.iconscout.com/icon/premium/png-256-thumb/copy-cat-5381934-4568586.png" />
+                </a> &nbsp;
+                <span id="chain-links-container"></span>
+                </div>
+
             </div>
         </div>
-    </div>
+      <!-- FORM DATA KOIN (Compact) -->
+<div class="uk-card uk-card-default uk-card-hover" id="scanner-config" style="border:1px solid;">
+  <div class="uk-card-body uk-padding-small">
+    <form>
+
+      <h4 id="judulform" class="uk-text-center uk-margin-remove">FORMULIR DATA TOKEN & PAIR</h4>
+
+      <!-- ROW: Token & Pair Inputs (rapat) -->
+      <div class="uk-margin-small" style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+        <b class="uk-text-primary">TOKEN:</b>
+        <input class="uk-input" type="text" id="ID" hidden>
+
+        <div class="uk-form-controls" style="flex:1; min-width:140px;">
+          <input class="uk-input uk-form-small" type="text" id="token_in" placeholder="NAME TOKEN" required>
+        </div>
+
+        <div class="uk-form-controls" style="flex:3; min-width:220px;">
+          <input class="uk-input uk-form-small" type="text" id="sc_in" placeholder="SC TOKEN CEX" required>
+        </div>
+
+        <div class="uk-form-controls" style="flex:1; min-width:110px;">
+          <input class="uk-input uk-form-small" type="number" id="des_in" placeholder="DES TOKEN" required min="0">
+        </div>
+        <b class="uk-text-primary">PAIR:</b>
+        <div class="uk-form-controls" style="flex:1; min-width:140px;">
+          <input class="uk-input uk-form-small" type="text" id="token_out" placeholder="NAME PAIR" required>
+        </div>
+
+        <div class="uk-form-controls" style="flex:3; min-width:220px;">
+          <input class="uk-input uk-form-small" type="text" id="sc_out" placeholder="SC PAIR DEX" required>
+        </div>
+
+        <div class="uk-form-controls" style="flex:1; min-width:110px;">
+          <input class="uk-input uk-form-small" type="number" id="des_out" placeholder="DES PAIR" required min="0">
+        </div>
+      </div>
+
+      <!-- ROW: CEX + STATUS + BUTTONS (rapi & mepet) -->
+      <div class="uk-margin-small" style="display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
+
+        <!-- CEX -->
+        <div style="display:flex; align-items:center; gap:6px;">
+          <b class="uk-text-danger">CEX:</b>
+          <div id="cex-options" class="uk-form-controls" style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+            <!-- Radio CEX di-generate di sini -->
+          </div>
+        </div>
+
+        <!-- STATUS -->
+        <div style="display:flex; align-items:center; gap:6px;">
+          <b class="uk-text-danger">STATUS:</b>
+          <label class="uk-margin-remove">
+            <input class="uk-checkbox" type="checkbox" id="status" checked> AKTIF
+          </label>
+        </div>
+
+        <!-- BUTTONS ke kanan -->
+        <div style="display:flex; align-items:center; gap:6px; margin-left:auto;">
+          <button type="button" id="addButton" class="uk-button uk-button-secondary uk-button-small">TAMBAH</button>
+          <button type="button" id="cancelButton" class="uk-button uk-button-danger uk-button-small" style="display:none;">CANCEL</button>
+          <button type="submit" id="SaveButton" class="uk-button uk-button-primary uk-button-small">SIMPAN</button>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
     
     <div>
         <hr class="uk-margin-top" />
@@ -163,7 +237,7 @@
             <!-- Judul dan Jumlah Token -->
             <div class="uk-width-expand">
 
-                <h3 class="uk-heading-line uk-margin-remove uk-text-primary">
+                <h3 class="uk-heading-line uk-margin-remove uk-text-primary" id="daftar">
                     <span style="font-size:large;">DAFTAR TOKEN <span id="namachain2"></span> (<span id="tokenCount" class="token-count">0</span>)</span>
                 </h3>
 
@@ -367,8 +441,8 @@
         if (!dataTokenPilih || !Array.isArray(dataTokenPilih) || dataTokenPilih.length === 0) {
             // Jika data token dan data token pilih tidak ada
             if (!DataTokens || !Array.isArray(DataTokens) || DataTokens.length === 0) {
-                $("#infoAPP").show().html("SILAKAN PILIH DATA TOKEN DAN PAIR DAHULU DI MENU IMPORT!!").addClass('uk-text-danger');
-                toastr.error('<b>SILAKAN PILIH DATA TOKEN DAN PAIR TERLEBIH DAHULU DI MENU IMPORT!!</b><br/>');
+                $("#infoAPP").show().html("SILAKAN PILIH CEX DAN PAIR DAHULU DI MENU IMPORT!!").addClass('uk-text-danger');
+                toastr.error('<b>SILAKAN PILIH CEX DAN PAIR TERLEBIH DAHULU DI MENU IMPORT!!</b><br/>');
                 form_off();
                 $("#ImportDataBtn").addClass("img-large");
                 $('#MasterDataBtn').css({
@@ -430,9 +504,13 @@
                  $('.table-header').css({
                      'background-color': selectedChain.WARNA,
                  });
-                 $('h3#judul,h3#judulform').css({
-                     'color': selectedChain.WARNA, // Fallback warna dasar
-                 });
+                $('h4#judulcex, h4#judulpair').css('color', selectedChain.WARNA);
+            
+                $('h3#daftar').css({ 'text-align': 'center', 'color': 'black', 'background': `linear-gradient(to right, #ffffff, ${selectedChain.WARNA}, #ffffff)`, 'padding-left': '4px' });
+                     // Terapkan background linear gradient ke header card
+                    document.querySelector('.header-card').style.background = 
+                        `linear-gradient(to right, ${selectedChain.WARNA} 0%,  rgb(234 234 234) 60%)`;
+
                 cekDataAwal(); 
                  // Untuk setiap chain yang ada di CONFIG_CHAINS dibuatkan ICON LINK CHAIN
                 Object.keys(CONFIG_CHAINS).forEach(chainKey => {
@@ -443,7 +521,7 @@
 
                     // Buat elemen link dan icon dengan pengaturan khusus jika cocok dengan chainName
                     const linkHTML = `<span class="chain-link ${isActive ? 'active-chain' : ''}" style="${!isActive ? 'opacity: 0.3;' : ''}">
-                             <a href="${currentPage}?chain=${chain.Nama_Chain}" ><img src="${chain.ICON}" alt="${chain.Nama_Chain} icon" width="${isActive ? '35' : '35'}"></a></span>`;
+                             <a href="${currentPage}?chain=${chain.Nama_Chain}" ><img src="${chain.ICON}" alt="${chain.Nama_Chain} icon" width="${isActive ? '24' : '30'}"></a></span>`;
                     
                     // Masukkan ke dalam container
                     $('#chain-links-container').append(linkHTML);
@@ -810,12 +888,12 @@
                     <td class="uk-text-center">${data.cex}</td>
                     <td style="text-align:center;">${data.symbol_in}</td>
                     <td style="font-size:small;">
-                        <a href="${URL_Chain}/token/${data.sc_in}" target="_blank" class="uk-link">${data.sc_in}</a><br/>(${data.des_in})
+                        <a href="${URL_Chain}/token/${data.sc_in}" target="_blank" class="uk-link">${data.sc_in}</a> &nbsp; [${data.des_in}]
                     </td>
                     <td class="uk-text-center" style="${withdrawStatus.style}">${withdrawStatus.text}</td>
                     <td style="text-align:center;">${data.symbol_out}</td>
                     <td style="font-size:small;">
-                        <a href="${URL_Chain}/token/${data.sc_out}" target="_blank" class="uk-link">${data.sc_out}</a><br/>(${data.des_out})
+                        <a href="${URL_Chain}/token/${data.sc_out}" target="_blank" class="uk-link">${data.sc_out}</a>&nbsp;[${data.des_out}]
                     </td>
                     <td class="uk-text-center" style="${depositStatus.style}">${depositStatus.text}</td>
                     <td class="uk-text-center">

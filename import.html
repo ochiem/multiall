@@ -14,12 +14,48 @@
 
     <script src="config.js"></script>
     <style>
-        .uk-container { width: 96%; max-width: none; }
         body {
             font-family: Arial, sans-serif;
         }
         .uk-container {
-            margin-top: 35px;
+            max-width: 100% !important;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+         .uk-icon {
+            /* width: 24px;
+            height: 24px; */
+            vertical-align: middle;
+            stroke-width: 1.2;    
+            stroke: black;
+        }
+
+        .icon:hover {
+            transform: scale(1.6); /* membesarkan 30% */
+        }
+
+        .uk-card,
+        .uk-card-default {
+            border-radius: 5px; /* bisa diganti 8px/16px sesuai selera */
+            overflow: hidden;    /* biar konten ikut rounded */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* optional, biar soft */
+        }
+        .header-card {
+            padding: 6px 12px !important; /* lebih kecil agar rapat */
+            border: 1px solid black;
+        }
+
+        .header-card h3 {
+            font-size: 18px;
+            line-height: 1.2;
+            margin: 0;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .uk-card img,
+        .uk-card-default img {
+            border-radius: 5px 5px 0 0; /* gambar di atas ikut rounded */
         }
        
         .uk-grid-small {
@@ -28,8 +64,14 @@
         .uk-table th, .uk-table td {
             text-align: center;
         }
+
+        #cex-options{
+            color: rgb(46, 36, 250);
+            font-weight: bolder;
+        }
         #pair-checkboxes {
-            margin-bottom: 20px;
+            color: green;
+            font-weight: bolder;
         }
 
         .form-container {
@@ -46,7 +88,7 @@
                 transform: scale(1.6); /* You can adjust the scale factor as needed */
             }
         .img-large {
-            width: 50px !important; /* Atur ukuran sesuai kebutuhan */
+            width: 30px !important; /* Atur ukuran sesuai kebutuhan */
             transition: transform 0.3s; /* Menambahkan efek animasi */
             display: inline-flex;          /* Menjadikan elemen inline fleksibel */
             justify-content: center;       /* Pusatkan gambar secara horizontal */
@@ -63,53 +105,83 @@
     </style>
 </head>
 <body>    
-    <div class="uk-container">
-        <div class="uk-text-center" uk-grid>
-            <div class="uk-width-auto@m">
-                <div class="uk-card uk-card-default uk-card-small uk-card-body">
-                    <h3 id="judul">
-                        MONITORING V1 <label id="namachain"></label> :: IMPORT </h3>
-                        &nbsp;
-                        <a href="import.html">
-                            <img class="icon" id="ImportDataBtn" title="IMPORT TOKEN PAIR" width="35px" src="https://icons.veryicon.com/png/o/internet--web/2022-alibaba-cloud-product-icon-cloud/cbs-database-backup.png" />
+      <div class="uk-container uk-margin-small-top uk-background-a">
+         <!-- Card Bagian Header -->
+        <div class="uk-card uk-card-default uk-margin-small header-card">
+            <div class="uk-flex-middle" uk-grid>
+                    
+                    <!-- Kiri: Judul -->
+                    <div class="uk-width-expand@s uk-width-1-1">
+                        <div class="uk-flex uk-flex-middle uk-flex-wrap">
+                        <h3 id="judul"  class="uk-margin-remove"  style="font-size: 18px; line-height: 1.2; color: #000; font-weight: bold;">
+                        MULTIALL [IMPORT] :: <label id="namachain"></label></h3>
+                        </div>
+                          <span >[ <b>
+                            <span class="uk-text-danger uk-text-small" id="infoAPP">???</span>
+                        </b> ]</span>
+                    </div>
+
+                    <!-- Kanan: Toolbar icon -->
+                    <div class="uk-width-auto@s uk-width-1-1">
+                        <div class="uk-flex uk-flex-middle uk-flex-wrap uk-flex-right@s" style="gap: 6px;">
+                             <a href="import.html">
+                            <img class="icon" id="ImportDataBtn" title="IMPORT TOKEN PAIR" width="24px" src="https://icons.veryicon.com/png/o/internet--web/2022-alibaba-cloud-product-icon-cloud/cbs-database-backup.png" />
                         </a>&nbsp;
                         <a href="multipair.html">
-                            <img class="icon" id="MasterDataBtn" title="SETTING TOKEN PAIR" width="35px" src="https://cdn-icons-png.flaticon.com/512/324/324125.png" />
+                            <img class="icon" id="MasterDataBtn" title="SETTING TOKEN PAIR" width="24px" src="https://cdn-icons-png.flaticon.com/512/324/324125.png" />
                         </a>&nbsp;
                         <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
-                            <img title="BUKA AKSES" src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="35px" />
+                            <img title="BUKA AKSES" src="https://cdn-icons-png.flaticon.com/512/8820/8820158.png" width="24px" />
                         </a>&nbsp;
-                        <img class="icon" id="UpdateWalletCEX" title="UPDATE WALLET CEX" width="35px" src="https://cdn-icons-png.flaticon.com/512/3687/3687106.png" /> &nbsp;
-                        <img class="icon" id="reload" title="REFRESH PAGE" width="35px" src="https://cdn-icons-png.flaticon.com/512/2546/2546705.png" /> &nbsp;
+                        <img class="icon" id="UpdateWalletCEX" title="UPDATE WALLET CEX" width="24px" src="https://cdn-icons-png.flaticon.com/512/3687/3687106.png" /> &nbsp;
+                        <img class="icon" id="reload" title="REFRESH PAGE" width="24px" src="https://cdn-icons-png.flaticon.com/512/2546/2546705.png" /> &nbsp;
                         <a href="memory.html" target="_blank">
-                            <img title="MANAJEMEN MEMORY" src="https://cdn-icons-png.flaticon.com/512/9776/9776871.png" width="35px" />
+                            <img title="MANAJEMEN MEMORY" src="https://cdn-icons-png.flaticon.com/512/9776/9776871.png" width="24px" />
                         </a>&nbsp;
                         <a href="index.html" target="_blank">
-                            <img class="icon" id="Scanner" title="SCANNER PRICE" width="35px" src="https://cdn.iconscout.com/icon/premium/png-256-thumb/copy-cat-5381934-4568586.png" />
+                            <img class="icon" id="Scanner" title="SCANNER PRICE" width="24px" src="https://cdn.iconscout.com/icon/premium/png-256-thumb/copy-cat-5381934-4568586.png" />
                         </a> 
                         <br/> <br/>
                         <span id="chain-links-container" ></span>  
-                </div>
-            </div>
-            <div class="uk-width-expand@m">
-                <div >
-                    <h4 class="uk-heading-divider" id="judulcex">Pilihan Exchanger (CEX) & TOKEN PAIR</h4>
-                    <span id="cex-options" class="uk-grid-small uk-child-width-auto uk-grid uk-margin-remove uk-text-primary uk-text-bolder"></span>
-                   <span id="pair-checkboxes" class="uk-grid-small uk-child-width-auto uk-grid uk-margin-remove uk-text-secondary  uk-text-bolder"></span>                
+                        </div>
+                    </div>
 
-                
-                    <button id="filter-btn" class="uk-button uk-button-primary uk-width-auto" disabled>Tampilkan</button>
-                    <button id="stop-btn" class="uk-button uk-button-danger uk-width-auto">BATALKAN</button>
-                    <button id="load-data-btn" class="uk-button uk-button-secondary uk-width-auto" style="display: none;">SIMPAN </button>
-                </div>
-                <div class="uk-align-center uk-background-muted uk-text-small">
-                    <b><span class="uk-text-secondary uk-text-medium">INFO: &nbsp;</span></b>
-                    <b><span class="uk-text-success uk-text-medium" id="infoAPP">???</span></b>&nbsp; &nbsp; &nbsp;
-                </div> 
             </div>
         </div>
-       
 
+        <!-- Card PILIH CEX & PAIR-->
+        <div class="uk-card uk-card-default uk-padding-small uk-card-hover"  style="border:1px solid; padding-top:6px; padding-bottom:6px;" id="scanner-config">
+            <div class="uk-grid-collapse uk-flex-middle" uk-grid>
+                <!-- Judul: 1 baris penuh & tanpa margin -->
+                <div class="uk-width-1-1">
+                <h4 id="judulcex" class="uk-margin-remove">Pilihan Exchanger (CEX) & TOKEN PAIR</h4>
+                </div>
+
+                <!-- Form Setting -->
+                <div class="uk-width-1-1">
+                <div class="uk-flex uk-flex-wrap uk-flex-middle" style="gap:14px;">
+                    <div class="uk-flex uk-flex-middle" style="gap:6px;">
+                    <strong class="uk-text-secondary">EXCHANGER:</strong>
+                    <!-- HINDARI uk-grid di sini; cukup flex -->
+                    <span id="cex-options" class="uk-flex uk-flex-wrap uk-flex-middle" style="gap:8px;"></span>
+                    </div>
+
+                    <div class="uk-flex uk-flex-middle" style="gap:6px;">
+                    <strong class="uk-text-secondary">PAIR:</strong>
+                    <span id="pair-checkboxes" class="uk-flex uk-flex-wrap uk-flex-middle" style="gap:8px;"></span>
+                    </div>
+
+                    <div class="uk-flex uk-flex-middle" style="gap:8px; margin-left:auto;">
+                    <button id="filter-btn" class="uk-button uk-button-primary" disabled>Tampilkan</button>
+                    <button id="stop-btn" class="uk-button uk-button-danger">BATALKAN</button>
+                    <button id="load-data-btn" class="uk-button uk-button-secondary" style="display:none;">SIMPAN</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+ 
         <!-- Tabel Hasil -->
         <h3 class="uk-heading-line uk-margin-top" id="daftar"><span>Daftar Token Pair <span id="namachain2"></span> Hasil Pilihan  </span></h3>
        
@@ -245,8 +317,8 @@
                     if (!dataTokenPilih || !Array.isArray(dataTokenPilih) || dataTokenPilih.length === 0) {
                         // Jika data token dan data token pilih tidak ada
                         if (!DataTokens || !Array.isArray(DataTokens) || DataTokens.length === 0) {
-                            $("#infoAPP").show().html("SILAKAN PILIH DATA TOKEN & PAIR DAHULU, KEMUDIAN TAMPILKAN & SIMPAN !!").addClass('uk-text-danger');
-                            toastr.error('<b>SILAKAN PILIH DATA TOKEN DAN PAIR!!</b><br/>');
+                            $("#infoAPP").show().html("SILAKAN PILIH CEX & PAIR, KEMUDIAN TAMPILKAN & SIMPAN !!").addClass('uk-text-danger');
+                            toastr.error('<b>SILAKAN PILIH CEX DAN PAIR!!</b><br/>');
                             form_off();
                             $("#ImportDataBtn").addClass("img-large");
                             $('#MasterDataBtn').css({
@@ -301,18 +373,28 @@
                     if (selectedChain) {
                         // Generate Pilihan CEX
                         // Update tampilan dengan nama chain dan warna
+                        function hexToRgba(hex, alpha) {
+                            var r = parseInt(hex.slice(1, 3), 16);
+                            var g = parseInt(hex.slice(3, 5), 16);
+                            var b = parseInt(hex.slice(5, 7), 16);
+                            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                        }
                         $('title').text("IMPORT TOKEN " + Nama_Chain.toUpperCase());
                         $('#namachain').text(Nama_Chain.toUpperCase());
                         $('#namachain2').text(Nama_Chain.toUpperCase());
                         $('h4#judulcex, h4#judulpair, #daftar').css('color', selectedChain.WARNA);
-                        $('h3#judul').css({
-                            'text-align':"center",
-                            'color': selectedChain.WARNA, // Fallback warna dasar
-                        });
+                       
+                          $('h3#daftar').css({ 'text-align': 'center', 'color': 'black', 'background': `linear-gradient(to right, #ffffff, ${selectedChain.WARNA}, #ffffff)`, 'padding-left': '4px' });
+
                         $('.table-header').css({
                             'text-align':"center",
                             'background-color': selectedChain.WARNA,
                         });
+
+                         // Terapkan background linear gradient ke header card
+                    document.querySelector('.header-card').style.background = 
+                        `linear-gradient(to right, ${selectedChain.WARNA} 0%,  rgb(234 234 234) 60%)`;
+
                         cekDataAwal();
                         var url = DTChain.DATAJSON; // Ganti dengan URL JSON Anda
                         
@@ -325,7 +407,7 @@
 
                             // Buat elemen link dan icon dengan pengaturan khusus jika cocok dengan chainName
                             const linkHTML = `<span class="chain-link ${isActive ? 'active-chain' : ''}" style="${!isActive ? 'opacity: 0.3;' : ''}">
-                                    <a href="${currentPage}?chain=${chain.Nama_Chain}" ><img src="${chain.ICON}" alt="${chain.Nama_Chain} icon" width="${isActive ? '35' : '35'}"></a></span>`;
+                                    <a href="${currentPage}?chain=${chain.Nama_Chain}" ><img src="${chain.ICON}" alt="${chain.Nama_Chain} icon" width="${isActive ? '24' : '30'}"></a></span>`;
                             
                             // Masukkan ke dalam container
                             $('#chain-links-container').append(linkHTML);
