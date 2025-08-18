@@ -19,6 +19,7 @@
 
     <script src="config.js"></script>
     <script src="main.js"></script>
+    
     <style>
         /* Override semua class UIkit text* agar mengikuti warna Bootstrap */
         [class*="uk-text"] {
@@ -352,6 +353,7 @@
     <!-- <base href="/V1/"> -->
     </head>
     <body>
+
     <div class="uk-container uk-margin-small-top uk-background-a">
         <!-- Card Bagian Header -->
         <div class="uk-card uk-card-default uk-margin-small header-card">
@@ -629,7 +631,6 @@
             <div id="InfoStatus" style="text-align:center; font-weight:bold; color:red;"></div>     -->
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
 <script>
@@ -1167,6 +1168,30 @@ $(document).ready(function() {
         $('body').removeClass('dark-mode uk-dark');
     }
     updateDarkIcon(isDark);
+    //scroll UP
+    
+     var $btn = $('#scrollTopBtn');
+  var THRESH = 200;
+
+  function toggleBtn() {
+    if ($(window).scrollTop() > THRESH) {
+      $btn.stop(true, true).fadeIn(150);
+    } else {
+      $btn.stop(true, true).fadeOut(150);
+    }
+  }
+
+  // Tampil/sembunyi saat scroll
+  $(window).on('scroll.scrollTopBtn', toggleBtn);
+
+  // Klik = scroll ke atas
+  $btn.on('click.scrollTopBtn', function (e) {
+    e.preventDefault();
+    $('html, body').stop(true).animate({ scrollTop: 0 }, 500, toggleBtn);
+  });
+
+  // State awal
+  toggleBtn();
 
     const infuraApiKey = '9d0429abadc34232af7d5c0e6ab98631';
     const urlParams = new URLSearchParams(window.location.search);
@@ -3745,5 +3770,15 @@ $(document).ready(function() {
     
 </script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
+<span id="scrollTopBtn"
+      title="Kembali ke Atas"
+      style="position:fixed; bottom:20px; right:30px;
+             width:25px; height:25px; border-radius:50%;
+             background:#07d94d; color:#fff; font-size:20px;
+             display:none; z-index:9999; cursor:pointer;
+             display:flex; align-items:center; justify-content:center;">
+  ↑
+</span>
+
 </body>
 </html>
