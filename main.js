@@ -390,7 +390,7 @@
                     //     "gasPriceGwei": Number(getFromLocalStorage('gasGWEI', 0)),
                     // };
                     
-                    apiUrl = "https://api.odos.xyz/sor/quote/v2";               
+                    apiUrl = "https://api.odos.xyz/sor/quote/v3";               
                     requestData = {
                         chainId: DTChain.Kode_Chain,
                         compact: true,
