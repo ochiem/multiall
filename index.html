@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MULTICHECKER-PLUS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/css/uikit.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="js/notify-shim.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.70.0/lib/index.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script> 
+    
+    <link id="favicon" rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6488/6488055.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- OLD OVERLAYS REMOVED - Now using AppOverlay from overlay-manager.js -->
+<!-- #pageLoadingOverlay - REMOVED: Page load now handled by AppOverlay -->
+<!-- #loadingOverlay - REMOVED: Wallet updates now use AppOverlay.show() -->
+<!-- All overlays now use unified AppOverlay system for consistency -->
+<div class="uk-container uk-margin-small-top uk-background-a">
+ <!-- Card Bagian Header -->
+    <div class="uk-card uk-card-default uk-margin-small header-card" id="menu-app">
+        <div class="uk-grid-small uk-flex-middle" uk-grid >
+                
+                <!-- Kiri: Judul -->
+                <div class="uk-width-expand@s uk-width-1-1">
+                    <div class="uk-flex uk-flex-middle uk-flex-wrap" style="align-items: center;">
+                        <h3 id="judul" class="uk-margin-remove"
+                            style="font-size: 18px; line-height: 1.4; color: #000; font-weight: bold; display: inline-flex; align-items: center;">
+                            <span id="app-title">MULTIPLUS-SCANNER</span>
+                            <span id="current-chain-label" style="margin-left:3px;">[ALL]</span>
+                        </h3>
+                        &nbsp;&nbsp;
+                        <span style="display: inline-flex; align-items: center;">[ <b>
+                            <span class="uk-text-danger uk-text-small" id="infoAPP">???</span>
+                        </b> ]</span>
+                    </div>
+                </div>
+
+                <!-- Kanan: Toolbar icon -->
+                <div class="uk-width-auto@s uk-width-1-1">
+                    <div class="uk-flex uk-flex-middle uk-flex-wrap uk-flex-right@s toolbar-scroll" style="gap: 8px; padding:0px 5px;">
+                         <a href="index.html?chain=all" id="multichain_scanner" ><img class="icon" title="SCANNER MUTLTICHAIN" width="24px" src="https://cdn-icons-png.flaticon.com/512/8897/8897593.png" /></a>
+                        <span id="chain-links-container"></span>
+                         
+                       
+                        <img class="icon" id="SettingConfig" data-feature="settings" title="CONFIG SCANNER" width="24px" src="https://cdn-icons-png.flaticon.com/512/771/771203.png" />
+                        <!-- <img class="icon" id="reload" data-feature="reload" title="RESET PROSES" width="24px" src="https://cdn-icons-png.flaticon.com/256/10264/10264169.png" /> -->
+
+                         <a href="extra/modal.html" target="_blank" data-feature="assets"><img class="icon" title="PORTOFOLIO ASSET" width="24px" src="https://cdn-icons-png.flaticon.com/512/893/893097.png" /></a>
+                         <a href="#" id="openDatabaseViewer" title="MANAJEMEN DATABASE"><img class="icon" width="24" src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" /></a>
+                         <a href="#" id="openHistoryModal" title="RIWAYAT AKSI"><img class="icon" width="24" src="https://images.icon-icons.com/2596/PNG/512/history_icon_155273.png" /></a>
+                       
+                         <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" rel="noopener noreferrer" data-feature="proxy"><img class="icon" title="BUKA KUNCI / AKSES" width="24px"  src="https://cdn-icons-png.flaticon.com/512/890/890162.png" /></a>
+
+                        <!-- Memory management removed (no localStorage) -->
+                        <img class="icon" id="darkModeToggle" title="Ganti Mode Gelap/Terang" width="24px" src="https://cdn-icons-png.flaticon.com/512/3751/3751403.png" /> 
+                    </div>
+                    
+                </div>
+
+</div>
+</div>
+
+
+    <div class="uk-card uk-card-default uk-padding-small uk-card-hover" id="scanner-config">
+        <div class="uk-grid-small uk-flex-middle" uk-grid>
+
+            <!-- Form Setting -->
+            <div class="uk-width-1-1">
+            <form id="FormScanner" class="uk-grid-small uk-flex-middle" uk-grid>
+
+                <!-- KOLOM KIRI: semua kontrol kecuali Search -->
+                <div class="uk-width-expand uk-flex uk-flex-middle uk-flex-wrap">
+                  <a href="#" target="_blank" id="ManajemenKoin" data-feature="manage">
+                            <img title="MANAJEMEN KOIN" class="icon"  src="https://cdn-icons-png.flaticon.com/256/7782/7782334.png" width="24px" />
+                        </a> &nbsp;&nbsp;
+                         <img class="icon" id="UpdateWalletCEX" data-feature="wallet" title="CHECK EXCHANGER" width="24px"  src="https://cdn-icons-png.flaticon.com/512/1969/1969111.png"  />
+&nbsp;&nbsp;
+                  <span class=" uk-text-bolder">SCANNER : </span>
+                <label class="uk-margin-small-left">
+                    <input class="uk-checkbox" type="checkbox" id="autoRunToggle">
+                    <span class="uk-text-success">Auto Run</span>
+                </label>
+                <label class="uk-margin-small-left">
+                    <input class="uk-checkbox vol-check" id="checkVOL" type="checkbox">
+                    <span class="uk-text-danger">Vol Check</span>
+                </label>
+
+                <label class="uk-margin-small-left">
+                    <input class="uk-checkbox posisi-check" type="checkbox" value="Actionkiri" checked>
+                    <span  >KIRI</span>
+                </label>
+                <label>
+                    <input class="uk-checkbox posisi-check uk-margin-small-left" type="checkbox" value="ActionKanan" checked>
+                    <span >KANAN</span>
+                </label>
+
+                <div class="uk-inline uk-margin-small-left">
+                    <span class="uk-text-danger uk-text-bolder">PNL</span>
+                    <input id="pnlFilterInput" class="uk-input uk-form-small" type="number" step="0.01" min="0" placeholder="PNL $" style="width:70px;">
+                </div>
+
+                <div class="uk-button-group uk-margin-small-left">
+                    <label class="uk-button uk-button-small uk-button-default toggle-radio sort-toggle active" data-sort="opt_A">
+                    <input class="uk-hidden" type="radio" name="toggle" value="opt_A" checked> A-Z
+                    </label>
+                    <label class="uk-button uk-button-small uk-button-default toggle-radio sort-toggle" data-sort="opt_Z">
+                    <input class="uk-hidden" type="radio" name="toggle" value="opt_Z"> Z-A
+                    </label>
+                </div>
+ 
+                <div class="uk-button-group uk-margin-small-left">
+                    <button type="button" id="startSCAN" data-feature="scan" class="uk-button uk-button-secondary uk-button-small">START</button>&nbsp;&nbsp;
+                    <button type="button" id="stopSCAN" data-feature="scan" style="display:none;" class="uk-button uk-button-danger uk-button-small">STOP</button>
+                    
+                </div>
+                
+                </div>
+
+                <!-- KOLOM KANAN: Search, rata kanan ≥ @m -->
+                <div class="uk-width-1-1 uk-width-auto@m">
+                    <div class="uk-flex uk-flex-right@m uk-flex-middle uk-flex-wrap">
+                        <span id="autoRunCountdown" class="uk-text-meta uk-margin-small-right" style="min-width:64px; display:inline-block;"></span>
+
+                        <label class="uk-margin-small-left uk-flex uk-flex-middle">
+                        <input class="uk-checkbox" type="checkbox" id="autoScrollCheckbox">
+                        <span class="uk-text-warning uk-margin-small-left">Auto Scroll</span>
+                        </label>&nbsp;&nbsp;
+                        <input class="uk-checkbox" type="checkbox" id="toggleScanLog">
+                        <span class="uk-margin-small-left">Log</span>
+                        <div class="uk-margin-small-left">
+                        <input type="text" id="searchInput"
+                                class="uk-input uk-form-small uk-form-primary uk-form-width-small"
+                                placeholder="Cari Koin...">
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </form>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="uk-width-1-1 uk-margin-remove-top">
+            <div id="progress-container">
+                <div id="progress-bar">
+                <span id="progress-text">0%</span>
+                </div>
+            </div>
+            <div id="progress" class="uk-margin-remove" style="font-size:12px;font-weight:bold;color:green;"></div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Bagian untuk menampilkan sinyal DEX -->
+    <div class="uk-text uk-text-small uk-margin-small-top" id="sinyal-container">
+            <!-- Sinyal DEX akan dimuat di sini -->
+    </div>
+
+
+    <!-- Unified Filter Card - Compact Checkbox Version -->
+    <div id="filter-card" class="uk-card uk-card-default uk-margin-small header-card uk-card-hover">
+        <div class="filter-compact-container">
+            <!-- Filter Groups Row - JavaScript will populate this with checkboxes AND summary -->
+            <div id="filter-groups" class="filter-groups-inline">
+                <!-- Dynamic checkboxes and summary will be injected here by renderFilterCard() -->
+            </div>
+        </div>
+
+        <!-- Legacy containers (hidden, for compatibility) -->
+        <div id="filter-head" style="display:none;">
+            <span id="filter-head-labels"></span>
+        </div>
+    </div>
+    
+    <div class="uk-overflow-auto uk-margin-small-top" id="monitoring-scroll" style="max-height: calc(100vh - 220px); overflow: auto;">
+        <table id="tabel-monitoring" class="uk-table uk-table-hover uk-table-small uk-table-striped" >
+            <thead id="monitoring-thead" style="background: #5c9514;"></thead>
+            <tbody id="dataTableBody">
+                <!-- Baris-baris data akan ditambahkan secara dinamis -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Floating Scroll-To-Top button (always visible) -->
+    <button id="btn-scroll-top" type="button" aria-label="Scroll to top" title="Scroll to top">
+        ⬆
+    </button>
+    
+<!-- SECTION: PENGATURAN SCANNING APLIKASI -->
+<section id="form-setting-app" class="uk-card uk-card-default uk-card-body uk-padding-small uk-card-hover uk-margin-small" style="display:none;">
+  <!-- Header Section -->
+  <div class="uk-card uk-card-default uk-card-body uk-padding-small uk-margin-small">
+    <div class="uk-flex uk-flex-between uk-flex-middle">
+      <h4 class="uk-heading-bullet uk-margin-remove">
+        <span uk-icon="icon: settings; ratio: 1.2"></span> PENGATURAN SCANNER
+      </h4>
+      <button type="button" id="btn-cancel-setting" class="uk-button uk-button-danger uk-button-small">
+        <span uk-icon="icon: close"></span> TUTUP
+      </button>
+    </div>
+  </div>
+
+  <!-- 3 Column Layout with Cards -->
+ <form class="uk-form-stacked uk-margin">
+
+  <!-- GRID 3:4:5 (uk-grid-match agar card sama tinggi) -->
+  <div class="uk-grid-small uk-grid-match" uk-grid>
+
+    <!-- COLUMN 1 (3) - JEDA DEX -->
+    <div class="uk-width-1-4@m">
+      <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+        <h5 class="uk-h5 uk-text-primary">
+          <span uk-icon="clock"></span> JEDA DEX
+        </h5>
+        <div id="dex-delay-group" class="uk-overflow-auto"  >
+          <!-- contoh item (JS akan populate) -->
+          <div class="uk-card uk-card-small uk-card-body uk-margin-small-bottom">
+            <div class="uk-flex uk-flex-between uk-flex-middle">
+              <div>
+                <div class="uk-text-small uk-text-bold">MATCHA</div>
+                <div class="uk-text-meta uk-text-truncate">Keterangan singkat</div>
+              </div>
+              <div class="uk-width-small">
+                <input class="uk-input uk-form-small" type="number" value="50" aria-label="matcha delay">
+              </div>
+            </div>
+          </div>
+          <!-- tambahkan item lainnya -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COLUMN 2 (4) - PENGATURAN SCANNER -->
+    <div class="uk-width-1-3@m">
+      <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+        <h5 class="uk-h5 uk-text-primary">
+          <span uk-icon="cog"></span> PENGATURAN SCANNER
+        </h5>
+
+        <div class="uk-margin-small">
+          <label class="uk-form-label uk-text-small uk-text-bolder">NICK NAME</label>
+          <div class="uk-form-controls">
+            <input type="text" id="user" class="uk-input uk-form-small" placeholder="Masukkan nickname (cth: SDDRX)" required>
+          </div>
+        </div>
+
+        <div class="uk-margin-small">
+          <label class="uk-form-label uk-text-small uk-text-danger uk-text-bolder">WALLET ADDRESS</label>
+          <div class="uk-form-controls">
+            <input class="uk-input uk-form-small" type="text" id="walletMeta" name="walletMeta" placeholder="0x..." aria-label="wallet address">
+          </div>
+        </div>
+
+        <div class="uk-grid-small uk-margin-small-top" uk-grid>
+          <div class="uk-width-1-2">
+            <label class="uk-form-label uk-text-small uk-text-bolder">KOIN / GRUP</label>
+            <div>
+              <label><input class="uk-radio" type="radio" name="koin-group" value="6"> 6</label><br>
+              <label><input class="uk-radio" type="radio" name="koin-group" value="5" checked> 5</label><br>
+              <label><input class="uk-radio" type="radio" name="koin-group" value="4"> 4</label>
+            </div>
+          </div>
+
+          <div class="uk-width-1-2">
+            <label class="uk-form-label uk-text-small uk-text-bolder">TIME OUT</label>
+            <div>
+              <label><input class="uk-radio" type="radio" name="waktu-tunggu" value="5" checked> NORMAL</label><br>
+              <label><input class="uk-radio" type="radio" name="waktu-tunggu" value="4"> MEDIUM</label><br>
+              <label><input class="uk-radio" type="radio" name="waktu-tunggu" value="3"> FAST</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="uk-grid-small uk-margin-small-top" uk-grid>
+          <div class="uk-width-1-2">
+            <label class="uk-form-label uk-text-small uk-text-bolder">JEDA / GRUP (ms)</label>
+            <div class="uk-form-controls">
+              <input class="uk-input uk-form-small" id="jeda-time-group" type="number" value="2000" min="100">
+            </div>
+            <div class="uk-text-meta uk-text-small uk-text-muted">Waktu jeda antar grup</div>
+          </div>
+          <div class="uk-width-1-2">
+            <label class="uk-form-label uk-text-small uk-text-bolder">JEDA / KOIN (ms)</label>
+            <div class="uk-form-controls">
+              <input class="uk-input uk-form-small" id="jeda-koin" type="number" value="500" min="100">
+            </div>
+            <div class="uk-text-meta uk-text-small uk-text-muted">Waktu jeda antar koin di grup</div>
+          </div>
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <!-- COLUMN 3 (5) - CUSTOM RPC -->
+    <div class="uk-width-expand@m">
+      <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+        <h5 class="uk-h5 uk-text-primary">
+          <span uk-icon="cloud-download"></span> CUSTOM RPC
+        </h5>
+
+        <div id="rpc-settings-group" class="uk-overflow-auto"  >
+          <!-- contoh entry -->
+          <div class="uk-grid-small uk-flex-middle uk-margin-small-bottom" uk-grid>
+            <div class="uk-width-auto"><span class="uk-icon" uk-icon="server"></span></div>
+            <div class="uk-width-expand">
+              <div class="uk-text-small uk-text-muted">BSC</div>
+              <input class="uk-input uk-form-small" type="text" value="https://bsc-dataseed.binance.org" aria-label="bsc rpc">
+            </div>
+            <div class="uk-width-auto">
+              <button class="uk-icon-button" uk-tooltip="Hapus RPC" title="Hapus"><span uk-icon="trash"></span></button>
+            </div>
+          </div>
+          <!-- JS append real list -->
+        </div>
+
+        <!-- tambah rpc cepat -->
+        <div class="uk-margin-small-top uk-grid-small" uk-grid>
+          <div class="uk-width-expand">
+          </div>
+          <div class="uk-width-auto">
+           <button type="button" id="btn-save-setting" class="uk-button uk-button-primary uk-button-small uk-border-pill">
+        <span uk-icon="check"></span> SIMPAN PENGATURAN
+      </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div> <!-- end grid -->
+
+</form>
+
+</section>
+
+
+<!-- CARD 2: UPDATE WALLET EXCHANGER -->
+<section id="update-wallet-section" class="uk-card uk-card-default uk-card-body uk-padding-small uk-card-hover uk-margin-small" style="display:none;">
+  <!-- Header -->
+  <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
+    <h4 class="uk-heading-bullet uk-margin-remove">UPDATE WALLET EXCHANGER</h4>
+    <div class="uk-flex uk-flex-middle" style="gap: 12px;">
+      <span class="uk-text-meta">Chain Aktif: <strong id="wallet-chain-label">-</strong></span>
+      <button type="button" id="btn-cancel-setting" class="uk-button uk-button-danger uk-button-small">
+        <span uk-icon="icon:  arrow-left"></span> KEMBALI
+      </button>
+      <!-- Tombol tutup dihapus sesuai permintaan -->
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="uk-card-body uk-padding-small uk-margin-small-bottom">
+    <div class="uk-grid-small uk-flex-middle" uk-grid>
+      <div class="uk-width-expand">
+        <p class="uk-text-small uk-text-muted uk-margin-remove" id="wallet-info-text">
+          Pilih exchanger kemudian jalankan pengecekan untuk melihat status deposit & withdraw koin.
+        </p>
+      </div>
+      <div class="uk-width-auto">
+        <button id="btn-cek-wallet-exchanger" class="uk-button uk-button-primary uk-button-small" disabled>
+          UPDATE WALLET EXCHANGER
+        </button>
+      </div>
+    </div>
+
+    <div id="wallet-update-result" class="uk-alert uk-margin-small-top" style="display:none;">
+      <p class="uk-margin-remove"></p>
+    </div>
+  </div>
+
+  <!-- CEX Cards Grid (2 kolom) -->
+  <div id="wallet-cex-grid" class="uk-grid-small uk-child-width-1-2@m uk-padding-small" uk-grid>
+    <!-- CEX cards will be rendered here dynamically -->
+  </div>
+</section>
+
+<!-- SECTION: DATABASE VIEWER -->
+<section id="database-viewer-section" class="uk-margin-small" style="display:none;">
+  <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+    <!-- Header with Stats -->
+    <div class="db-viewer-header">
+      <h2>Database Viewer</h2>
+      <p>Eksplorasi semua data tabel dari IndexedDB dengan pencarian dan filter</p>
+
+      <div class="db-stats-bar">
+        <div class="db-stat-item">
+          <span class="label">Total Tabel</span>
+          <span class="value" id="db-total-tables">0</span>
+        </div>
+        <div class="db-stat-item">
+          <span class="label">Total Records</span>
+          <span class="value" id="db-total-records">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="db-toolbar">
+      <div class="uk-inline">
+        <span class="uk-form-icon" uk-icon="icon: search"></span>
+        <input class="uk-input uk-form-small" type="text" id="db-search-input" placeholder="Cari tabel atau data...">
+      </div>
+
+      <div class="db-toolbar-actions">
+      <button class="uk-button uk-button-secondary uk-button-small" type="button" uk-toggle="target: #backup-modal">
+        <span uk-icon="icon: database; ratio: 0.7"></span>
+        Backup/Restore
+      </button>
+      <button id="db-refresh-btn" class="uk-button uk-button-primary uk-button-small" type="button">
+        <span uk-icon="icon: refresh; ratio: 0.7"></span>
+        Refresh
+      </button>
+      <button id="db-close-btn" class="uk-button uk-button-danger uk-button-small" type="button">
+        <span uk-icon="icon: close; ratio: 0.7"></span>
+        Tutup
+      </button>
+      </div>
+    </div>
+
+  <!-- Tables Container -->
+  <div id="database-viewer-container">
+    <!-- Table cards will be rendered here dynamically -->
+  </div>
+</section>
+
+    <section id="token-management" class="uk-card uk-card-default uk-padding-small uk-card-hover" style="display: none; border:1px solid black;" >
+
+        <!-- Config Manajemen (terpisah seperti config-scanner) -->
+        <div id="manager-config" class="uk-card uk-card-default uk-padding-small uk-card-hover uk-margin-small-bottom">
+            <button type="button" id="btn-cancel-setting" class="uk-button uk-button-danger uk-button-small">
+        <span uk-icon="icon:  arrow-left"></span> KEMBALI
+      </button>  
+          <div id="token-management-stats" class="uk-text-small">
+                <!-- stats + controls will be injected dynamically -->
+            </div>
+           
+        </div>
+
+        <!-- Tabel Manajemen (terpisah dari config) -->
+        <div id="manager-table" class="uk-overflow-auto" style="max-height:100vh;">
+            <table class="uk-table uk-table-striped uk-table-divider">
+                <thead class="uk-background-secondary">
+                    <tr>
+                    <th style="width:46px">No</th>
+                    <th>Symbol Token / Pair</th>
+                    <th>Chain & Status</th>
+                    <th>Exchanger</th>
+                    <th>DEX & Modal [KIRI | KANAN]</th>
+                    <th style="width:130px">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="mgrTbody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- SECTION: IFRAME CONTAINER -->
+   <section id="iframe-container"  class="uk-card uk-card-default uk-card-body uk-margin-small" style="display:none; height:85vh;">
+        <div class="uk-background-muted uk-padding-small uk-height-1-1 uk-border-rounded">
+            <iframe id="iframe-content"  src=""  style="width:100%; height:100%; border:none; background:transparent;"></iframe>
+        </div>
+    </section>
+
+
+    <!-- SINGLE CHAIN SCANNER SECTION REMOVED: merged into #tabel-monitoring -->
+  
+</div>
+<!-- Modal UIKIT EDIT KOIN -->
+ <div id="FormEditKoinModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-padding-small">
+
+        <!-- Header -->
+        <div class="uk-flex uk-flex-middle uk-margin-small" id="judulmodal">
+        <div class="uk-width-expand"></div>
+        <div class="uk-text-center uk-width-auto">
+            <h4 class="uk-margin-remove">FORM KOIN [TOKEN & PAIR]</h4>
+        </div>
+        <div class="uk-width-expand uk-text-right">
+            
+        </div>
+        </div>
+
+        <hr class="uk-margin-remove-top uk-margin-small-bottom">
+
+        <!-- Info Detail Koin -->
+        <form id="multiTokenForm" class="uk-form-stacked">
+        <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-2@m">
+            <label class="uk-form-label"><b>Nama Token & Desimal</b></label>
+            <div class="uk-form-controls uk-grid-small" uk-grid>
+                <div class="uk-width-expand">
+                <input type="text" id="inputSymbolToken" class="uk-input uk-form-small" placeholder="Symbol Token">
+                </div>
+                <div class="uk-width-auto">
+                <input type="number" id="inputDesToken" class="uk-input uk-form-small uk-form-width-small" placeholder="Desimal">
+                </div>
+            </div>
+            <label class="uk-form-label uk-margin-small-top"><b>Smart Kontrak Token</b></label>
+            <input type="text" id="inputSCToken" class="uk-input uk-form-small" placeholder="Smart Contract Token">
+            </div>
+
+            <div class="uk-width-1-2@m">
+            <label class="uk-form-label"><b>Nama Pair & Desimal</b></label>
+            <div class="uk-form-controls uk-grid-small" uk-grid>
+                <div class="uk-width-expand">
+                <input type="text" id="inputSymbolPair" class="uk-input uk-form-small" placeholder="Symbol Pair">
+                </div>
+                <div class="uk-width-auto">
+                <input type="number" id="inputDesPair" class="uk-input uk-form-small uk-form-width-small" placeholder="Desimal">
+                </div>
+            </div>
+            <label class="uk-form-label uk-margin-small-top"><b>Smart Kontrak Pair</b></label>
+            <input type="text" id="inputSCPair" class="uk-input uk-form-small" placeholder="Smart Contract Pair">
+            </div>
+        </div>
+
+<!-- Card: Chain, Status, CEX/DEX -->
+      <div class="uk-card uk-card-default uk-card-small uk-card-body uk-margin-small-top">
+
+        <!-- Chain & Status -->
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-1@m">
+            <div class="uk-grid-small uk-child-width-1-3@m" uk-grid>
+              <div>
+                <label class="uk-form-label" for="mgrChain"><b>Chain</b></label>
+                <select id="mgrChain" class="uk-select uk-form-small"></select>
+              </div>
+
+              <div>
+                <label class="uk-form-label"><b>Status</b></label>
+                <div class="uk-margin-small-top uk-flex uk-flex-middle" style="gap:12px;">
+                <label class="uk-margin-remove">
+                    <input class="uk-radio" type="radio" name="mgrStatus" id="mgrStatusOn"  value="on"  checked>
+                    ON
+                </label>
+                <label class="uk-margin-remove">
+                    <input class="uk-radio" type="radio" name="mgrStatus" id="mgrStatusOff" value="off">
+                    OFF
+                </label>
+                </div>
+            </div>
+
+              <div><!-- spacer kolom ke-3 jika dibutuhkan --></div>
+            </div>
+          </div>
+        </div>
+    </div>
+        
+        <div class="uk-card uk-card-default uk-card-small uk-card-body uk-margin-small-top">
+            
+            <div class="uk-grid-small" uk-grid>
+            <!-- Kolom CEX -->
+            <div class="uk-width-1-3@m">
+                <label class="uk-form-label uk-text-bold">Pilih Exchanger</label>
+                <div id="cex-checkbox-koin" class="uk-margin-small-top"></div>
+            </div>
+
+            <!-- Kolom DEX -->
+            <div class="uk-width-2-3@m">
+                <label class="uk-form-label uk-text-bold">
+                Pilih DEX  & Modal {KIRI, KANAN}
+                </label>
+                <div id="dex-checkbox-koin" class="uk-margin-small-top"></div>
+            </div>
+            </div>
+
+            <input type="hidden" id="multiTokenIndex">
+        </div>
+
+        <!-- Tombol Action -->
+        <div class="uk-flex uk-flex-right uk-margin-top uk-grid-small" uk-grid>
+            <div><button class="uk-button uk-button-danger" type="button" id="HapusEditkoin">Hapus</button></div>
+            <!-- <div><button class="uk-button uk-button-secondary" type="button" id="CopyToMultiBtn" style="display:none;">Import</button></div> -->
+            <div>
+              <button class="uk-button uk-button-secondary" type="button" id="CopyToMultiBtn" style="display:none;">
+                <span uk-icon="star"></span> Import
+              </button>
+            </div>
+
+            <div><button class="uk-button uk-button-primary" type="submit" id="SaveEditkoin">Simpan</button></div>
+            <div><button class="uk-button uk-button-default uk-modal-close" type="button" id="BatalEditkoin">Batal</button></div>
+
+        </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Modal UIKIT TOKEN SYNC -->
+<div id="sync-modal" uk-modal>
+  <div class="uk-modal-dialog uk-width-1-1@m uk-width-2-3@l uk-margin-auto-vertical">
+
+    <!-- HEADER -->
+    <div class="uk-modal-header uk-flex uk-flex-between uk-flex-middle uk-padding-small">
+      <div>
+        <h4 class="uk-modal-title uk-margin-remove"><span uk-icon="move"></span> Sinkronisasi Koin</h4>
+        <span class="uk-text-meta uk-margin-remove-top">Pilih CEX, Pair, lalu masukkan modal tiap DEX</span>
+      </div>
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+    </div>
+
+    <!-- BODY -->
+    <div class="uk-modal-body uk-padding-small">
+      <!-- Snapshot Info Section -->
+      <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom uk-text-small">
+        <div>
+          <span class="uk-text-meta">Chain: <strong id="sync-snapshot-chain-label">-</strong></span>
+          <span class="uk-text-meta uk-margin-small-left">Data Snapshot: <span id="sync-source-indicator" class="uk-text-bold uk-text-primary">-</span></span>
+        </div>
+        <div class="uk-flex uk-flex-middle" style="gap:8px;">
+          <div id="sync-snapshot-status" class="uk-text-meta"></div>
+          <button id="refresh-snapshot-btn" class="uk-button uk-button-primary uk-button-small" type="button">
+            <span uk-icon="icon: play; ratio: 0.85"></span> SNAPSHOT [UPDATE KOIN]
+          </button>
+        </div>
+      </div>
+      <div class="uk-grid-small" uk-grid>
+
+  <!-- Kolom kiri (lebih kecil) -->
+  <div class="uk-width-1-3@m">
+    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+      <h6 class="uk-heading-bullet uk-margin-small">1. Exchanger</h6>
+      <div id="sync-filter-cex" class="uk-flex uk-flex-wrap" style="gap:6px; max-height:200px; overflow:auto;"></div>
+
+      <h6 class="uk-heading-bullet uk-margin-small">2. Pair DEX</h6>
+      <div id="sync-filter-pair" class="uk-flex uk-flex-wrap" style="gap:6px; max-height:200px; overflow:auto;"></div>
+
+      <div id="sync-non-config" class="uk-card uk-card-default uk-card-body uk-padding-small uk-margin-small-top" style="display:none;">
+        <h6 class="uk-margin-remove">Detail Pair NON</h6>
+        <div class="uk-margin-small">
+          <label class="uk-form-label uk-text-small">Nama Pair</label>
+          <input id="sync-non-pair-name" class="uk-input uk-form-small" type="text" placeholder="Contoh: USDT">
+        </div>
+        <div class="uk-margin-small">
+          <label class="uk-form-label uk-text-small">SC Pair</label>
+          <input id="sync-non-pair-sc" class="uk-input uk-form-small" type="text" placeholder="Alamat kontrak pair">
+        </div>
+        <div class="uk-margin-small">
+          <label class="uk-form-label uk-text-small">Desimal Pair</label>
+          <input id="sync-non-pair-des" class="uk-input uk-form-small" type="number" min="0" placeholder="18">
+        </div>
+      </div>
+
+      <h6 class="uk-heading-bullet uk-margin-small">3. DEX &amp; Modal <span class="uk-text-meta"></span></h6>
+      <div id="sync-dex-config" class="uk-flex uk-flex-column" style="gap:6px; max-height:300px; overflow:auto;"></div>
+    </div>
+  </div>
+
+  <!-- Kolom kanan (lebih lebar) -->
+  <div class="uk-width-2-3@m">
+    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+      <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small">
+        <h6 class="uk-margin-remove">4. Pilih Koin [ <span id="sync-selected-count" class="uk-text-small uk-badge">0</span> ]</h6>
+
+        <div class="uk-flex uk-flex-middle" style="gap:8px;">
+          <span class="uk-text-small uk-text-bold">Pilih:</span>
+          <label class="uk-margin-remove"><input type="radio" name="sync-pick-mode" value="all" class="uk-radio"> Semua</label>
+          <label class="uk-margin-remove"><input type="radio" name="sync-pick-mode" value="selected" class="uk-radio"> Dipilih</label>
+          <label class="uk-margin-remove"><input type="radio" name="sync-pick-mode" value="snapshot" class="uk-radio"> Snapshot</label>
+          <label class="uk-margin-remove"><input type="radio" name="sync-pick-mode" value="clear" class="uk-radio"> Hapus</label>
+        </div>
+      </div>
+
+      <div class="uk-overflow-auto uk-margin-small-top" style="max-height:65vh; border:1px solid #ddd; border-radius:4px;">
+        <table id="sync-table" class="uk-table uk-table-divider uk-table-hover uk-table-small uk-margin-remove">
+          <thead style="position:sticky; top:0; background:#fff; z-index:1;">
+            <tr>
+              <th>✓</th>
+              <th data-sort-key="default" class="sync-sortable">No <span class="sync-sort-indicator"></span></th>
+              <th data-sort-key="cex" class="sync-sortable">CEX <span class="sync-sort-indicator"></span></th>
+              <th data-sort-key="token" class="sync-sortable">Nama Koin <span class="sync-sort-indicator"></span></th>
+              <th data-sort-key="sc" class="sync-sortable">SC <span class="sync-sort-indicator"></span></th>
+              <th data-sort-key="decimals" class="sync-sortable">Decimals <span class="sync-sort-indicator"></span></th>
+              <th data-sort-key="trade" class="sync-sortable">Trade <span class="sync-sort-indicator"></span></th>
+              <th data-sort-key="price" class="sync-sortable">Price <span class="sync-sort-indicator"></span></th>
+            </tr>
+          </thead>
+          <tbody id="sync-modal-tbody">
+            <!-- token rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+ 
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="uk-modal-footer uk-text-right uk-padding-small">
+      <button class="uk-button uk-button-danger uk-button-small uk-modal-close" type="button">Cancel</button>
+      <button id="sync-save-btn" class="uk-button uk-button-primary uk-button-small" type="button">SAVE KOIN</button>
+    </div>
+
+  </div>
+
+  <!-- Sync Processing Overlay -->
+  <div id="sync-overlay" class="uk-flex uk-flex-middle uk-flex-center" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999;">
+    <div class="uk-card uk-card-default uk-card-body uk-text-center" style="min-width:320px;">
+      <div class="uk-margin-small" uk-spinner="ratio: 0.9"></div>
+      <div class="uk-margin-small msg uk-text-bold uk-text-large">Memproses...</div>
+      <div class="uk-text-meta phase uk-margin-small">Phase</div>
+      <progress id="sync-ov-progress" class="uk-progress uk-margin-small-top" value="0" max="100"></progress>
+      <div class="uk-text-meta counter">0 / 0 (0%)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: History Log -->
+<div id="history-modal" uk-modal>
+  <div class="uk-modal-dialog uk-width-1-1@m uk-width-2-3@l uk-margin-auto-vertical">
+    <div class="uk-modal-header uk-flex uk-flex-between uk-flex-middle uk-padding-small">
+      <div>
+        <h4 class="uk-modal-title uk-margin-remove"><span uk-icon="clock"></span> Riwayat Aksi</h4>
+        <p class="uk-text-meta uk-margin-remove-top">Filter dan kelola riwayat aksi aplikasi</p>
+      </div>
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+    </div>
+    <div class="uk-modal-body uk-padding-small">
+      <div class="uk-grid-small uk-child-width-1-3@m uk-child-width-1-1" uk-grid>
+        <div>
+          <label class="uk-form-label">Mode</label>
+          <select id="histMode" class="uk-select uk-form-small">
+            <option value="all">Semua</option>
+            <option value="single">Single</option>
+            <option value="multi">Multi</option>
+          </select>
+        </div>
+        <div>
+          <label class="uk-form-label">Chain</label>
+          <input id="histChain" class="uk-input uk-form-small" placeholder="MULTICHAIN / BSC / ..." />
+        </div>
+        <div>
+          <label class="uk-form-label">Cari</label>
+          <input id="histSearch" class="uk-input uk-form-small" placeholder="Cari action/status..." />
+        </div>
+      </div>
+      <div class="uk-overflow-auto uk-margin-small-top" style="max-height:60vh; border:1px solid #ddd; border-radius:4px;">
+        <table class="uk-table uk-table-divider uk-table-hover uk-table-small uk-margin-remove">
+          <thead style="position:sticky; top:0; background:#fff; z-index:1;">
+            <tr>
+              <th style="width:32px;"><input type="checkbox" id="histSelectAll"></th>
+              <th style="width:160px;">Waktu</th>
+              <th>Aksi</th>
+              <th style="width:90px;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="histTbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="uk-modal-footer uk-padding-small uk-text-right">
+      <button class="uk-button uk-button-danger uk-button-small" id="histDeleteSelected">Hapus Terpilih</button>
+      <button class="uk-button uk-button-default uk-button-small" id="histClearAll">Bersihkan Semua</button>
+    </div>
+  </div>
+  </div>
+
+<!-- Modal: Backup & Restore Database -->
+<div id="backup-modal" uk-modal>
+  <div class="uk-modal-dialog">
+    <div class="uk-modal-header uk-padding-small">
+      <h4 class="uk-modal-title uk-margin-remove"><span uk-icon="database"></span> Backup & Restore Database</h4>
+    </div>
+    <div class="uk-modal-body uk-padding-small">
+      <p class="uk-text-small">Gunakan fitur ini untuk mencadangkan seluruh data aplikasi (IndexedDB) ke file JSON dan memulihkannya kembali.</p>
+      <div class="uk-margin-small">
+        <button id="btnBackupDb" class="uk-button uk-button-primary uk-button-small"><span uk-icon="download"></span> Backup (Download)</button>
+        <button id="btnRestoreDb" class="uk-button uk-button-danger uk-button-small"><span uk-icon="upload"></span> Restore (Upload)</button>
+        <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;">
+      </div>
+      <div id="backupSummary" class="uk-text-meta"></div>
+    </div>
+    <div class="uk-modal-footer uk-text-right uk-padding-small">
+      <button class="uk-button uk-button-default uk-modal-close uk-button-small" type="button">Close</button>
+    </div>
+  </div>
+  
+</div>
+
+
+
+<!-- Load all scripts at the end -->
+<script src="app-namespace.js"></script>
+<script src="secrets.js"></script>
+<script src="config.js"></script>
+
+<!-- NEW: Core Utilities -->
+<script src="event-bus.js"></script><!-- GLOBAL EVENT SYSTEM -->
+<script src="overlay-manager.js"></script><!-- UNIFIED OVERLAY -->
+<script src="table-manager.js"></script><!-- STANDARDIZED TABLES -->
+
+<!-- RPC SYSTEM: Load in correct order -->
+<script src="storage.js"></script><!-- Must load BEFORE rpc-database-migrator -->
+<script src="rpc-database-migrator.js"></script><!-- RPC DATABASE MIGRATION & INITIALIZATION -->
+<script src="rpc-manager.js"></script><!-- RPC MANAGEMENT WITH AUTO FALLBACK -->
+
+<script src="services/cex/registry.js"></script>
+
+<script src="utils.js"></script>
+<script src="services/cex.js"></script>
+<script src="services/dex.js"></script>
+<script src="api.js"></script>
+<script src="snapshot-new.js"></script>
+<script src="database-viewer.js"></script>
+<script src="main.js"></script>
+<script src="ui.js"></script>
+<script src="dom-renderer.js"></script>
+<script src="scanner.js"></script>
+<script src="wallet-exchanger.js"></script>
+</body>
+</html>
